@@ -1,0 +1,78 @@
+{% extends 'layout.html' %}
+{% block body %}
+<div>
+	<div class="container text-center">
+    	<div class="user_profile">
+            <h3 id="user_name" class="text-center">User Name</h3>
+			<div><span id="user_account" >@UserAccount</span> • Health Evaluation</div>
+            <div id="profile_image">
+                <img src="../static/images/451370.jpg" alt="Profile Image" height="150px">
+            </div>
+        </div>
+        <div class="health_point card">
+			<h4>Health Ranking</h4>
+            <div>My Health Point</div>
+            <h1 id="health_point">50</h1>
+            <ul class="list-inline">
+                <li class="list-inline-item">A</li>
+                <li class="list-inline-item">B</li>
+                <li class="list-inline-item">C</li>
+                <li class="list-inline-item">D</li>
+                <li class="list-inline-item">E</li>
+            </ul>
+        </div>
+        <div class="caculator card">
+            <div class="card-header">How is my Body Shape?</div>
+            <div class="row">
+                <div class="col-sm-12 col-md-4">
+                    <div>Weight</div>
+                    <h1 id="bfp">60</h1>
+                </div>
+				<div class="col-sm-12 col-md-4">
+					<div>Body Mass Index (BMI)</div>
+					<h1 id="bmi">99</h1>
+				</div>
+				<div class="col-sm-12 col-md-4">
+					<div>Body Fat Percentage (BFP)</div>
+					<h1 id="bfp">99</h1>
+				</div>
+			</div>
+        </div>
+        <div class="calories card">
+        	<div class="card-header">How should I eat?</div>
+            <div></div>
+            <div><h1 id="carlories">2000</h1>k cal</div>
+            <div>calories range: <span>1000-3000</span>kcal</div>
+        </div>
+        <div class="exercise card">
+        	<div class="card-header">How should I Exercise?</div>
+            <div>Target heart rate</div>
+            <h1 id="heart_rate">120</h1>
+            <div>b/min</div>
+        </div>
+		<div class="bloodpressure card">
+        	<div class="card-header">How is my blood pressure?</div>
+			<div class="row">
+				<div class="col-sm-12 col-md-4">
+					<div>Systolic pressure</div>
+					<h1 id="systol">120</h1>
+					<div>mm Hg</div>
+				</div>
+				<div class="col-sm-12 col-md-4">
+					<div>Diastolic pressure</div>
+					<h1 id="diastol">120</h1>
+					<div>mm Hg</div>
+				</div>
+				<div class="col-sm-12 col-md-4">
+					<div>Pulse rate</div>
+					<h1 id="pulse">7120</h1>
+					<div>b/min</div>
+				</div>
+			</div>
+           
+        </div>
+        <div>
+        </div>
+    </div>
+</div>
+{% endblock %}
