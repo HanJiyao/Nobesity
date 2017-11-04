@@ -1,6 +1,72 @@
 {% extends 'layout.html' %}
 {% block body %}
-    <div class="jumbotron text-center">
-        <h1>Welcome to NObesity SG</h1>
+    <div class="jumbotron">
+		<a href="/profile">
+		<div class="card">
+			<img class="card-img bg-dark" alt="Card image" height="180px" >
+			<div class="card-img-overlay" >
+				<div class="card-body" style="color:white">
+					<div>Health Grade</div>
+					<ul class="list-inline">
+						<li class="list-inline-item">A</li>
+						<li class="list-inline-item">B</li>
+						<li class="list-inline-item">C</li>
+						<li class="list-inline-item">D</li>
+						<li class="list-inline-item">E</li>
+					</ul>
+					<div class="row">
+						<div class="col-sm-4">weight<div>60</div></div>
+						<div class="col-sm-4">BMI<div>20</div></div>
+						<div class="col-sm-4">Cal<div>500</div></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		</a>
+		<div class="card">
+			<h2 class="card-header ">
+				Health Status
+			</h2>
+			<div class="card-body">
+				<h4 class="card-title">My Plan Today</h4>
+				<p class="card-text">Personalized actions to check-off everyday and help you achieve your goal</p>
+				<p class="card-text">✓ ✓ ✓ ✓ ✓</p>
+				<a href="/plans" class="btn btn-primary">Go Plan Details</a>
+			</div>
+			<div class="card-body">
+				<h4 class="card-title">My Diet & Exercise</h4>
+				<p class="card-text">A healthy lifestyle requires balance in the foods you eat, the beverages you drink, the way you do daily activities, and in the amount of activity in your daily routine.</p>
+				<div class="progress vertical">
+				  <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 40%;">
+				  </div>  
+				</div>
+				<a href="/diet" class="btn btn-primary  mt-3">Go Diet Details</a>
+			</div>
+		</div>
+		<div class="card mt-3">
+		  <h2 class="card-header ">
+			Discovery
+		  </h2>
+		  <div class="card-body">
+			<h4 class="card-title">Quiz Challenge</h4>
+			<p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam</p>
+			<a href="/quiz" class="btn btn-primary">Go Quiz</a>
+		  </div>
+		  <div class="card-body">
+			<h4 class="card-title">Coummunity</h4>
+			<p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam</p>
+			<a href="/community" class="btn btn-primary">Go Community</a>
+		  </div>
+		</div>
+		<div class="card mt-3">
+		  <h2 class="card-header ">
+			Rewards
+		  </h2>
+		  <div class="card-body">
+			<h4 class="card-title">Nobesity Coin</h4>
+			<p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam</p>
+			<a href="/rewards" class="btn btn-primary">Go Rewards</a>
+		  </div>
+		</div>
     </div>
 {% endblock %}

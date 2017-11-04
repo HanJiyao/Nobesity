@@ -1,0 +1,63 @@
+{% extends 'layout.html' %}
+{% block body %}
+<div style="height:100%" class="jumbotron">
+<form style="max-width: 1000px" class="mx-auto">
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputEmail4">First Name</label>
+      <input type="email" class="form-control" id="firstName" placeholder="First Name">
+    </div>
+    <div class="form-group col-md-6">
+      <label for="inputPassword4">Last Name</label>
+      <input type="password" class="form-control" id="lastName" placeholder="Last Name">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="inputAddress">Gender</label>
+      <div class="row">
+        <div class="form-check col-md-6">
+          <label class="form-check-label">
+            <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked>
+            Male
+          </label>
+        </div>
+        <div class="form-check col-md-6">
+          <label class="form-check-label">
+            <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2">
+            Female
+          </label>
+        </div>
+      </div>
+  </div>
+  <div class="form-group">
+    <label for="inputAddress">Birth date</label>
+    <input type="date" class="form-control" id="birth" placeholder="Birthday">
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+    <label for="inputAddress2">Weight</label>
+    <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
+    </div>
+      <div class="form-group col-md-6">
+    <label for="inputAddress2">Height</label>
+    <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-4">
+      <label for="inputCity">Systol</label>
+      <input type="text" class="form-control" id="inputCity">
+    </div>
+    <div class="form-group col-md-4">
+      <label for="inputState">Diastol</label>
+      <input  id="inputState" class="form-control">
+    </div>
+    <div class="form-group col-md-4">
+      <label for="inputZip">Pulse</label>
+      <input type="text" class="form-control" id="inputZip">
+    </div>
+  </div>
+  <a href="/profile" class="btn btn-primary form-control">Sign in</a>
+</form>
+</div>
+{% endblock %}

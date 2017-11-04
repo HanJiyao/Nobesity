@@ -14,7 +14,7 @@ def login():
     return render_template('login.html')
 
 
-@app.route('/signup')
+@app.route('/timeline')
 def timeline():
     return render_template('timeline.html')
 
@@ -22,6 +22,11 @@ def timeline():
 @app.route('/signup')
 def signup():
     return render_template('signup.html')
+
+
+@app.route('/details')
+def details():
+    return render_template('details.html')
 
 
 @app.route('/profile')
@@ -42,6 +47,16 @@ def diet():
 @app.route('/quiz')
 def quiz():
     return render_template('quiz.html')
+
+
+@app.route('/community')
+def community():
+    return render_template('community.html')
+
+
+@app.route('/rewards')
+def rewards():
+    return render_template('rewards.html')
 
 
 if __name__ == '__main__':

@@ -1,6 +1,18 @@
 {% extends 'layout.html' %}
 {% block body %}
-    <div class="jumbotron text-center">
-        <h1>Welcome to NObesity SG</h1>
+    <div style="height:100%" class="jumbotron">
+    <form action="" class="" >
+    <div class="form-group col-lg-3 mx-auto">
+      <div class="container">
+          <div> <span>Log in</span><small class="float-right"><span>or <a href="/signup">Sign up</a></span></small></div>
+        <input type="text" class="form-control mt-3" placeholder="email/username" name="uname" required>
+        <input type="password" class="form-control mt-3" placeholder="password" name="psw" required>
+      <div class="container">
+        <span class="psw mt-3"><a href="#">Forgot password?</a></span>
+      </div>
+      <button type="submit" class="form-control btn btn-secondary mt-3">Login</button>
+      </div>
     </div>
+    </form>
+</div>
 {% endblock %}
