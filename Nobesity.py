@@ -24,9 +24,9 @@ def signup():
     return render_template('signup.html')
 
 
-@app.route('/details')
-def details():
-    return render_template('details.html')
+@app.route('/accountinfo')
+def accountinfo():
+    return render_template('accountinfo.html')
 
 
 @app.route('/profile')
