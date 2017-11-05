@@ -59,5 +59,50 @@ def rewards():
     return render_template('rewards.html')
 
 
+@app.route('/bread')
+def bread():
+    return render_template('bread.html')
+
+
+@app.route('/porridge')
+def porridge():
+    return render_template('porridge.html')
+
+
+@app.route('/oats')
+def oats():
+    return render_template('oats.html')
+
+
+@app.route('/salad')
+def salad():
+    return render_template('salad.html')
+
+
+@app.route('/juices')
+def juices():
+    return render_template('juices.html')
+
+
+@app.route('/kway_teow_soup')
+def kway_teow_soup():
+    return render_template('kway_teow_soup.html')
+
+
+@app.route('/fishsoup')
+def fishsoup():
+    return render_template('fishsoup.html')
+
+
+@app.route('/herbalsoup')
+def herbalsoup():
+    return render_template('herbalsoup.html')
+
+
+@app.route('/seafoodsoup')
+def seafoodsoup():
+    return render_template('seafoodsoup.html')
+
+
 if __name__ == '__main__':
     app.run()
