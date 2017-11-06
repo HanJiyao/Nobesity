@@ -63,7 +63,6 @@ def rewards():
 def bread():
     return render_template('bread.html')
 
-
 @app.route('/porridge')
 def porridge():
     return render_template('porridge.html')
@@ -103,6 +102,9 @@ def herbalsoup():
 def seafoodsoup():
     return render_template('seafoodsoup.html')
 
+@app.route('/leaderboards')
+def leaderboards():
+    return render_template('leaderboards.html')
 
 if __name__ == '__main__':
     app.run()
