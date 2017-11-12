@@ -1,4 +1,6 @@
-<style>
+{% extends 'layout.html' %}
+{% block body %}
+    <style>
 .button {
     background-color: #4CAF50; /* Green */
     border: none;
@@ -14,18 +16,19 @@ h1 {color:green;}
     width: 35px;
     padding: 5px;
     border: 0;
+    box-shadow: 0;
     display: inline;
 }
 </style>
+<div class="jumbotron" style="text-align: center">
 <p class="question">1.What is the bmi that is considered obese?</p>
 <ul class="answers">
-    <li>
-        <input type="radio" name="q1" value="a" id="q1a"><label for="q1a">30</label><br/></li>
+    <input type="radio" name="q1" value="a" id="q1a"><label for="q1a">30</label><br/>
 <input type="radio" name="q1" value="b" id="q1b"><label for="q1b">25</label><br/>
 <input type="radio" name="q1" value="c" id="q1c"><label for="q1c">20</label><br/>
 <input type="radio" name="q1" value="d" id="q1d"><label for="q1d">27.5</label><br/>
 </ul>
-<img align='right' style="width:304px;height:228px;" src="https://www.organicfacts.net/wp-content/uploads/2013/05/Vegetables4.jpg">
+<img style="width:304px;height:228px;position: absolute;right: 0" src="https://www.organicfacts.net/wp-content/uploads/2013/05/Vegetables4.jpg">
 
 <p class="question">2.What types of food should Obese people eat to ose weight?</p>
 <ul class="answers">
@@ -75,3 +78,5 @@ h1 {color:green;}
     </a>
 
 </div>
+    </div>
+{% endblock %}
