@@ -49,9 +49,9 @@ def quiz():
     return render_template('quiz.html')
 
 
-@app.route('/community')
+@app.route('/forum')
 def community():
-    return render_template('community.html')
+    return render_template('forum.html')
 
 
 @app.route('/rewards')
