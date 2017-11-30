@@ -1,16 +1,23 @@
 {% extends 'layout.html' %}
 {% block body %}
-<div style="height:100%" class="jumbotron">
-    <form action="" class="" >
-    <div class="form-group col-lg-3 mx-auto">
-      <div class="container">
-          <div> <span>Sign up</span><small class="float-right"><span>or <a href="/login">Log in</a></span></small></div>
-        <input type="text" class="form-control mt-3" placeholder="username" name="uname" required>
-        <input type="email" class="form-control mt-3" placeholder="email" name="email" required>
-        <input type="password" class="form-control mt-3" placeholder="password" name="psw" required>
-        <a href="/accountinfo" class="form-control btn btn-secondary mt-3">Sign Up</a>
-      </div>
-    </div>
-    </form>
+<div class="account-box">
+    <form action="" class="main-form" >
+        <div class="row switch-page">
+            <div class="link-box col-6"><a href="/login">Log in</a></div>
+            <div class="current-box col-6">Sign up</div>
+        </div>
+		<div class="form-group account-content">
+		<form action="" class="" >
+            <div class="form-group">
+                <div class="container">
+                    <input type="text" class="form-control mt-3" placeholder="username" name="uname" required>
+                    <input type="email" class="form-control mt-3" placeholder="email" name="email" required>
+                    <input type="password" class="form-control mt-3" placeholder="password" name="psw" required>
+                    <a href="/accountinfo" class="form-control submit-btn" style="text-align: center;">Sign Up</a>
+                </div>
+            </div>
+		</form>
+		</div>
+	</form>
 </div>
 {% endblock %}
