@@ -1,6 +1,7 @@
 @charset "utf-8";
 body{
-	background: #f0f0f0;
+    background: #f0f0f0;
+	padding-top: 80px;
 }
 .nav-wrapper{
 	background: white;
