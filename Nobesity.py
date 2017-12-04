@@ -19,6 +19,16 @@ def timeline():
     return render_template('timeline.html')
 
 
+@app.route('/registerGender')
+def registergender():
+    return render_template('firstTimeRegistGender.html')
+
+
+@app.route('/registerInfo')
+def registerinfo():
+    return render_template('firstTimeRegistInfo.html')
+
+
 @app.route('/signup')
 def signup():
     return render_template('signup.html')
