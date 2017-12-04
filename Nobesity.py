@@ -112,9 +112,11 @@ def herbalsoup():
 def seafoodsoup():
     return render_template('seafoodsoup.html')
 
+
 @app.route('/leaderboards')
 def leaderboards():
     return render_template('leaderboards.html')
+
 
 if __name__ == '__main__':
     app.run()
