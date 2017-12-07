@@ -10,6 +10,7 @@
     <link href="../static/css/Diet.css" rel="stylesheet" type="text/css">
     <link href="../static/css/login.css" rel="stylesheet" type="text/css">
     <link href="../static/css/profile.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
@@ -44,7 +45,8 @@
 		  </li>
 		  <!-- {% if not session.logged_in %} -->
 			<li class="nav-item dropdown account-btn">
-				<a class="dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				<a class="dropdown-toggle" href="#" id="navbarDropdownMenuLink"
+                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 				  UserName
 				</a>
 				<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
@@ -80,21 +82,31 @@
                 <li class="list-inline-item class_e">E</li>
             </ul>
         </div>
-        <div class="caculator card">
+        <div class="calculator card">
             <div class="card-header"><div class="card-header-text">How is my Body Shape?</div></div>
             <div class="card-body">
-                <div class="row">
-                    <div class="col-sm-12 col-md-4">
-                        <div>Weight</div>
-                        <h1 id="weight">60</h1>
+                <div class="card-body-title">Health Status</div>
+                <div class="row statistics">
+                    <div class="col-4">
+                        <h1 id="weight">60</h1><span class="unit-small">kg</span>
+                        <div>Current Weight</div>
                     </div>
-                    <div class="col-sm-12 col-md-4">
+                    <div class="col-4">
+                        <h1 id="bmi">24</h1><span class="unit-small">kg/m2</span>
                         <div>Body Mass Index (BMI)</div>
-                        <h1 id="bmi">24</h1>
                     </div>
-                    <div class="col-sm-12 col-md-4">
+                    <div class="col-4">
+                        <h1 id="bfp">26</h1><span class="unit-small">%</span>
                         <div>Body Fat Percentage (BFP)</div>
-                        <h1 id="bfp">26</h1>
+                    </div>
+                </div>
+                <div class="card-body-desc">
+                    <div class="desc-text">
+                    <div class="lightbulb"><i class="material-icons">lightbulb_outline</i></div>
+                        Base on your age and gender, your healthy range<br>
+                        Weight: <span>50-70kg</span>,
+                        BMI: <span>18.5–24.9</span>,
+                        BFP: <span>19-23%</span>.<br>
                     </div>
                 </div>
             </div>
@@ -102,41 +114,58 @@
         <div class="calories card">
         	<div class="card-header"><div class="card-header-text">How should I eat?</div></div>
             <div class="card-body">
-                <div><h1 id="carlories">2000</h1><span class="unit-small">k cal</span></div>
-                <div>calories range: <span>1000-3000</span>kcal</div>
+                <div class="card-body-title">Recommend Calorie Intake</div>
+                <div><h1 id="calories">2000</h1><span class="unit-small">Cal</span></div>
+                <div class="card-body-desc">
+                    <div class="desc-text">
+                    <div class="lightbulb"><i class="material-icons">lightbulb_outline</i></div>
+                    You need Calories consumption range: <span>1000-3000</span>Cal to maintain your healthy weight.<br>
+                    Energy balance is the relationship between how many calories you consume and burn.
+                    </div>
+                </div>
             </div>
         </div>
         <div class="exercise card">
         	<div class="card-header"><div class="card-header-text">How should I Exercise?</div></div>
             <div class="card-body">
-                <div>Target heart rate</div>
+                <div class="card-body-title">Target Heart Rate</div>
                 <h1 id="heart_rate">120</h1>
                 <span class="unit-small">b/min</span>
+                <div class="card-body-desc">
+                    <div class="desc-text">
+                    <div class="lightbulb"><i class="material-icons">lightbulb_outline</i></div>
+                    It's important to note that target heart rate is just a guide.<br>
+                    If you want a more definitive range,Consider discussing with an exercise physiologist.
+                    </div>
+                </div>
             </div>
         </div>
-		<div class="bloodpressure card">
+		<div class="blood_pressure card">
         	<div class="card-header"><div class="card-header-text">How is my blood pressure?</div></div>
             <div class="card-body">
-			<div class="row">
-				<div class="col-sm-12 col-md-4">
-					<div>Systolic pressure</div>
-					<h1 id="systol">130</h1>
-					<span class="unit-small">mm Hg</span>
-				</div>
-				<div class="col-sm-12 col-md-4">
-					<div>Diastolic pressure</div>
-					<h1 id="diastol">85</h1>
-					<span class="unit-small">mm Hg</span>
-				</div>
-				<div class="col-sm-12 col-md-4">
-					<div>Pulse rate</div>
-					<h1 id="pulse">90</h1>
-					<span class="unit-small">b/min</span>
-				</div>
-			</div>
-           </div>
-        </div>
-        <div>
+                <div class="card-body-title">Blood Pressure</div>
+                <div class="row statistics">
+                    <div class="col-4">
+                        <h1 id="systol">130</h1><span class="unit-small">mm Hg</span>
+                        <div>Systolic pressure</div>
+                    </div>
+                    <div class="col-4">
+                        <h1 id="diastol">85</h1><span class="unit-small">mm Hg</span>
+                        <div>Diastolic pressure</div>
+                    </div>
+                    <div class="col-4">
+                        <h1 id="pulse">90</h1><span class="unit-small">b/min</span>
+                        <div>Pulse rate</div>
+                    </div>
+                </div>
+                <div class="card-body-desc">
+                    <div class="desc-text">
+                    <div class="lightbulb"><i class="material-icons">lightbulb_outline</i></div>
+                    Blood pressure is important because the higher your blood pressure is,<br>
+                    the higher your risk of health problems in the future.
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

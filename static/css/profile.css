@@ -9,7 +9,7 @@
 	border: white solid 0.1px;
 	box-shadow: 0 5px 25px #e0e0e0;
 	margin: 30px 0;
-	padding: 0 0 30px 0;
+	padding: 0;
 }
 .card .card-header{
 	background: white;
@@ -26,6 +26,9 @@
 	margin:auto;
 	display:inline-block;
 }
+.card-body{
+	padding: 50px;
+}
 .card-body h1{
 	font-size:50px;
 	font-weight:400;
@@ -36,6 +39,36 @@
 	position:relative;
 	top:-30px;
 	right:-5px;
+	font-size: 20px;
+}
+.card-body-title{
+	text-align: left;
+	font-size: 20px;
+	border-left: #64DD17 solid thick;
+	padding: 0 10px;
+	margin-bottom: 30px;
+}
+.card-body-desc{
+	margin: 40px 0 0;
+	padding: 30px;
+	border: #e0e0e0 solid 1px;
+	text-align: left;
+}
+.card-body-desc .desc-text{
+	width: 80%;
+	margin: auto;
+}
+.lightbulb{
+	float: left;
+	height: 50px;
+	width: 50px;
+	color:white;
+	background: #64DD17;
+	padding: 12px;
+	font-size: 20px;
+	border-radius: 100%;
+	margin-left: 30px;
+	margin-right: 50px;
 }
 .header-desc{
 	font-size: 20px;
@@ -66,7 +99,7 @@
 	margin:0;
 }
 .health_point h5{
-	padding-top: 100px;
+	padding-top: 90px;
 	color:grey;
 	font-weight: 400;
 	font-size: 30px;
@@ -83,7 +116,7 @@
 	font-size: 20px;
 	height: 30px;
 	width: 30px;
-	margin: 0px;
+	margin: 0;
 	background: black;
 }
 .health_point .list-inline-item.class_a{
@@ -107,4 +140,8 @@
 	font-size: 33px;
 	position: relative;
 	top:3px;
+}
+.statistics{
+	max-width: 80%;
+	margin:auto;
 }
