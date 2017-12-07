@@ -1,6 +1,6 @@
 @charset "utf-8";
 .account-box {
-	margin: 80px auto;
+	margin: 50px auto;
 	background: white;
 	max-width: 600px;
 }
@@ -9,7 +9,7 @@
 	box-shadow:#e0e0e0 5px 10px 25px;
 }
 .account-content{
-	padding: 60px 50px;
+	padding:50px;
 }
 .submit-btn{
     display: block;
@@ -57,7 +57,7 @@
 }
 .main-form{
 	border: #e0e0e0 solid 1px;
-	
+	height: 100%;
 }
 .box-header{
 	font-size: 30px;
