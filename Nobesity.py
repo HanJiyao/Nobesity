@@ -54,6 +54,9 @@ def profile():
 def plans():
     return render_template('plans.html')
 
+@app.route('/diet')
+def diet():
+    return render_template('diet.html')
 
 @app.route('/viewNutrition')
 def nutrition():
