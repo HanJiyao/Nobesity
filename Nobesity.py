@@ -25,14 +25,19 @@ def timeline():
     return render_template('timeline.html')
 
 
+@app.route('/registerName')
+def registername():
+    return render_template('firstTimeRegisterName.html')
+
+
 @app.route('/registerGender')
 def registergender():
-    return render_template('firstTimeRegistGender.html')
+    return render_template('firstTimeRegisterGender.html')
 
 
 @app.route('/registerInfo')
 def registerinfo():
-    return render_template('firstTimeRegistInfo.html')
+    return render_template('firstTimeRegisterInfo.html')
 
 
 @app.route('/signup')
@@ -42,7 +47,7 @@ def signup():
 
 @app.route('/accountinfo')
 def accountinfo():
-    return render_template('accountinfo.html')
+    return render_template('accountinfoDisplay.html')
 
 
 @app.route('/profile')
@@ -69,6 +74,7 @@ class RequiredIf(object):
                 else:
                     validators.Optional().__call__(form, field)
 
+
 class nutrition_food(Form):
     food_name = StringField('Name',[validators.length(min=1,max=150),validators.DataRequired()])
     food_type = StringField('Type',[validators.length(min=1,max=150),validators.DataRequired()])
@@ -76,6 +82,7 @@ class nutrition_food(Form):
     fats = StringField('Fats value',[validators.length(min=1,max=3),validators.DataRequired()])
     carbohydrates = StringField('Carbohydrates value',[validators.length(min=1,max=3),validators.DataRequired()])
     proteins = StringField('Protein value',[validators.length(min=1,max=3),validators.DataRequired()])
+
 
 @app.route('/diet', methods=['GET','POST'])
 def new_diet():
@@ -95,6 +102,7 @@ def new_diet():
           })
         flash('Food inserted successfully', 'sucess')
     return  render_template('diet.html', form=food_form)
+
 
 @app.route('/quiz')
 def quiz():
