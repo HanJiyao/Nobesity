@@ -2,6 +2,11 @@ from flask import Flask, render_template, request
 from wtforms import Form, StringField, TextAreaField, RadioField, SelectField, validators
 
 import firebase_admin
+from firebase_admin import credentials, db
+
+cred = credentials.Certificate('')
+default_app = firebase_admin.initialize_app(cred,{})
+
 app = Flask(__name__)
 
 
