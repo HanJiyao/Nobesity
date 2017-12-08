@@ -1,8 +1,19 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, flash, redirect, url_for
 from wtforms import Form, StringField, TextAreaField, RadioField, SelectField, validators
 
 import firebase_admin
-app = Flask(__name__)
+from firebase_admin import credentials, db
+
+cred = credentials.Certificate('./cred/nobesity-it1705-firebase-adminsdk-xo793-bbfa4432da.json')
+default_app = firebase_admin.initialize_app(cred, {
+    'databaseURL': 'https://nobesity-it1705.firebaseio.com/ '
+})
+
+root = db.reference()
+
+if __name__ == '__main__':
+    app.secret_key = 'nobesity1705'
+    app.run()
 
 
 @app.route('/home')
