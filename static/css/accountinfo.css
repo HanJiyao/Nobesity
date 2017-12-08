@@ -1,0 +1,30 @@
+@charset "utf-8";
+.account_info{
+	max-width: 600px!important;
+	background: white;
+	margin: 50px 0;
+	padding: 80px;
+	box-shadow:#e0e0e0 0 5px 50px;
+}
+.gender-row{
+	padding-top: 20px;
+}
+.gender-row .col-2{
+	padding-top: 6px;
+}
+.gender-radio{
+	margin-left: 50px; 
+}
+.gender-radio, .gender-radio-female{
+	background: #03A9F4;
+}
+.gender-radio-female{
+	float: right;
+}
+#update_info{
+	background: #03A9F4
+}
+.account_info .form-group{
+	padding-bottom: 30px;
+	border-bottom: #e0e0e0 dashed 1px;
+}
