@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Nobesity SG</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <link rel="stylesheet" href="../static/css/layout.css">
+    <link rel="stylesheet" href="../static/css/forum.css">
+    <link rel="stylesheet" href="../static/css/Diet.css">
+    <link rel="stylesheet" href="../static/css/login.css">
+</head>
+<body>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+<div class="wrapper">
+	<div class="nav-wrapper">
+	<nav class="navbar navbar-expand navbar-light">
+	  <a class="navbar-brand" href="#">NObesity</a>
+	  <div id="navbarNavDropdown" class="navbar-collapse collapse">
+		<ul class="navbar-nav ml-auto">
+		  <li class="nav-item active">
+			<a class="nav-link" href="/home">Home <span class="sr-only">(current)</span></a> 
+		  </li>
+		  <li class="nav-item">
+			<a class="nav-link" href="/plans">Plan</a>
+		  </li>
+		  <li class="nav-item">
+			<a class="nav-link" href="/diet">Diet</a>
+		  </li>
+		  <li class="nav-item">
+			<a class="nav-link" href="/quiz">Quiz</a>
+		  </li>
+		  <li class="nav-item">
+			<a class="nav-link" href="/faq">FAQ</a>
+		  </li>
+		  <li class="nav-item">
+			<a class="nav-link" href="/rewards">Reward</a>
+		  </li>
+		  <li class="nav-item sep">
+			<a class="nav-link">|</a>
+		  </li>
+		  <!-- {% if not session.logged_in %} -->
+			<li class="nav-item dropdown account-btn">
+				<a class="dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				  UserName
+				</a>
+				<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+				  <a class="dropdown-item" href="/profile">Profile</a>
+				  <a class="dropdown-item" href="/accountinfo">Account</a>
+				  <a class="dropdown-item" href="#">Log out</a>
+				</div>
+			</li>
+		<!-- {% else %}
+			<li><a href="/login">Get Started</a></li>
+		{% endif %} -->
+		  </ul>
+		</div>
+	  </nav>
+	</div>
+	<div class="account-box" style="height: 657px">
+        <form action="" class="main-form" >
+            <div class="box-header">A bit about you</div>
+            <div class="box-text">This will help us tailor your health journey</div>
+            <div class="form-group account-content">
+            <div class="form-group">
+				<label for="inputHeight">Height (cm)</label>
+				<input type="number" class="form-control" id="height" placeholder="Enter height">
+			  </div>
+			  <div class="form-group">
+				<label for="weight">Weight</label>
+				<input type="number" class="form-control" id="weight" placeholder="Enter weight">
+			  </div>
+          	  <div class="form-group">
+				<label for="weight">Birthday</label>
+				<div class="form-row">
+				<div class="form-group col-md-4">
+				  <select class="form-control" id="day" placeholder="Day">
+					  <option selected disabled>Day</option>
+					  <option>1</option>
+					  <option>2</option>
+					  <option>3</option>
+					  <option>4</option>
+					  <option>5</option>
+					  <option>6</option>
+					  <option>7</option>
+					  <option>8</option>
+					  <option>9</option>
+					  <option>10</option>
+					  <option>11</option>
+					  <option>12</option>
+					  <option>12</option>
+					  <option>13</option>
+					  <option>14</option>
+					  <option>15</option>
+					  <option>16</option>
+					  <option>17</option>
+					  <option>18</option>
+					  <option>19</option>
+					  <option>20</option>
+					  <option>21</option>
+					  <option>22</option>
+					  <option>23</option>
+					  <option>24</option>
+					  <option>25</option>
+					  <option>26</option>
+					  <option>27</option>
+					  <option>28</option>
+					  <option>29</option>
+					  <option>30</option>
+					  <option>31</option>
+				  </select>
+				</div>
+				<div class="form-group col-md-4">
+				  <select id="month" class="form-control" placeholder="Month">
+					  <option selected disabled>Month</option>
+					  <option>1</option>
+					  <option>2</option>
+					  <option>3</option>
+					  <option>4</option>
+					  <option>5</option>
+					  <option>6</option>
+					  <option>7</option>
+					  <option>8</option>
+					  <option>9</option>
+					  <option>10</option>
+					  <option>11</option>
+					  <option>12</option>
+				  </select>
+				</div>
+				<div class="form-group col-md-4">
+				  <input type="number" class="form-control" id="year" placeholder="Year">
+				</div>
+			  </div>
+			  </div>
+				<button type="submit" class="form-control submit-btn" style="margin-top: 30px;     margin-bottom: 0;">Next</button>
+           	</div>
+        </form>
+    </div>
+	<footer class="footer">
+		<div class="container-fluid text-center">
+			<span> © 2017 NYP SIT Nobesity Singapore</span>
+		</div>
+	</footer>
+</div>
+</body>
+</html>

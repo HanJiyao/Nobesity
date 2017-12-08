@@ -5,10 +5,11 @@
     <title>Nobesity SG</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
-    <link rel="stylesheet" href="../static/css/layout.css">
-    <link rel="stylesheet" href="../static/css/forum.css">
-    <link rel="stylesheet" href="../static/css/Diet.css">
-    <link href="css/login.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="../static/css/layout.css" type="text/css">
+    <link rel="stylesheet" href="../static/css/forum.css" type="text/css">
+    <link rel="stylesheet" href="../static/css/Diet.css" type="text/css">
+    <link href="../static/css/login.css" rel="stylesheet" type="text/css">
+    <link href="../static/css/accountinfo.css" rel="stylesheet" type="text/css">
 </head>
 <body>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
@@ -54,34 +55,70 @@
 	<!-- {% else %}
 		<li><a href="/login">Get Started</a></li>
 	{% endif %} -->
-	  </ul>
-	</div>
-  </nav>
+	</ul>
+  </div>
+</nav>
 </div>
-<div class="account-box">
-    <form action="" class="main-form" >
-        <div class="row switch-page">
-            <div class="link-box col-6"><a href="/login">Log in</a></div>
-            <div class="current-box col-6">Sign up</div>
-        </div>
-		<div class="form-group account-content">
-		<form action="" class="" >
-            <div class="form-group">
-                <div class="container">
-                    <input type="text" class="form-control mt-3" placeholder="username" name="uname" required>
-                    <input type="email" class="form-control mt-3" placeholder="email" name="email" required>
-                    <input type="password" class="form-control mt-3" placeholder="password" name="psw" required>
-                    <button class="form-control submit-btn">Sign Up</button>
-                </div>
-            </div>
-		</form>
-		</div>
-	</form>
-	</div>
-	<footer class="footer">
+<form class="mx-auto account_info">
+  <div class="form-group form-row">
+    <div class="col-md-6">
+      <label for="firstName">First Name</label>
+      <input type="text" class="form-control" id="firstName" placeholder="First Name">
+    </div>
+    <div class="col-md-6">
+      <label for="lastName">Last Name</label>
+      <input type="text" class="form-control" id="lastName" placeholder="Last Name">
+    </div>
+  </div>
+  <div class="form-group group-row">
+  	<div class="row gender-row">
+        <label for="gender" class="col-2">Gender</label>
+        <div class="col-10" data-toggle="buttons">
+		  <label class="col-5 btn btn-primary gender-radio">
+			<input class="form-check-input" type="radio" name="gender" id="gender_male" value="male" autocomplete="off">
+			Male
+		  </label>
+		  <label class="col-5 btn btn-primary gender-radio-female">
+			<input class="form-check-input" type="radio" name="gender" id="gender_female" value="female">
+			Female
+		  </label>
+      </div>
+  	</div>
+  </div>
+  <div class="form-group">
+    <label for="inputAddress">Birth date</label>
+    <input type="date" class="form-control" id="birth">
+  </div>
+  <div class="form-group form-row">
+    <div class="col-md-6">
+    <label for="inputAddress2">Weight</label>
+    <input type="text" class="form-control" id="weight" placeholder="Weight">
+    </div>
+      <div class="col-md-6">
+    <label for="inputAddress2">Height</label>
+    <input type="text" class="form-control" id="height" placeholder="Height">
+    </div>
+  </div>
+  <div class="form-group form-row">
+    <div class="col-md-4">
+      <label for="inputCity">Systol</label>
+      <input type="text" class="form-control" id="inputCity">
+    </div>
+    <div class="col-md-4">
+      <label for="inputState">Diastol</label>
+      <input  id="inputState" class="form-control">
+    </div>
+    <div class="col-md-4">
+      <label for="inputZip">Pulse</label>
+      <input type="text" class="form-control" id="inputZip">
+    </div>
+  </div>
+  <button class="btn btn-primary form-control" id="update_info">Update</button>
+</form>
+<footer class="footer">
 		<div class="container-fluid text-center">
 			<span> © 2017 NYP SIT Nobesity Singapore</span>
 		</div>
 	</footer>
-	</body>
+</body>
 </html>
