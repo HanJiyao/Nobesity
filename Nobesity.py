@@ -55,13 +55,9 @@ def plans():
     return render_template('plans.html')
 
 
-
-
 class RequiredIf(object):
-
     def __init__(self, *args, **kwargs):
         self.conditions = kwargs
-
     def __call__(self, form, field):
         for name, data in self.conditions.items():
             if name not in form._fields:
@@ -80,7 +76,6 @@ class nutrition_food(Form):
     fats = StringField('Fats value',[validators.length(min=1,max=3),validators.DataRequired()])
     carbohydrates = StringField('Carbohydrates value',[validators.length(min=1,max=3),validators.DataRequired()])
     proteins = StringField('Protein value',[validators.length(min=1,max=3),validators.DataRequired()])
-
 
 @app.route('/diet', methods=['GET','POST'])
 def new_diet():

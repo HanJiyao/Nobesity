@@ -1,4 +1,4 @@
-% extends 'layout.html' %}
+{% extends 'layout.html' %}
 {% block body %}
     <div class = 'view_diet'>
     <h1>View Nutritions</h1>
@@ -47,29 +47,28 @@
     </table>
     </div>
     <div class = "create_diet">
-    <h1>Food Publication</h1>
-    <form method="Post" action="">
-       <div class = 'form-group'>
-           <div class = 'form-row'>
-               {{ render_field(form.food_name,class_='form-control') }}
-           </div>
-           <div class = 'form-row'>
-               {{ render_field(form.food_type, class_='form-control')}}
-           </div>
-           <div class ='form-row'>
-               {{ render_field(form.calories,class_='form-control')}}
-           </div>
-           <div class = 'form-row'>
-               {{ render_field(form.fats,class_='form-control')}}
-           </div>
-           <div class='form-row'>
-               {{ render_field(form.carbohydrates, class_='form-control')}}
-           </div>
-           <div class='form-row'>
-               {{ render_field(form.proteins, class_='form-control') }}
-           </div>
-       </div>
-   </form>
+        <h1>Food Publication</h1>
+        <form method="Post" action="">
+            <div class = 'form-group'>
+                <div class = 'form-row'>
+                    {{ render_field(form.food_name,class_='form-control') }}
+                </div>
+                <div class = 'form-row'>
+                    {{ render_field(form.food_type, class_='form-control')}}
+                </div>
+                <div class ='form-row'>
+                    {{ render_field(form.calories,class_='form-control')}}
+                </div>
+                <div class = 'form-row'>
+                    {{ render_field(form.fats,class_='form-control')}}
+                </div>
+                <div class='form-row'>
+                    {{ render_field(form.carbohydrates, class_='form-control')}}
+                </div>
+                <div class='form-row'>
+                    {{ render_field(form.proteins, class_='form-control') }}
+                </div>
+                </div>
+        </form>
     </div>
-
 {% endblock %}
