@@ -1,4 +1,7 @@
 @charset "utf-8";
+.wrapper{
+	max-width: 1000px;
+}
 body{
     background: #f0f0f0;
 	padding-top: 80px;
@@ -52,21 +55,22 @@ body{
 .dropdown{
 	padding: 15px 0;
 }
-.dropdown-toggle {
+.account-btn {
 	background: #03A9F4;
 	border-radius: 5px;
 	border: #03A9F4 solid 1px;
 	transition: background 0.5s, color 0.5s;
 	display: block;
 	text-decoration: none;
-	color: white;
+	color: white !important;
 	padding: 10px;
 	width: 160px;
 }
-.dropdown-toggle:hover{
+.account-btn:hover{
 	text-decoration: none;
 	background: white;
-	color: #03A9F4;
+	color: #03A9F4 !important;
+	cursor: pointer;
 }
 .dropdown-item{
 	text-align: center;
