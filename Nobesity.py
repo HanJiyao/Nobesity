@@ -59,7 +59,7 @@ def profile():
 @app.route('/plans')
 def plans():
     return render_template('plans.html')
-
+We found some conflicts while trying to merge. Please resolve the conflicts and commit the changes.
 
 
 @app.route('/diet')
