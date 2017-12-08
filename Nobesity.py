@@ -55,9 +55,7 @@ def plans():
     return render_template('plans.html')
 
 
-@app.route('/view_diet')
-def view_diet():
-    return render_template('view_diet.html')
+
 
 class RequiredIf(object):
 
@@ -84,7 +82,7 @@ class nutrition_food(Form):
     proteins = StringField('Protein value',[validators.length(min=1,max=3),validators.DataRequired()])
 
 
-@app.route('/createNutrition', methods=['GET','POST'])
+@app.route('/diet', methods=['GET','POST'])
 def new_diet():
     food_form = nutrition_food(request.form)
     if request.method == 'POST' and food_form.validate():
@@ -101,8 +99,7 @@ def new_diet():
                            'Carbohydrates value':diet.get_carbohydrates(),'Protein value':diet.get_protein()
           })
         flash('Food inserted successfully', 'sucess')
-        return redirect(url_for('view_diet'))
-    return  render_template('create_diet.html', form=food_form)
+    return  render_template('diet.html', form=food_form)
 
 @app.route('/quiz')
 def quiz():
