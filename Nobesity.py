@@ -61,8 +61,8 @@ def plans():
     return render_template('plans.html')
 
 
-@app.route('/diet')
-def diet():
+@app.route('/Nutrition')
+def nutrition():
     return render_template('viewNutrition.html')
 
 class RequiredIf(object):
@@ -106,7 +106,7 @@ def new_food():
                            'Carbohydrates value':Nutrition.get_carbohydrates(),'Protein value':Nutrition.get_protein()
           })
         flash('Food inserted successfully', 'sucess')
-        return redirect(url_for('diet'))
+        return redirect(url_for('nutrition'))
     return  render_template('create_nutrition.html',form=food_form)
 
 @app.route('/quiz')
