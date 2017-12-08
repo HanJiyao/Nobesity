@@ -5,16 +5,10 @@ import firebase_admin
 from firebase_admin import credentials, db
 
 cred = credentials.Certificate('./cred/nobesity-it1705-firebase-adminsdk-xo793-bbfa4432da.json')
-default_app = firebase_admin.initialize_app(cred, {
-    'databaseURL': 'https://nobesity-it1705.firebaseio.com/ '
-})
+default_app = firebase_admin.initialize_app(cred, {'databaseURL': 'https://nobesity-it1705.firebaseio.com/ '})
 
 root = db.reference()
 app = Flask(__name__)
-if __name__ == '__main__':
-    app.secret_key = 'nobesity1705'
-    app.run()
-
 
 @app.route('/home')
 def home():
@@ -122,50 +116,6 @@ def faq():
 @app.route('/rewards')
 def rewards():
     return render_template('rewards.html')
-
-
-@app.route('/bread')
-def bread():
-    return render_template('Reference/bread.html')
-
-@app.route('/porridge')
-def porridge():
-    return render_template('Reference/porridge.html')
-
-
-@app.route('/oats')
-def oats():
-    return render_template('Reference/oats.html')
-
-
-@app.route('/salad')
-def salad():
-    return render_template('Reference/salad.html')
-
-
-@app.route('/juices')
-def juices():
-    return render_template('Reference/juices.html')
-
-
-@app.route('/kway_teow_soup')
-def kway_teow_soup():
-    return render_template('Reference/kway_teow_soup.html')
-
-
-@app.route('/fishsoup')
-def fishsoup():
-    return render_template('Reference/fishsoup.html')
-
-
-@app.route('/herbalsoup')
-def herbalsoup():
-    return render_template('Reference/herbalsoup.html')
-
-
-@app.route('/seafoodsoup')
-def seafoodsoup():
-    return render_template('Reference/seafoodsoup.html')
 
 
 @app.route('/leaderboards')
