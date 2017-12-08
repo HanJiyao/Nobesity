@@ -1,0 +1,49 @@
+% extends 'layout.html' %}
+{% block body %}
+    <h1>View Nutritions</h1>
+    <br/>
+    <hr/>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Calories</th>
+            <th>Fats(%)</th>
+            <th>Carbohydrates(%)</th>
+            <th>Protein(%)</th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th scope="row">1</th>
+            <td>Bread</td>
+            <td>Food</td>
+            <td>265</td>
+            <td>4</td>
+            <td>16</td>
+            <td>18</td>
+
+            <td><a href="#">View</a></td>
+            <td><a href="/update">Update</a></td>
+            <td><a href="#">Delete</a></td>
+        </tr>
+        <tr>
+            <th scope="row">2</th>
+            <td>Oats</td>
+            <td>Food</td>
+            <td>68</td>
+            <td>2</td>
+            <td>6</td>
+            <td>4</td>
+
+            <td><a href="#">View</a></td>
+            <td><a href="/update">Update</a></td>
+            <td><a href="#">Delete</a></td>
+        </tr>
+        </tbody>
+    </table>
+
+{% endblock %}
