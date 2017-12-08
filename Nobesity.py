@@ -59,12 +59,28 @@ def profile():
 @app.route('/plans')
 def plans():
     return render_template('plans.html')
-We found some conflicts while trying to merge. Please resolve the conflicts and commit the changes.
 
 
 @app.route('/diet')
 def diet():
     return render_template('viewNutrition.html')
+
+class RequiredIf(object):
+
+    def __init__(self, *args, **kwargs):
+        self.conditions = kwargs
+
+    def __call__(self, form, field):
+        for name, data in self.conditions.items():
+            if name not in form._fields:
+                validators.Optional()(field)
+            else:
+                condition_field = form._fields.get(name)
+                if condition_field.data == data:
+                    validators.DataRequired().__call__(form, field)
+                else:
+                    validators.Optional().__call__(form, field)
+
 class nutrition_food(Form):
     food_name = StringField('Name',[validators.length(min=1,max=150),validators.DataRequired()])
     food_type = StringField('Type',[validators.length(min=1,max=150),validators.DataRequired()])
@@ -73,16 +89,16 @@ class nutrition_food(Form):
     carbohydrates = StringField('Carbohydrates value',[validators.length(min=1,max=3),validators.DataRequired()])
     proteins = StringField('Protein value',[validators.length(min=1,max=3),validators.DataRequired()])
 
-@app.route('/create_nutrition')
+@app.route('/create_nutrition', methods=['GET','POST'])
 def new_food():
-    form = nutrition_food(request.form)
-    if request.method == 'POST' and form.validate():
-        name = form.food_name.data
-        type = form.food_type.data
-        calories = form.calories.data
-        fats = form.fats.data
-        carbohydrates = form.carbohydrates.data
-        protein = form.proteins.data
+    food_form = nutrition_food(request.form)
+    if request.method == 'POST' and food_form.validate():
+        name = food_form.food_name.data
+        type = food_form.food_type.data
+        calories = food_form.calories.data
+        fats = food_form.fats.data
+        carbohydrates = food_form.carbohydrates.data
+        protein = food_form.proteins.data
         Nutrition = nutrition(name, type, calories, fats, carbohydrates, protein)
         Nutrition.db = root.child('Food')
         Nutrition.db.push({'Name':Nutrition.get_name(), 'Type':Nutrition.get_type(),
@@ -90,11 +106,8 @@ def new_food():
                            'Carbohydrates value':Nutrition.get_carbohydrates(),'Protein value':Nutrition.get_protein()
           })
         flash('Food inserted successfully', 'sucess')
-
-
-
-
-
+        return redirect(url_for('diet'))
+    return  render_template('create_nutrition.html',form=food_form)
 
 @app.route('/quiz')
 def quiz():
