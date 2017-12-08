@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, flash, redirect, url_for
 from wtforms import Form, StringField, TextAreaField, RadioField, SelectField, validators
-from Nutrition import nutrition
+from Diet import Diet
 import firebase_admin
 from firebase_admin import credentials, db
 
@@ -54,13 +54,10 @@ def profile():
 def plans():
     return render_template('plans.html')
 
-@app.route('/diet')
-def diet():
-    return render_template('diet.html')
 
-@app.route('/viewNutrition')
-def nutrition():
-    return render_template('viewNutrition.html')
+@app.route('/view_diet')
+def view_diet():
+    return render_template('view_diet.html')
 
 class RequiredIf(object):
 
@@ -88,7 +85,7 @@ class nutrition_food(Form):
 
 
 @app.route('/createNutrition', methods=['GET','POST'])
-def new_food():
+def new_diet():
     food_form = nutrition_food(request.form)
     if request.method == 'POST' and food_form.validate():
         name = food_form.food_name.data
@@ -97,15 +94,15 @@ def new_food():
         fats = food_form.fats.data
         carbohydrates = food_form.carbohydrates.data
         protein = food_form.proteins.data
-        Nutrition = nutrition(name, type, calories, fats, carbohydrates, protein)
-        Nutrition.db = root.child('Food')
-        Nutrition.db.push({'Name':Nutrition.get_name(), 'Type':Nutrition.get_type(),
-                           'Calories value':Nutrition.get_calories(),'Fats Value':Nutrition.get_fats(),
-                           'Carbohydrates value':Nutrition.get_carbohydrates(),'Protein value':Nutrition.get_protein()
+        diet = Diet(name, type, calories, fats, carbohydrates, protein)
+        diet.db = root.child('Food')
+        diet.db.push({'Name':diet.get_name(), 'Type':diet.get_type(),
+                           'Calories value':diet.get_calories(),'Fats Value': diet.get_fats(),
+                           'Carbohydrates value':diet.get_carbohydrates(),'Protein value':diet.get_protein()
           })
         flash('Food inserted successfully', 'sucess')
-        return redirect(url_for('nutrition'))
-    return  render_template('create_nutrition.html',form=food_form)
+        return redirect(url_for('view_diet'))
+    return  render_template('create_diet.html', form=food_form)
 
 @app.route('/quiz')
 def quiz():

@@ -1,4 +1,4 @@
-class nutrition:
+class Diet:
     def __init__(self,name,type,calories,fats,carbohydrate,protein):
         self.name = name
         self.type = type
