@@ -83,7 +83,8 @@ class nutrition_food(Form):
     carbohydrates = StringField('Carbohydrates value',[validators.length(min=1,max=3),validators.DataRequired()])
     proteins = StringField('Protein value',[validators.length(min=1,max=3),validators.DataRequired()])
 
-@app.route('/create_nutrition', methods=['GET','POST'])
+
+@app.route('/new_nutrition', methods=['GET','POST'])
 def new_food():
     food_form = nutrition_food(request.form)
     if request.method == 'POST' and food_form.validate():
