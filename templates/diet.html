@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
 {% block body %}
     <div class = 'view_diet'>
-    <h1>View Nutritions</h1>
+    <h1>View Diet</h1>
     <br/>
     <table class="table table-bordered">
         <thead>
@@ -18,8 +18,7 @@
         </thead>
         <tbody>
         <tr>
-            <th scope="row">1</th>
-            <td>Bread</td>
+            <th scope="row">Bread</th>
             <td>Food</td>
             <td>265</td>
             <td>4</td>
@@ -27,12 +26,11 @@
             <td>18</td>
 
             <td><a href="#">View</a></td>
-            <td><a href="/update">Update</a></td>
+            <td><a href="#">Update</a></td>
             <td><a href="#">Delete</a></td>
         </tr>
         <tr>
-            <th scope="row">2</th>
-            <td>Oats</td>
+            <th scope="row">Oats</th>
             <td>Food</td>
             <td>68</td>
             <td>2</td>
@@ -40,35 +38,13 @@
             <td>4</td>
 
             <td><a href="#">View</a></td>
-            <td><a href="/update">Update</a></td>
+            <td><a href="#">Update</a></td>
             <td><a href="#">Delete</a></td>
         </tr>
         </tbody>
     </table>
     </div>
     <div class = "create_diet">
-        <h1>Food Publication</h1>
-        <form method="Post" action="">
-            <div class = 'form-group'>
-                <div class = 'form-row'>
-                    {{ render_field(form.food_name,class_='form-control') }}
-                </div>
-                <div class = 'form-row'>
-                    {{ render_field(form.food_type, class_='form-control')}}
-                </div>
-                <div class ='form-row'>
-                    {{ render_field(form.calories,class_='form-control')}}
-                </div>
-                <div class = 'form-row'>
-                    {{ render_field(form.fats,class_='form-control')}}
-                </div>
-                <div class='form-row'>
-                    {{ render_field(form.carbohydrates, class_='form-control')}}
-                </div>
-                <div class='form-row'>
-                    {{ render_field(form.proteins, class_='form-control') }}
-                </div>
-                </div>
-        </form>
+        <h1>Create Diet</h1>
     </div>
 {% endblock %}
