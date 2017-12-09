@@ -1,10 +1,10 @@
 <div class="nav-wrapper">
     <nav class="navbar navbar-expand navbar-light">
-        <a class="navbar-brand" href="#">NObesity</a>
+        <a class="navbar-brand" href="/">NObesity</a>
         <div id="navbarNavDropdown" class="navbar-collapse collapse">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="/home">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/plans">Plan</a>
@@ -24,20 +24,20 @@
                 <li class="nav-item sep">
                     <a class="nav-link sep">|</a>
                 </li>
-                <!-- {% if not session.logged_in %} -->
-                <li class="nav-item dropdown">
-                    <a class="dropdown-toggle account-btn" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      UserName
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="/profile">Profile</a>
-                        <a class="dropdown-item" href="/accountinfo">Account</a>
-                        <a class="dropdown-item" href="#">Log out</a>
-                    </div>
-                </li>
-                <!-- {% else %}
-                <li><a href="/login">Get Started</a></li>
-                {% endif %} -->
+                {% if session.logged_in%}
+                    <li class="nav-item dropdown">
+                        <a class="dropdown-toggle account-btn" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          UserName
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="/profile">Profile</a>
+                            <a class="dropdown-item" href="/accountinfo">Account</a>
+                            <a class="dropdown-item" href="/logout">Log out</a>
+                        </div>
+                    </li>
+                {% else %}
+                    <li><a href="/signup" class="account-btn">Get Started</a></li>
+                {% endif %}
             </ul>
         </div>
     </nav>

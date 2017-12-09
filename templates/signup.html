@@ -1,23 +1,42 @@
 {% extends 'layout.html' %}
 {% block body %}
-<div class="account-box">
-    <form action="" class="main-form" >
-        <div class="row switch-page">
-            <div class="link-box col-6"><a href="/login">Log in</a></div>
-            <div class="current-box col-6">Sign up</div>
-        </div>
-		<div class="form-group account-content">
-		<form action="" class="" >
-            <div class="form-group">
-                <div class="container">
-                    <input type="text" class="form-control mt-3" placeholder="username" name="uname" required>
-                    <input type="email" class="form-control mt-3" placeholder="email" name="email" required>
-                    <input type="password" class="form-control mt-3" placeholder="password" name="psw" required>
-                    <button class="form-control submit-btn">Sign Up</button>
-                </div>
+    {% macro render_field(field) %}
+      {{ field(**kwargs)|safe }}
+      {% if field.errors %}
+        {% for error in field.errors %}
+            <div class="alert alert-danger col-11 m-auto">
+                {{ error }}
             </div>
-		</form>
-		</div>
-	</form>
-</div>
+        {% endfor %}
+      {% endif %}
+    {% endmacro %}
+    <div class="account-box">
+        <form method="post" action="" class="main-form" >
+            <div class="row switch-page">
+                <div class="link-box col-6"><a href="/login">Log in</a></div>
+                <div class="current-box col-6">Sign up</div>
+            </div>
+            <div class="form-group account-content">
+            <form action="" class="" >
+                <div class="form-group">
+                    <div class="container">
+                        <div class="form-row">
+                            {{ render_field(form.username, class_="form-control m-3", placeholder="Username") }}
+                        </div>
+                        <div class="form-row">
+                            {{ render_field(form.email, class_="form-control m-3", placeholder="Email") }}
+                        </div>
+                        <div class="form-row">
+                            {{ render_field(form.password, class_="form-control m-3", placeholder="Password") }}
+                        </div>
+                        <div class="form-row">
+                            {{ render_field(form.confirm, class_="form-control m-3", placeholder="Confirm Passord") }}
+                        </div>
+                        <button type="submit" class="form-control submit-btn" value="Register">Sign Up</button>
+                    </div>
+                </div>
+            </form>
+            </div>
+        </form>
+    </div>
 {% endblock %}
