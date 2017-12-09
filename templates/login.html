@@ -1,16 +1,35 @@
 {% extends 'layout.html' %}
 {% block body %}
-    <div class="account-box" style="height: 556px;">
-        <form action="" class="main-form" >
+    {% macro render_field(field) %}
+      {{ field(**kwargs)|safe }}
+      {% if field.errors %}
+        {% for error in field.errors %}
+            <div class="alert alert-danger col-12 m-auto">
+                {{ error }}
+            </div>
+        {% endfor %}
+      {% endif %}
+    {% endmacro %}
+    <div class="account-box">
+        <form method="post" action="" class="main-form" >
             <div class="row switch-page">
                 <div class="current-box col-6">Log in</div>
                 <div class="link-box col-6"><a href="/signup">Sign up</a></div>
             </div>
             <div class="form-group account-content">
                 <div class="container">
-                    <input type="text" class="form-control mt-3 mb-3" placeholder="email/username" name="uname" required>
-                    <input type="password" class="form-control mt-3 mb-3" placeholder="password" name="psw" required>
-                    <button type="submit" value="signup" class="form-control submit-btn">Log in</button>
+                    <div class="form-row">
+                        {{ render_field(form.username, class_="form-control mt-3 mb-3", placeholder="Username / Email") }}
+                    </div>
+                    <div class="form-row">
+                        {{ render_field(form.password, class_="form-control mt-3 mb-3", placeholder="Password") }}
+                    </div>
+                    {% if password_check != '' %}
+                        <div class="form-row">
+                            <div class="alert alert-danger col-12 m-auto">Invalid Password</div>
+                        </div>
+                    {% endif %}
+                    <button type="submit" class="form-control submit-btn" value="Login">Log in</button>
                     <div class="psw"><a href="#">Forgot password?</a></div>
                 </div>
             </div>

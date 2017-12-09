@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, flash, redirect, url_for, session
-from wtforms import Form, StringField, TextAreaField, RadioField, SelectField, PasswordField, validators
+from wtforms import Form, StringField, TextAreaField, RadioField, SelectField, PasswordField, validators, ValidationError
 from Diet import Diet
 import firebase_admin
 from firebase_admin import credentials, db
@@ -8,6 +8,10 @@ default_app = firebase_admin.initialize_app(cred, {'databaseURL': 'https://nobes
 root = db.reference()
 app = Flask(__name__)
 app.secret_key = 'secret'
+UserId_db = root.child('UserAccount').get()
+uid_db = {}
+for key in UserId_db:
+    uid_db[key] = UserId_db[key]
 
 
 class RequiredIf(object):
@@ -35,38 +39,102 @@ def index():
 
 class UserAccount:
     def __init__(self, username, email, password):
-        self.username = username
-        self.email = email
-        self.password = password
+        self.__username = username
+        self.__email = email
+        self.__password = password
+
+    def get_username(self):
+        return self.__username
+
+    def get_email(self):
+        return self.__email
+
+    def get_password(self):
+        return self.__password
 
 
-@app.route('/login')
+def validate_login(form, field):
+    valid = False
+    for i in uid_db:
+        if field.data == i or field.data == uid_db[i]['email']:
+            valid = True
+    if valid is False:
+        raise ValidationError('Invalid User Name or Email')
+
+
+class LoginForm(Form):
+    username = StringField('Email / User Name', [validators.data_required(), validate_login])
+    password = PasswordField('Password', [validators.data_required()])
+
+
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    login_form = SignUpForm(request.form)
-    session['logged_in'] = True
-    return redirect(url_for('index'))
+    login_form = LoginForm(request.form)
+    password_check = ''
+    if request.method == 'POST' and login_form.validate():
+        login_id = request.form.to_dict()['username']
+        valid = False
+        try:
+            if uid_db[login_id]['password'] == request.form.to_dict()['password']:
+                valid = True
+        except KeyError:
+            for i in uid_db:
+                if uid_db[i]['email'] == login_id:
+                    if uid_db[i]['password'] == request.form.to_dict()['password']:
+                        valid = True
+        finally:
+            if valid is False:
+                password_check = 'Invalid'
+            else:
+                session['logged_in'] = True
+                return redirect(url_for('index'))
+    return render_template('login.html', form=login_form, password_check=password_check)
+
+
+def validate_uid(form, field):
+    for i in uid_db:
+        if field.data == i:
+            raise ValidationError('The username is already registered')
+
+
+def validate_email(form, field):
+    for i in uid_db:
+        if field.data == uid_db[i]['email']:
+            raise ValidationError('The Email is already registered')
+
+
+class SignUpForm(Form):
+    username = StringField('User Name', [
+        validators.length(min=5, max=20),
+        validators.DataRequired(),
+        validate_uid])
+    email = StringField('Email', [
+        validators.email(),
+        validators.DataRequired(),
+        validate_email])
+    password = PasswordField('Password', [
+        validators.DataRequired(),
+        validators.EqualTo('confirm', message='Passwords must match')])
+    confirm = PasswordField('Confirm Password')
 
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     signup_form = SignUpForm(request.form)
     if request.method == 'POST' and signup_form.validate():
-        user = UserAccount(SignUpForm.username.data, SignUpForm.email.data, SignUpForm.password.data)
-        return redirect(url_for('login'))
+        user_account = UserAccount(
+            signup_form.username.data,
+            signup_form.email.data,
+            signup_form.password.data
+        )
+        user_db = root.child('UserAccount')
+        user_db.child(user_account.get_username()).set({
+            'email': user_account.get_email(),
+            'password': user_account.get_password()
+        })
+        session['logged_in'] = True
+        return redirect(url_for('register_name'))
     return render_template('signup.html', form=signup_form)
-
-
-class SignUpForm(Form):
-    username = StringField('User Name', [
-        validators.length(max=20),
-        validators.DataRequired()])
-    email = StringField('Email', [
-        validators.email(),
-        validators.DataRequired()])
-    password = PasswordField('Password', [
-        validators.DataRequired(),
-        validators.EqualTo('confirm', message='Passwords must match')])
-    confirm = PasswordField('Confirm Password')
 
 
 @app.route('/logout')
@@ -82,19 +150,18 @@ def timeline():
 
 
 @app.route('/registerName')
-def registername():
+def register_name():
     return render_template('firstTimeRegisterName.html')
 
 
 @app.route('/registerGender')
-def registergender():
+def register_gender():
     return render_template('firstTimeRegisterGender.html')
 
 
 @app.route('/registerInfo')
-def registerinfo():
+def register_info():
     return render_template('firstTimeRegisterInfo.html')
-
 
 
 @app.route('/accountinfo')
@@ -159,6 +226,7 @@ def rewards():
 @app.route('/leaderboards')
 def leaderboards():
     return render_template('leaderboards.html')
+
 
 if __name__ == '__main__':
     app.run()
