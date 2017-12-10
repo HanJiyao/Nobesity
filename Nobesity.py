@@ -34,7 +34,6 @@ class RequiredIf(object):
 def index():
     if session.get('logged_in') is True:
         return redirect(url_for('timeline'))
-    return render_template('home.html')
 
 
 class UserAccount:
