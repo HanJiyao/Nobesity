@@ -72,22 +72,28 @@
 .gender-img{
 	padding: 0;
 	text-align: center;
+	cursor: pointer;
+	border: white solid 1px;
+	transition: color 0.5s, background 0.5s;
+}
+.gender-img:hover{
+	color:#03A9F4;
 }
 .card-img-top{
-	height: 125px;
-	width: 125px;
+	height: 136px;
+	width: 136px;
 	margin:6px auto 0;
 }
 .gender-img.active{
 	background: #03A9F4;
-	color:white
+	color:white;
 }
 .gender-select{
-	width: 80%;
+	width: 86%;
 	margin: auto;
 	font-size: 25px;
 }
-.card-body{
+.gender-text{
 	padding: 10px 0;
 }
 .alert-danger{

@@ -29,7 +29,7 @@
 	margin:auto;
 	display:inline-block;
 }
-.card-body{
+.profile.card-body{
 	padding: 50px;
 }
 .card-body h1{

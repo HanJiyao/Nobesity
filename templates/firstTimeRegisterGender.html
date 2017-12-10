@@ -1,26 +1,59 @@
 {% extends 'layout.html' %}
 {% block body %}
+    {% macro render_field(field) %}
+      {{ field(**kwargs)|safe }}
+      {% if field.errors %}
+        {% for error in field.errors %}
+            <div class="alert alert-danger col-12 m-auto">
+                {{ error }}
+            </div>
+        {% endfor %}
+      {% endif %}
+    {% endmacro %}
+<script>
+    $(document).ready(function () {
+        var male = $("#gender-0");
+        var female = $("#gender-1");
+        var select_male = $("#select_male");
+        var select_female = $("#select_female");
+        select_male.click(function(){
+            male.prop("checked","True");
+            female.removeProp("checked","True");
+            select_male.attr("class","col-5 gender-img card active");
+            select_female.attr("class","col-5 gender-img card  ml-auto");
+        });
+        select_female.click(function(){
+            female.prop("checked","True");
+            male.removeProp("checked","True");
+            select_female.attr("class","col-5 gender-img card  ml-auto active");
+            select_male.attr("class","col-5 gender-img card");
+        });
+    });
+</script>
 	<div class="account-box">
-        <form action="" class="main-form" >
+        <form method="post" action="" class="main-form" >
             <div class="box-header">Let's Get Started</div>
             <div class="box-text">This will help us tailor your health journey</div>
             <div class="form-group account-content">
             <div class="gender-select">
 				<div class="row">
-					<div class="col-5 gender-img card">
-						<img class="card-img-top">
+					<div class="col-5 gender-img card" id="select_male">
+						<img class="card-img-top" alt="male_avatar" src="../static/images/male_avatar.jpg">
 						<div class="card-body">
 							<p class="card-text">Male</p>
 						</div>
 					</div>
-					<div class="col-5 gender-img card ml-auto">
-						<img class="card-img-top">
+					<div class="col-5 gender-img card ml-auto" id="select_female">
+						<img class="card-img-top" alt="female_avatar" src="../static/images/female_avatar.jpg">
 						<div class="card-body">
 							<p class="card-text">Female</p>
 						</div>
 					</div>
-				</div>	
-           </div><button type="submit" class="form-control submit-btn" style="margin-top: 50px;     margin-bottom: 0;">Next</button>
+				</div>
+				<div class="form-row sr-only">
+                     {{ render_field(gender_form.gender, class_="radio-inline") }}
+				</div>
+           </div><button value="Gender" type="submit" class="form-control submit-btn" style="margin-top: 50px;margin-bottom: 0;">Next</button>
            </div>
         </form>
     </div>
