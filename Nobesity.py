@@ -167,6 +167,9 @@ def register_info():
 def accountinfo():
     return render_template('accountinfoDisplay.html')
 
+@app.route('/home')
+def home():
+    return render_template('home.html')
 
 @app.route('/profile')
 def profile():
