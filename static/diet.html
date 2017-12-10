@@ -1,8 +1,8 @@
-% extends 'layout.html' %}
+{% extends 'layout.html' %}
 {% block body %}
-    <h1>View Nutritions</h1>
+    <div class = 'view_diet'>
+    <h1>View Diet</h1>
     <br/>
-    <hr/>
     <table class="table table-bordered">
         <thead>
         <tr>
@@ -18,26 +18,26 @@
         </thead>
         <tbody>
         <tr>
-            <th scope="row">1</th>
-            <td>Bread</td>
+            <th scope="row">Bread</th>
             <td>Food</td>
             <td>265</td>
             <td>4</td>
             <td>16</td>
             <td>18</td>
-
         </tr>
         <tr>
-            <th scope="row">2</th>
-            <td>Oats</td>
+            <th scope="row">Oats</th>
             <td>Food</td>
             <td>68</td>
             <td>2</td>
             <td>6</td>
             <td>4</td>
-
+        </tr>
+        <tr>
+            <td><a href="/new_diet">Create New Diet</a></td>
+            <td><a href ="/update_diet">Update Diet</a></td>
         </tr>
         </tbody>
     </table>
-
+    </div>
 {% endblock %}

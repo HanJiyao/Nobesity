@@ -1,8 +1,8 @@
-{% extends 'layout.html' %}
+{% extends layout.html %}
 
 {% block body %}
-    {% from "includes/_formhelper.html" import render_field %}
-    <h1>New Diet</h1>
+      {% from "includes/_formhelper.html" import render_field %}
+    <h1>Update Diet</h1>
     <form method="POST" action="">
         <div class="form-group">
             <div class="form-row">
@@ -34,7 +34,7 @@
                 <div class="form-group col-md-11">
                 </div>
                 <div class="form-group col-md-1">
-                    <input type ="submit" value="submit" class="btn btn-submit">
+                    <input type ="submit" value="update" class=" btn btn-update">
                 </div>
             </div>
         </div>

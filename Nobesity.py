@@ -179,6 +179,12 @@ def plans():
     return render_template('plans.html')
 
 
+@app.route('/diet')
+def diet():
+    print(diet.db)
+    return render_template('diet.html')
+
+
 class food(Form):
     food_name = StringField('Name',[validators.length(min=1,max=150),validators.DataRequired()])
     food_type = StringField('Type',[validators.length(min=1,max=150),validators.DataRequired()])
@@ -204,8 +210,28 @@ def new_diet():
                       'Calories value': diet.get_calories(), 'Fats Value': diet.get_fats(),
                       'Carbohydrates value': diet.get_carbohydrates(),'Protein value': diet.get_protein()
             })
-            flash('Food inserted successfully', 'sucess')
+            flash('New Diet inserted successfully', 'sucess')
             return render_template('new_diet.html', form=form)
+    return render_template('diet.html')
+
+@app.route('/update_diet')
+def update_diet():
+    if request.method =='POST' and form.validate():
+        form = food(request.form)
+        name = form.food_name.data
+        type = form.food_type.data
+        calories = form.calories.data
+        fats = form.fats.data
+        carbohydrates = form.carbohydrates.data
+        protein = form.proteins.data
+        diet = Diet(name,type,calories,fats,carbohydrates,protein)
+        diet.db = root.child('Food')
+        diet.db.push({'Name': diet.get_name(), 'Type': diet.get_type(),
+                  'Calories value': diet.get_calories(), 'Fats Value': diet.get_fats(),
+                  'Carbohydrates value': diet.get_carbohydrates(), 'Protein value': diet.get_protein()
+                  })
+        flash('Diet updated successfully', 'sucess')
+        return render_template('update_diet.html', form=form)
     return render_template('diet.html')
 
 @app.route('/quiz')
