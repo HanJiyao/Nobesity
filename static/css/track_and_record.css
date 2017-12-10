@@ -1,0 +1,43 @@
+div {
+  display: block;
+}
+
+section {
+	display: block;
+}
+
+div.image-container {
+	height: 350px;
+	width: 100%;
+}
+
+div.image-container img {
+	height: 330px;
+	width: 95%;
+}
+
+div.wrapper {
+	padding-top: 30px;
+}
+
+section#overview {
+	width: 50%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+div.date {
+	background-color: #1b9393;
+	height: 50px;
+	line-height: 50px;
+}
+
+div.date span {
+	color: white;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+div.overview {
+	background-color: white;
+}
