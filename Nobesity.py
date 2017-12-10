@@ -9,10 +9,10 @@ root = db.reference()
 app = Flask(__name__)
 app.secret_key = 'secret'
 UserId_db = root.child('UserAccount').get()
+
 uid_db = {}
 for key in UserId_db:
     uid_db[key] = UserId_db[key]
-
 
 class RequiredIf(object):
     def __init__(self, *args, **kwargs):
@@ -203,15 +203,16 @@ def new_diet():
             fats = form.fats.data
             carbohydrates = form.carbohydrates.data
             protein = form.proteins.data
-            diet = Diet(name, type, calories, fats, carbohydrates, protein)
-            diet.db = root.child('Food')
-            diet.db.push({'Name': diet.get_name(), 'Type': diet.get_type(),
-                      'Calories value': diet.get_calories(), 'Fats Value': diet.get_fats(),
-                      'Carbohydrates value': diet.get_carbohydrates(),'Protein value': diet.get_protein()
+            food_diet = Diet(name, type, calories, fats, carbohydrates, protein)
+            food_diet.db = root.child('Food')
+            food_diet.db.push({'Name': food_diet.get_name(), 'Type': food_diet.get_type(),
+                      'Calories value': food_diet.get_calories(), 'Fats Value': food_diet.get_fats(),
+                      'Carbohydrates value': food_diet.get_carbohydrates(),'Protein value': food_diet.get_protein()
             })
-            flash('New Diet inserted successfully', 'sucess')
-            return render_template('new_diet.html', form=form)
-    return render_template('diet.html')
+            flash('New Diet inserted successfully', 'success')
+            return redirect(url_for('diet'))
+    return render_template('new_diet.html')
+
 
 @app.route('/update_diet')
 def update_diet():
@@ -219,20 +220,20 @@ def update_diet():
     if request.method =='POST' and form.validate():
         form = Food(request.form)
         name = form.food_name.data
-        type = form.food_type.data
+        food_type = form.food_type.data
         calories = form.calories.data
         fats = form.fats.data
         carbohydrates = form.carbohydrates.data
         protein = form.proteins.data
-        diet = Diet(name,type,calories,fats,carbohydrates,protein)
-        diet.db = root.child('Food')
-        diet.db.push({'Name': diet.get_name(), 'Type': diet.get_type(),
-                  'Calories value': diet.get_calories(), 'Fats Value': diet.get_fats(),
-                  'Carbohydrates value': diet.get_carbohydrates(), 'Protein value': diet.get_protein()
-                  })
-        flash('Diet updated successfully', 'sucess')
-        return render_template('update_diet.html', form=form)
-    return render_template('diet.html')
+        food_diet = Diet(name,food_type,calories,fats,carbohydrates,protein)
+        food_diet.db = root.child('Food')
+        food_diet.db.push({'Name': food_diet.get_name(), 'Type': food_diet.get_type(),'Calories value': food_diet.get_calories(),
+                      'Fats Value': food_diet.get_fats(), 'Carbohydrates value': food_diet.get_carbohydrates(),
+                      'Protein value': food_diet.get_protein()})
+        flash('Diet updated successfully', 'success')
+        return redirect(url_for('diet'))
+    return render_template('update_diet.html')
+
 
 @app.route('/quiz')
 def quiz():
