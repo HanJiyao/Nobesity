@@ -246,6 +246,11 @@ def faq():
     return render_template('faq.html')
 
 
+@app.route('/record')
+def record():
+    return render_template('track_and_record.html')
+
+
 @app.route('/rewards')
 def rewards():
     return render_template('rewards.html')

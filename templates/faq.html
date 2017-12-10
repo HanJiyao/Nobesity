@@ -12,6 +12,8 @@
             <div class="section-wrapper">
                 <div class="section-animate" style="opacity: 1; transform: matrix(1, 0, 0, 1, 0, 0);">
                     <h4>Frequently Asked Questions</h4>
+                    <br>
+                    <input class="form-control" type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for a question" align="left">
                     <div class="faqs">
                         <div class="faq">
                             <div class="faq-question">
@@ -89,5 +91,27 @@
         </div>
     </div>
 </div>
+<script>
+function myFunction() {
+  // Declare variables
+  var input, filter, div, p, i, j;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  div = document.getElementsByClassName("faq-question");
+console.log(div)
+  // Loop through all table rows, and hide those who don't match the search query
+  for (i = 0; i < div.length; i++) {
+      p = div[i].getElementsByTagName("p");
+      for (j = 0; j < p.length; j++) {
+        if (p.innerHTML.toUpperCase().indexOf(filter) > -1) {
+          div[i].style.display = "";
+        } else {
+          div[i].style.display = "none";
+      }
+    }
+  }
+
+}
+</script>
 
 {% endblock %}

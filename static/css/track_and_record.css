@@ -17,7 +17,7 @@ div.image-container img {
 }
 
 div.wrapper {
-	padding-top: 30px;
+	padding-top: 20px;
 }
 
 section#overview {
@@ -26,18 +26,34 @@ section#overview {
 	margin-right: auto;
 }
 
-div.date {
+section#activities {
+	width: 50%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+div#top {
 	background-color: #1b9393;
 	height: 50px;
 	line-height: 50px;
 }
 
-div.date span {
+div#top span {
 	color: white;
 	padding-top: 10px;
 	padding-bottom: 10px;
+	font-size: 25px;
 }
 
-div.overview {
+div#bottom {
 	background-color: white;
+}
+
+div.overview span {
+	font-size: 25px;
+}
+
+div.form-group input {
+	margin-left: auto;
+	margin-right: auto;
 }
