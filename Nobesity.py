@@ -179,7 +179,7 @@ def plans():
     return render_template('plans.html')
 
 
-class nutrition_food(Form):
+class food(Form):
     food_name = StringField('Name',[validators.length(min=1,max=150),validators.DataRequired()])
     food_type = StringField('Type',[validators.length(min=1,max=150),validators.DataRequired()])
     calories = StringField('Calories value',[validators.length(min=1,max=3),validators.DataRequired()])
@@ -188,25 +188,25 @@ class nutrition_food(Form):
     proteins = StringField('Protein value',[validators.length(min=1,max=3),validators.DataRequired()])
 
 
-@app.route('/diet', methods=['GET','POST'])
+@app.route('/new_diet', methods=['GET','POST'])
 def new_diet():
-    food_form = nutrition_food(request.form)
-    if request.method == 'POST' and food_form.validate():
-        name = food_form.food_name.data
-        type = food_form.food_type.data
-        calories = food_form.calories.data
-        fats = food_form.fats.data
-        carbohydrates = food_form.carbohydrates.data
-        protein = food_form.proteins.data
-        diet = Diet(name, type, calories, fats, carbohydrates, protein)
-        diet.db = root.child('Food')
-        diet.db.push({'Name': diet.get_name(), 'Type': diet.get_type(),
+    form = food(request.form)
+    if request.method == 'POST' and form.validate():
+            name = form.food_name.data
+            type = form.food_type.data
+            calories = form.calories.data
+            fats = form.fats.data
+            carbohydrates = form.carbohydrates.data
+            protein = form.proteins.data
+            diet = Diet(name, type, calories, fats, carbohydrates, protein)
+            diet.db = root.child('Food')
+            diet.db.push({'Name': diet.get_name(), 'Type': diet.get_type(),
                       'Calories value': diet.get_calories(), 'Fats Value': diet.get_fats(),
                       'Carbohydrates value': diet.get_carbohydrates(),'Protein value': diet.get_protein()
-          })
-        flash('Food inserted successfully', 'sucess')
-    return render_template('diet.html', form=food_form)
-
+            })
+            flash('Food inserted successfully', 'sucess')
+            return render_template('new_diet.html', form=form)
+    return render_template('diet.html')
 
 @app.route('/quiz')
 def quiz():
