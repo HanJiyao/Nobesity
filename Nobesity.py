@@ -181,11 +181,10 @@ def plans():
 
 @app.route('/diet')
 def diet():
-    print(diet.db)
     return render_template('diet.html')
 
 
-class food(Form):
+class Food(Form):
     food_name = StringField('Name',[validators.length(min=1,max=150),validators.DataRequired()])
     food_type = StringField('Type',[validators.length(min=1,max=150),validators.DataRequired()])
     calories = StringField('Calories value',[validators.length(min=1,max=3),validators.DataRequired()])
@@ -196,7 +195,7 @@ class food(Form):
 
 @app.route('/new_diet', methods=['GET','POST'])
 def new_diet():
-    form = food(request.form)
+    form = Food(request.form)
     if request.method == 'POST' and form.validate():
             name = form.food_name.data
             type = form.food_type.data
@@ -216,8 +215,9 @@ def new_diet():
 
 @app.route('/update_diet')
 def update_diet():
+    form = Food(request.form)
     if request.method =='POST' and form.validate():
-        form = food(request.form)
+        form = Food(request.form)
         name = form.food_name.data
         type = form.food_type.data
         calories = form.calories.data
