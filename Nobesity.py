@@ -214,7 +214,7 @@ def new_diet():
     return render_template('new_diet.html', form=new_form)
 
 
-@app.route('/update_diet')
+@app.route('/update_diet', methods=['GET','POST'])
 def update_diet():
     update_form = Food(request.form)
     if request.method =='POST' and update_form.validate():
