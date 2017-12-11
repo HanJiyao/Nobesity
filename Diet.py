@@ -1,11 +1,15 @@
 class Diet:
     def __init__(self,name,type,calories,fats,carbohydrate,protein):
+        self.dietID = ''
         self.name = name
         self.type = type
         self.calories = calories
         self.fats = fats
         self.carbohydrates = carbohydrate
         self.protein = protein
+
+    def get_dietID(self):
+        return self.dietID
 
     def get_name(self):
         return self.name
@@ -24,6 +28,9 @@ class Diet:
 
     def get_protein(self):
         return self.protein
+
+    def set_dietID(self,dietID):
+        self.dietID = dietID
 
     def set_name(self, name):
         self.name = name

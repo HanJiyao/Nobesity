@@ -328,16 +328,26 @@ def plans():
 
 @app.route('/diet')
 def diet():
-    return render_template('diet.html')
+    diets = root.child('Food').get()
+    diet_list = []
+    for dietID in diets:
+        eachdiet = diets[dietID]
+        print(eachdiet)
+        food = Diet(eachdiet['Name'],eachdiet['Type'], eachdiet['Calories Value'], eachdiet['Fats Value'],
+                    eachdiet['Carbohydrates Value'], eachdiet['Protein '] )
+        food.set_dietID(dietID)
+        print(food.get_dietID())
+        diet_list.append(food)
 
+    return render_template('diet.html', diet='diet_list')
 
 class Food(Form):
     food_name = StringField('Name',[validators.length(min=1,max=150),validators.DataRequired()])
     food_type = StringField('Type',[validators.length(min=1,max=150),validators.DataRequired()])
-    calories = StringField('Calories value',[validators.length(min=1,max=3),validators.DataRequired()])
-    fats = StringField('Fats value',[validators.length(min=1,max=3),validators.DataRequired()])
-    carbohydrates = StringField('Carbohydrates value',[validators.length(min=1,max=3),validators.DataRequired()])
-    proteins = StringField('Protein value',[validators.length(min=1,max=3),validators.DataRequired()])
+    calories = StringField('Calories Value',[validators.length(min=1,max=3),validators.DataRequired()])
+    fats = StringField('Fats Value',[validators.length(min=1,max=3),validators.DataRequired()])
+    carbohydrates = StringField('Carbohydrates Value',[validators.length(min=1,max=3),validators.DataRequired()])
+    proteins = StringField('Protein Value',[validators.length(min=1,max=3),validators.DataRequired()])
 
 
 @app.route('/new_diet', methods=['GET','POST'])
@@ -353,16 +363,18 @@ def new_diet():
             food_diet = Diet(name, type, calories, fats, carbohydrates, protein)
             food_diet.db = root.child('Food')
             food_diet.db.push({'Name': food_diet.get_name(), 'Type': food_diet.get_type(),
-                      'Calories value': food_diet.get_calories(), 'Fats Value': food_diet.get_fats(),
-                      'Carbohydrates value': food_diet.get_carbohydrates(),'Protein value': food_diet.get_protein()
+                      'Calories Value': food_diet.get_calories(), 'Fats Value': food_diet.get_fats(),
+                      'Carbohydrates Value': food_diet.get_carbohydrates(),'Protein Value': food_diet.get_protein()
             })
             flash('New Diet inserted successfully', 'success')
+
             return redirect(url_for('diet'))
+
     return render_template('new_diet.html', form=new_form)
 
 
-@app.route('/update_diet', methods=['GET','POST'])
-def update_diet():
+@app.route('/update_diet/<string:id>', methods=['GET','POST'])
+def update_diet(id):
     update_form = Food(request.form)
     if request.method =='POST' and update_form.validate():
         name = update_form.food_name.data
@@ -372,13 +384,39 @@ def update_diet():
         carbohydrates = update_form.carbohydrates.data
         protein = update_form.proteins.data
         food_diet = Diet(name,food_type,calories,fats,carbohydrates,protein)
-        food_diet.db = root.child('Food')
-        food_diet.db.push({'Name': food_diet.get_name(), 'Type': food_diet.get_type(),'Calories value': food_diet.get_calories(),
-                      'Fats Value': food_diet.get_fats(), 'Carbohydrates value': food_diet.get_carbohydrates(),
-                      'Protein value': food_diet.get_protein()})
+        Diet_db = root.child('Food/' + id)
+        Diet_db.set({'Name': food_diet.get_name(), 'Type': food_diet.get_type(),'Calories Value': food_diet.get_calories(),
+                      'Fats Value': food_diet.get_fats(), 'Carbohydrates Value': food_diet.get_carbohydrates(),
+                      'Protein Value': food_diet.get_protein()})
         flash('Diet updated successfully', 'success')
+
         return redirect(url_for('diet'))
-    return render_template('update_diet.html', form=update_form)
+    else:
+        url = 'Food/' + id
+        eachdiet = root.child(url).get()
+
+        food = Diet(eachdiet['Name'], eachdiet['Type'], eachdiet['Calories Value'], eachdiet['Fats Value'],
+                    eachdiet['Carbohydrates Value'], eachdiet['Protein '])
+        food.set_dietID(id)
+        update_form.food_name.data = food.get_name()
+        update_form.food_type.data = food.get_type()
+        update_diet.calories.data = food.get_calories()
+        update_diet.fats.data = food.get_fats()
+        update_diet.carbohydrates.data =  food.get_carbohydrates()
+        update_diet.protein.data = food.get_protein()
+
+        return render_template('update_diet.html', form=update_form)
+
+
+@app.route('/delete_diet/<string:id>', methods=['POST'])
+def delete_diet(id):
+    Diet_db = root.child('Food/' + id)
+    Diet_db.delete()
+    flash('Diet deleted','Success')
+
+    return redirect(url_for('diet'))
+
+
 
 
 @app.route('/quiz')
