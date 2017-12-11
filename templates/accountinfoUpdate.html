@@ -1,59 +1,96 @@
 {% extends 'layout.html' %}
 {% block body %}
-<form class="mx-auto account_info">
+    {% macro render_field(field) %}
+      {{ field(**kwargs)|safe }}
+      {% if field.errors %}
+        {% for error in field.errors %}
+            <small class="alert alert-danger col-12 m-auto">
+                {{ error }}
+            </small>
+        {% endfor %}
+      {% endif %}
+    {% endmacro %}
+<script>
+    $(document).ready(function () {
+        var male = $("#gender-0");
+        var female = $("#gender-1");
+        var select_male = $("#gender_male");
+        var select_female = $("#gender_female");
+        select_male.click(function(){
+            male.prop("checked","True");
+            female.removeProp("checked","True");
+            select_male.attr("class","form-control gender-radio active");
+            select_female.attr("class","form-control gender-radio");
+        });
+        select_female.click(function(){
+            female.prop("checked","True");
+            male.removeProp("checked","True");
+            select_female.attr("class","form-control gender-radio ml-auto active");
+            select_male.attr("class","form-control gender-radio");
+        });
+    });
+</script>
+<form method="post" class="mx-auto account_info">
   <div class="form-group form-row">
     <div class="col-md-6">
       <label for="firstName">First Name</label>
-      <input type="text" class="form-control" id="firstName" placeholder="First Name">
+      {{ render_field(setup_form.first_name, class_="form-control", placeholder="First Name") }}
     </div>
     <div class="col-md-6">
       <label for="lastName">Last Name</label>
-      <input type="text" class="form-control" id="lastName" placeholder="Last Name">
+      {{ render_field(setup_form.last_name, class_="form-control", placeholder="Last Name") }}
     </div>
   </div>
+  <div class="form-group">
+    <label for="display_name">Display Name</label>
+    {{ render_field(setup_form.display_name, class_="form-control", placeholder="Last Name") }}
+  </div>
   <div class="form-group group-row">
-  	<div class="row gender-row">
-        <label for="gender" class="col-2">Gender</label>
-        <div class="col-10" data-toggle="buttons">
-		  <label class="col-5 btn btn-primary gender-radio">
-			<input class="form-check-input" type="radio" name="gender" id="gender_male" value="male" autocomplete="off">
+    <label for="gender">Gender</label>
+  	<div class="form-row">
+        <div class="col-md-6">
+		  <div class="form-control gender-radio" id="gender_male">
 			Male
-		  </label>
-		  <label class="col-5 btn btn-primary gender-radio-female">
-			<input class="form-check-input" type="radio" name="gender" id="gender_female" value="female">
+		  </div>
+        </div>
+        <div class="col-md-6">
+		  <div class="form-control gender-radio ml-auto" id="gender_female">
 			Female
-		  </label>
-      </div>
+		  </div>
+        </div>
   	</div>
   </div>
+  <div class="form-group sr-only">
+    {{ render_field(setup_form.gender, class_="radio-inline") }}
+  </div>
   <div class="form-group">
-    <label for="inputAddress">Birth date</label>
-    <input type="date" class="form-control" id="birth">
+    <label for="birth">Birth date</label>
+    {{ render_field(setup_form.birthday, class_="form-control", placeholder="YYYY-MM-DD") }}
   </div>
   <div class="form-group form-row">
     <div class="col-md-6">
-    <label for="inputAddress2">Weight</label>
-    <input type="text" class="form-control" id="weight" placeholder="Weight">
+    <label for="weight">Weight (kg)</label>
+    {{ render_field(setup_form.current_weight, class_="form-control", placeholder="Enter Current Weight") }}
     </div>
       <div class="col-md-6">
-    <label for="inputAddress2">Height</label>
-    <input type="text" class="form-control" id="height" placeholder="Height">
+    <label for="height">Height (m)</label>
+    {{ render_field(setup_form.height, class_="form-control", placeholder="Enter Height") }}
     </div>
   </div>
   <div class="form-group form-row">
     <div class="col-md-4">
       <label for="inputCity">Systol</label>
-      <input type="text" class="form-control" id="inputCity">
+      {{ render_field(setup_form.systol, class_="form-control", placeholder="Enter Systolic Pressure") }}
     </div>
     <div class="col-md-4">
       <label for="inputState">Diastol</label>
-      <input  id="inputState" class="form-control">
+      {{ render_field(setup_form.diastol, class_="form-control", placeholder="Enter Diastalic Pressure") }}
     </div>
     <div class="col-md-4">
       <label for="inputZip">Pulse</label>
-      <input type="text" class="form-control" id="inputZip">
+      {{ render_field(setup_form.pulse, class_="form-control", placeholder="Enter Pulse Rate") }}
     </div>
   </div>
-  <button class="btn btn-primary form-control" id="update_info">Update</button>
+  <button class="btn btn-primary form-control" id="update_info">Confirm Update</button>
 </form>
 {% endblock %}

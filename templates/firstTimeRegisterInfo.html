@@ -1,77 +1,39 @@
 {% extends 'layout.html' %}
 {% block body %}
+    {% macro render_field(field) %}
+      {{ field(**kwargs)|safe }}
+      {% if field.errors %}
+        {% for error in field.errors %}
+            <div class="alert alert-danger col-12 m-auto">
+                {{ error }}
+            </div>
+        {% endfor %}
+      {% endif %}
+    {% endmacro %}
 	<div class="account-box" style="height: 657px">
-        <form action="" class="main-form" >
+        <form method="post" action="" class="main-form" >
             <div class="box-header">A bit about you</div>
             <div class="box-text">This will help us tailor your health journey</div>
             <div class="form-group account-content">
             <div class="form-group">
-				<label for="inputHeight">Height (cm)</label>
-				<input type="number" class="form-control" id="height" placeholder="Enter height">
+				<label for="inputHeight">Height (m)</label>
+				{{ render_field(moreinfo_form.height, class_="form-control", placeholder="Enter Height") }}
 			  </div>
 			  <div class="form-group">
-				<label for="weight">Weight</label>
-				<input type="number" class="form-control" id="weight" placeholder="Enter weight">
+				<label for="weight">Weight (kg)</label>
+				{{ render_field(moreinfo_form.current_weight, class_="form-control", placeholder="Enter Current Weight") }}
 			  </div>
           	  <div class="form-group">
 				<label for="weight">Birthday</label>
 				<div class="form-row">
 				<div class="form-group col-md-4">
-				  <select class="form-control" id="day" placeholder="Day">
-					  <option selected disabled>Day</option>
-					  <option>1</option>
-					  <option>2</option>
-					  <option>3</option>
-					  <option>4</option>
-					  <option>5</option>
-					  <option>6</option>
-					  <option>7</option>
-					  <option>8</option>
-					  <option>9</option>
-					  <option>10</option>
-					  <option>11</option>
-					  <option>12</option>
-					  <option>12</option>
-					  <option>13</option>
-					  <option>14</option>
-					  <option>15</option>
-					  <option>16</option>
-					  <option>17</option>
-					  <option>18</option>
-					  <option>19</option>
-					  <option>20</option>
-					  <option>21</option>
-					  <option>22</option>
-					  <option>23</option>
-					  <option>24</option>
-					  <option>25</option>
-					  <option>26</option>
-					  <option>27</option>
-					  <option>28</option>
-					  <option>29</option>
-					  <option>30</option>
-					  <option>31</option>
-				  </select>
+				  {{ render_field(moreinfo_form.birth_day, class_="form-control", placeholder="Day") }}
 				</div>
 				<div class="form-group col-md-4">
-				  <select id="month" class="form-control" placeholder="Month">
-					  <option selected disabled>Month</option>
-					  <option>1</option>
-					  <option>2</option>
-					  <option>3</option>
-					  <option>4</option>
-					  <option>5</option>
-					  <option>6</option>
-					  <option>7</option>
-					  <option>8</option>
-					  <option>9</option>
-					  <option>10</option>
-					  <option>11</option>
-					  <option>12</option>
-				  </select>
+				  {{ render_field(moreinfo_form.birth_month, class_="form-control", placeholder="Month") }}
 				</div>
 				<div class="form-group col-md-4">
-				  <input type="number" class="form-control" id="year" placeholder="Year">
+				  {{ render_field(moreinfo_form.birth_year, class_="form-control", placeholder="Year") }}
 				</div>
 			  </div>
 			  </div>

@@ -1,17 +1,188 @@
-{% extends 'layout.html' %}
-{% block body %}
-
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Nobesity SG</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <link href="../static/css/layout.css" rel="stylesheet" type="text/css">
+    <link href="../static/css/track_and_record.css" rel="stylesheet" type="text/css">
+    <link href="../static/css/Diet.css" rel="stylesheet" type="text/css">
+    <link href="../static/css/login.css" rel="stylesheet" type="text/css">
+    <link href="../static/css/profile.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+<div class="wrapper">
+	<div class="nav-wrapper">
+	<nav class="navbar navbar-expand navbar-light">
+	  <a class="navbar-brand" href="#">NObesity</a>
+	  <div id="navbarNavDropdown" class="navbar-collapse collapse">
+		<ul class="navbar-nav ml-auto">
+		  <li class="nav-item active">
+			<a class="nav-link" href="/home">Home <span class="sr-only">(current)</span></a>
+		  </li>
+		  <li class="nav-item">
+			<a class="nav-link" href="/plans">Plan</a>
+		  </li>
+		  <li class="nav-item">
+			<a class="nav-link" href="/diet">Diet</a>
+		  </li>
+		  <li class="nav-item">
+			<a class="nav-link" href="/quiz">Quiz</a>
+		  </li>
+		  <li class="nav-item">
+			<a class="nav-link" href="/faq">FAQ</a>
+		  </li>
+		  <li class="nav-item">
+			<a class="nav-link" href="/rewards">Reward</a>
+		  </li>
+		  <li class="nav-item sep">
+			<a class="nav-link">|</a>
+		  </li>
+		  <!-- {% if not session.logged_in %} -->
+			<li class="nav-item dropdown account-btn">
+				<a class="dropdown-toggle" href="#" id="navbarDropdownMenuLink"
+                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				  UserName
+				</a>
+				<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+				  <a class="dropdown-item" href="/profile">Profile</a>
+				  <a class="dropdown-item" href="/accountinfo">Account</a>
+				  <a class="dropdown-item" href="#">Log out</a>
+				</div>
+			</li>
+		<!-- {% else %}
+			<li><a href="/login">Get Started</a></li>
+		{% endif %} -->
+		  </ul>
+		</div>
+	  </nav>
+	</div>
+<!--Actual content-->
 <div>
     <div class="jumbotron text-center">
-        <div id="track_and_record">
-            <div class="top-container"></div>
-            <div class="calendar-container"></div>
-            <div class="form-group text-center">
-                <button class="btn btn-primary btn-lg" id="activityButton" data-toggle="modal" data-target="#myModal">Add activity</button>
-                <button class="btn btn-primary btn-lg" id="weightButton" data-toggle="modal" data-target="#myModal">Log your weight</button>
+    <div class="wrapper">
+            <section id="top-container">
+                <div class="title">
+                    <h1>NObesity SG</h1>
+                    <br>
+                    <h4>Track and Record your activities!</h4>
+                </div>
+                <div class="image-container">
+                    <img src="images/group_exercise.jpg">
+                </div>
+            </section>
+            <section id="addition" class="form-group text-center">
+                <button class="btn btn-primary btn-lg" id="activityButton" data-toggle="modal" data-target="#addModal">Add activity</button>
+                <button class="btn btn-primary btn-lg" id="weightButton" data-toggle="modal" data-target="#logModal">Log your weight</button>
+            </section>
+            <section id="calendar-container"></section>
+            <section id="overview">
+                <div id="top" class="date">
+                    <span>Today, </span>
+                    <span>8 December 2017</span>
+                </div>
+                <div id="bottom" class="overview">
+                    <ul><li>
+                        <div class="info">
+                            <span>30</span>
+                            <span>min</span>
+                        </div>
+                    </li></ul>
+                    <ul><li>
+                        <div class="info">
+                            <span>5</span>
+                            <span>km</span>
+                        </div>
+                    </li></ul>
+                    <ul><li>
+                        <div class="info">
+                            <span>500</span>
+                            <span>calories</span>
+                        </div>
+                    </li></ul>
+                    <ul><li>
+                        <div class="info">
+                            <span>6000</span>
+                            <span>steps</span>
+                        </div>
+                    </li></ul>
+                </div>
+            </section>
+            <section id="activities">
+                <div id="top">
+                    <span>Recent activities</span>
+                </div>
+                <div id="bottom" class="overview">
+                    <ul><li>
+                        <div class="info">
+                            <span>Walking: </span>
+                            <span>5000</span>
+                            <span>steps</span>
+                        </div>
+                    </li></ul>
+                    <ul><li>
+                        <div class="info">
+                            <span>Running: </span>
+                            <span>3</span>
+                            <span>km</span>
+                        </div>
+                    </li></ul>
+                    <ul><li>
+                        <div class="info">
+                            <span>Zumba: </span>
+                            <span>30</span>
+                            <span>min</span>
+                        </div>
+                    </li></ul>
+                    <ul><li>
+                        <div class="info">
+                            <span>Badminton: </span>
+                            <span>60</span>
+                            <span>min</span>
+                        </div>
+                    </li></ul>
+                </div>
+            </section>
+            <!--bottom section showing the user's weight over a period of time can be shown using a line graph-->
+            <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+					<div class="modal-content">
+					<div class="modal-header">
+					<h5 class="modal-title" id="ModalLabel">Add activity</h5>
+					</div>
+					<div class="modal-body">
+					    <form id="activity-form" action="#">
+                            <div class="form-group">
+						        <label for="actname">Activity</label>
+						        <input required type="actname" class="form-control input-lg col-sm-4" id="actname" placeholder="">
+						    </div>
+						    <div class="form-group">
+						        <label for="date">Date</label>
+						        <input required type="date" class="form-control input-lg col-sm-4" id="date" placeholder="DD/MM/YYYY">
+						    </div>
+                        </form>
+					</div>
+					<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Save</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+					</div>
+					</div>
+                </div>
             </div>
-        </div>
+    </div>
     </div>
 </div>
-
-{% endblock %}
+<!--Actual content-->
+<footer class="footer">
+		<div class="container-fluid text-center">
+			<span> © 2017 NYP SIT Nobesity Singapore</span>
+		</div>
+	</footer>
+</div>
+</body>
+</html>

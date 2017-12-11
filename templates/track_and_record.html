@@ -3,14 +3,116 @@
 
 <div>
     <div class="jumbotron text-center">
-        <div id="track_and_record">
-            <div class="top-container"></div>
-            <div class="calendar-container"></div>
-            <div class="form-group text-center">
-                <button class="btn btn-primary btn-lg" id="activityButton" data-toggle="modal" data-target="#myModal">Add activity</button>
-                <button class="btn btn-primary btn-lg" id="weightButton" data-toggle="modal" data-target="#myModal">Log your weight</button>
+    <div class="wrapper">
+            <section id="top-container">
+                <div class="title">
+                    <h1>NObesity SG</h1>
+                    <br>
+                    <h4>Track and Record your activities!</h4>
+                </div>
+                <div class="image-container">
+                    <img src="images/group_exercise.jpg">
+                </div>
+            </section>
+            <section id="addition" class="form-group text-center">
+                <button class="btn btn-primary btn-lg" id="activityButton" data-toggle="modal" data-target="#addModal">Add activity</button>
+                <button class="btn btn-primary btn-lg" id="weightButton" data-toggle="modal" data-target="#logModal">Log your weight</button>
+            </section>
+            <section id="calendar-container"></section>
+            <section id="overview">
+                <div id="top" class="date">
+                    <span>Today, </span>
+                    <span>8 December 2017</span>
+                </div>
+                <div id="bottom" class="overview">
+                    <ul><li>
+                        <div class="info">
+                            <span>30</span>
+                            <span>min</span>
+                        </div>
+                    </li></ul>
+                    <ul><li>
+                        <div class="info">
+                            <span>5</span>
+                            <span>km</span>
+                        </div>
+                    </li></ul>
+                    <ul><li>
+                        <div class="info">
+                            <span>500</span>
+                            <span>calories</span>
+                        </div>
+                    </li></ul>
+                    <ul><li>
+                        <div class="info">
+                            <span>6000</span>
+                            <span>steps</span>
+                        </div>
+                    </li></ul>
+                </div>
+            </section>
+            <section id="activities">
+                <div id="top">
+                    <span>Recent activities</span>
+                </div>
+                <div id="bottom" class="overview">
+                    <ul><li>
+                        <div class="info">
+                            <span>Walking: </span>
+                            <span>5000</span>
+                            <span>steps</span>
+                        </div>
+                    </li></ul>
+                    <ul><li>
+                        <div class="info">
+                            <span>Running: </span>
+                            <span>3</span>
+                            <span>km</span>
+                        </div>
+                    </li></ul>
+                    <ul><li>
+                        <div class="info">
+                            <span>Zumba: </span>
+                            <span>30</span>
+                            <span>min</span>
+                        </div>
+                    </li></ul>
+                    <ul><li>
+                        <div class="info">
+                            <span>Badminton: </span>
+                            <span>60</span>
+                            <span>min</span>
+                        </div>
+                    </li></ul>
+                </div>
+            </section>
+            <!--bottom section showing the user's weight over a period of time can be shown using a line graph-->
+            <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+					<div class="modal-content">
+					<div class="modal-header">
+					<h5 class="modal-title" id="ModalLabel">Add activity</h5>
+					</div>
+					<div class="modal-body">
+					    <form id="activity-form" action="#">
+                            <div class="form-group">
+						        <label for="actname">Activity</label>
+						        <input required type="actname" class="form-control input-lg col-sm-4" id="actname" placeholder="">
+						    </div>
+						    <div class="form-group">
+						        <label for="date">Date</label>
+						        <input required type="date" class="form-control input-lg col-sm-4" id="date" placeholder="DD/MM/YYYY">
+						    </div>
+                        </form>
+					</div>
+					<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Save</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+					</div>
+					</div>
+                </div>
             </div>
-        </div>
+    </div>
     </div>
 </div>
 

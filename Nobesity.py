@@ -1,18 +1,17 @@
 from flask import Flask, render_template, request, flash, redirect, url_for, session
-from wtforms import Form, StringField, TextAreaField, RadioField, SelectField, PasswordField, validators, ValidationError
+from wtforms import Form, \
+    StringField, TextAreaField, RadioField, SelectField, PasswordField, DecimalField, IntegerField, DateField, \
+    validators, ValidationError
 from Diet import Diet
 import firebase_admin
 from firebase_admin import credentials, db
+import datetime
 cred = credentials.Certificate('./cred/nobesity-it1705-firebase-adminsdk-xo793-bbfa4432da.json')
 default_app = firebase_admin.initialize_app(cred, {'databaseURL': 'https://nobesity-it1705.firebaseio.com/'})
 root = db.reference()
 app = Flask(__name__)
 app.secret_key = 'secret'
-UserId_db = root.child('UserAccount').get()
 
-uid_db = {}
-for key in UserId_db:
-    uid_db[key] = UserId_db[key]
 
 class RequiredIf(object):
     def __init__(self, *args, **kwargs):
@@ -34,28 +33,29 @@ class RequiredIf(object):
 def index():
     if session.get('logged_in') is True:
         return redirect(url_for('timeline'))
+    return render_template('home.html')
 
 
 class UserAccount:
     def __init__(self, username, email, password):
-        self.__username = username
-        self.__email = email
-        self.__password = password
+        self.username = username
+        self.email = email
+        self.password = password
 
     def get_username(self):
-        return self.__username
+        return self.username
 
     def get_email(self):
-        return self.__email
+        return self.email
 
     def get_password(self):
-        return self.__password
+        return self.password
 
 
 def validate_login(form, field):
     valid = False
-    for i in uid_db:
-        if field.data == i or field.data == uid_db[i]['email']:
+    for i in root.child('UserAccount').get():
+        if field.data == i or field.data == root.child('UserAccount').get()[i]['email']:
             valid = True
     if valid is False:
         raise ValidationError('Invalid User Name or Email')
@@ -70,17 +70,20 @@ class LoginForm(Form):
 def login():
     login_form = LoginForm(request.form)
     password_check = ''
+    uid_db = root.child('UserAccount').get()
     if request.method == 'POST' and login_form.validate():
         login_id = request.form.to_dict()['username']
         valid = False
         try:
             if uid_db[login_id]['password'] == request.form.to_dict()['password']:
                 valid = True
+                session['username'] = login_id
         except KeyError:
             for i in uid_db:
                 if uid_db[i]['email'] == login_id:
                     if uid_db[i]['password'] == request.form.to_dict()['password']:
                         valid = True
+                        session['username'] = uid_db[i]
         finally:
             if valid is False:
                 password_check = 'Invalid'
@@ -91,15 +94,18 @@ def login():
 
 
 def validate_uid(form, field):
-    for i in uid_db:
+    for i in root.child('UserAccount').get():
         if field.data == i:
             raise ValidationError('The username is already registered')
 
 
 def validate_email(form, field):
-    for i in uid_db:
-        if field.data == uid_db[i]['email']:
-            raise ValidationError('The Email is already registered')
+    for i in root.child('UserAccount').get():
+        try:
+            if field.data == root.child('UserAccount').get()[i]['email']:
+                raise ValidationError('The Email is already registered')
+        except KeyError:
+            pass
 
 
 class SignUpForm(Form):
@@ -132,12 +138,14 @@ def signup():
             'password': user_account.get_password()
         })
         session['logged_in'] = True
+        session['username'] = signup_form.username.data
         return redirect(url_for('register_name'))
     return render_template('signup.html', form=signup_form)
 
 
 @app.route('/logout')
 def logout():
+    session.pop('username', None)
     session.pop('logged_in', None)
     return redirect(url_for('index'))
 
@@ -148,22 +156,162 @@ def timeline():
     return render_template('timeline.html')
 
 
-@app.route('/registerName')
+class NameForm(Form):
+    first_name = StringField('First Name', [validators.length(min=1, max=20), validators.DataRequired()])
+    last_name = StringField('Last Name', [validators.length(min=1, max=20), validators.DataRequired()])
+    display_name = StringField('Display Name', [validators.length(min=1, max=20), validators.DataRequired()])
+
+
+class AccountSetup:
+    def __init__(self, first_name, last_name, display_name, gender, birth, height, weight_dict, bp_dict):
+        self.first_name = first_name
+        self.last_name = last_name
+        self.display_name = display_name
+        self.gender = gender
+        self.birth = birth
+        self.height = height
+        self.weight_dict = weight_dict
+        self.bp_dict = bp_dict
+
+    def get_first_name(self):
+        return self.first_name
+
+    def get_last_name(self):
+        return self.last_name
+
+    def get_display_name(self):
+        return self.display_name
+
+    def get_gender(self):
+        return self.gender
+
+    def get_birth(self):
+        return self.birth
+
+    def get_height(self):
+        return self.height
+
+    def get_weight_dict(self):
+        return self.weight_dict
+
+    def get_bp_dict(self):
+        return self.bp_dict
+
+
+@app.route('/setup/name', methods=['GET', 'POST'])
 def register_name():
-    return render_template('firstTimeRegisterName.html')
+    name_form = NameForm(request.form)
+    if request.method == 'POST' and name_form.validate():
+        root.child('UserAccount').child(session['username']).update({
+            'first_name': name_form.first_name.data,
+            'last_name': name_form.last_name.data,
+            'display_name': name_form.display_name.data
+        })
+        return redirect(url_for('register_gender'))
+    return render_template('firstTimeRegisterName.html', name_form=name_form)
 
 
-@app.route('/registerGender')
+class GenderForm(Form):
+    gender = RadioField('Gender', [validators.DataRequired()], choices=[('male', 'Male'), ('female', 'Female')])
+
+
+@app.route('/setup/gender', methods=['GET', 'POST'])
 def register_gender():
-    return render_template('firstTimeRegisterGender.html')
+    gender_form = GenderForm(request.form)
+    if request.method == 'POST' and gender_form.validate():
+        root.child('UserAccount').child(session['username']).update({
+            'gender': gender_form.gender.data,
+        })
+        return redirect(url_for('register_info'))
+    return render_template('firstTimeRegisterGender.html', gender_form=gender_form)
 
 
-@app.route('/registerInfo')
+class MoreInfoForm(Form):
+    height = DecimalField('Current Height (m)', [validators.DataRequired()], places=2)
+    current_weight = DecimalField('Current Weight (kg)', [validators.DataRequired()], places=2)
+    birth_day = SelectField('Day', choices=[('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'), ('5', '5'),
+                                            ('6', '6'), ('7', '7'), ('8', '8'), ('9', '9'), ('10', '10'),
+                                            ('11', '11'), ('12', '12'), ('13', '13'), ('14', '14'), ('15', '15'),
+                                            ('16', '16'), ('17', '17'), ('18', '18'), ('19', '19'), ('20', '20'),
+                                            ('21', '21'), ('22', '22'), ('23', '23'), ('24', '24'), ('25', '25'),
+                                            ('26', '26'), ('27', '27'), ('28', '28'), ('29', '29'), ('30', '30'),
+                                            ('31', '31')
+                                            ]
+                            )
+    birth_month = SelectField('Month', choices=[('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'), ('5', '5'),
+                                                ('6', '6'), ('7', '7'), ('8', '8'), ('9', '9'), ('10', '10'),
+                                                ('11', '11'), ('12', '12')
+                                                ]
+                              )
+    birth_year = IntegerField('Year')
+    
+
+@app.route('/setup/moreinfo', methods=['GET', 'POST'])
 def register_info():
-    return render_template('firstTimeRegisterInfo.html')
+    moreinfo_form = MoreInfoForm(request.form)
+    register_date = '{:%Y-%m-%d}'.format(datetime.date.today())
+    if request.method == 'POST' and moreinfo_form.validate():
+        root.child('UserAccount').child(session['username']).update({
+            'height': str(moreinfo_form.height.data),
+            'weight_dict': {
+                register_date: str(moreinfo_form.current_weight.data)
+            },
+            'birthday': str(moreinfo_form.birth_year.data) + '-' +
+                        str(moreinfo_form.birth_month.data) + '-' +
+                        str(moreinfo_form.birth_day.data)
+        })
+        return redirect(url_for('profile'))
+    return render_template('firstTimeRegisterInfo.html', moreinfo_form=moreinfo_form)
 
 
-@app.route('/accountinfo')
+class UserAccountSetupForm(Form):
+    first_name = StringField('First Name', [validators.length(min=1, max=20), validators.DataRequired()])
+    last_name = StringField('Last Name', [validators.length(min=1, max=20), validators.DataRequired()])
+    display_name = StringField('Display Name', [validators.length(min=1, max=20), validators.DataRequired()])
+    gender = RadioField('Gender', [validators.DataRequired()], choices=[('male', 'Male'), ('female', 'Female')])
+    current_weight = DecimalField('Current Weight (kg)', [validators.DataRequired()], places=2)
+    birthday = DateField('Birthday')
+    height = DecimalField('Current Height (m)', [validators.DataRequired()], places=2)
+    systol = DecimalField('Systol')
+    diastol = DecimalField('Diastol')
+    pulse = DecimalField('Pulse')
+
+
+@app.route('/setup', methods=['GET', 'POST'])
+def setup_accountinfo():
+    setup_date = '{:%Y-%m-%d}'.format(datetime.date.today())
+    setup_form = UserAccountSetupForm(request.form)
+    if request.method == 'POST' and setup_form.validate():
+        first_name = setup_form.first_name.data
+        last_name = setup_form.last_name.data
+        display_name = setup_form.display_name.data
+        gender = setup_form.gender.data
+        birthday = str(setup_form.birthday.data)
+        height = str(setup_form.height.data)
+        weight_dict = {setup_date: str(setup_form.current_weight.data)}
+        bp_dict = {
+            setup_date: {
+                'systol': str(setup_form.systol.data),
+                'diastol': str(setup_form.diastol.data),
+                'pulse': str(setup_form.pulse.data)
+            }
+        }
+        user_setup = AccountSetup(first_name, last_name, display_name, gender, birthday, height, weight_dict, bp_dict)
+        root.child('UserAccount').child(session['username']).update({
+            'first_name': user_setup.get_first_name(),
+            'last_name': user_setup.get_last_name(),
+            'display_name': user_setup.get_display_name(),
+            'gender': user_setup.get_gender(),
+            'birthday': user_setup.get_birth(),
+            'height': user_setup.get_height(),
+            'weight_dict': user_setup.get_weight_dict(),
+            'bp_dict': user_setup.get_bp_dict()
+        })
+        return redirect(url_for('accountinfo'))
+    return render_template('accountinfoUpdate.html', setup_form=setup_form)
+
+
+@app.route('/account')
 def accountinfo():
     return render_template('accountinfoDisplay.html')
 
@@ -241,6 +389,11 @@ def quiz():
 @app.route('/faq')
 def faq():
     return render_template('faq.html')
+
+
+@app.route('/record')
+def record():
+    return render_template('track_and_record.html')
 
 
 @app.route('/rewards')
