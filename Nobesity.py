@@ -328,18 +328,16 @@ def plans():
 
 @app.route('/diet')
 def diet():
-    diets = root.child('Food').get()
+    Diet_db = root.child('Food').get()
     diet_list = []
-    for dietID in diets:
-        eachdiet = diets[dietID]
-        print(eachdiet)
+    for dietID in Diet_db:
+        eachdiet = Diet_db[dietID]
         food = Diet(eachdiet['Name'],eachdiet['Type'], eachdiet['Calories Value'], eachdiet['Fats Value'],
-                    eachdiet['Carbohydrates Value'], eachdiet['Protein '] )
+                    eachdiet['Carbohydrates Value'], eachdiet['Protein Value'] )
         food.set_dietID(dietID)
-        print(food.get_dietID())
         diet_list.append(food)
 
-    return render_template('diet.html', diet='diet_list')
+    return render_template('diet.html', diet=diet_list)
 
 class Food(Form):
     food_name = StringField('Name',[validators.length(min=1,max=150),validators.DataRequired()])
@@ -394,7 +392,6 @@ def update_diet(id):
     else:
         url = 'Food/' + id
         eachdiet = root.child(url).get()
-
         food = Diet(eachdiet['Name'], eachdiet['Type'], eachdiet['Calories Value'], eachdiet['Fats Value'],
                     eachdiet['Carbohydrates Value'], eachdiet['Protein '])
         food.set_dietID(id)
@@ -408,15 +405,13 @@ def update_diet(id):
         return render_template('update_diet.html', form=update_form)
 
 
-@app.route('/delete_diet/<string:id>', methods=['POST'])
+@app.route('/delete_diet', methods=['POST'])
 def delete_diet(id):
     Diet_db = root.child('Food/' + id)
     Diet_db.delete()
     flash('Diet deleted','Success')
 
     return redirect(url_for('diet'))
-
-
 
 
 @app.route('/quiz')
