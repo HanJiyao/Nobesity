@@ -339,6 +339,7 @@ def diet():
 
     return render_template('diet.html', diet=diet_list)
 
+
 class Food(Form):
     food_name = StringField('Name',[validators.length(min=1,max=150),validators.DataRequired()])
     food_type = StringField('Type',[validators.length(min=1,max=150),validators.DataRequired()])
@@ -374,18 +375,18 @@ def new_diet():
 @app.route('/update_diet/<string:id>', methods=['GET','POST'])
 def update_diet(id):
     update_form = Food(request.form)
-    if request.method =='POST' and update_form.validate():
+    if request.method == 'POST' and update_form.validate():
         name = update_form.food_name.data
         food_type = update_form.food_type.data
         calories = update_form.calories.data
         fats = update_form.fats.data
         carbohydrates = update_form.carbohydrates.data
         protein = update_form.proteins.data
-        food_diet = Diet(name,food_type,calories,fats,carbohydrates,protein)
+        food_diet = Diet(name,food_type, calories,fats,carbohydrates,protein)
         Diet_db = root.child('Food/' + id)
         Diet_db.set({'Name': food_diet.get_name(), 'Type': food_diet.get_type(),'Calories Value': food_diet.get_calories(),
-                      'Fats Value': food_diet.get_fats(), 'Carbohydrates Value': food_diet.get_carbohydrates(),
-                      'Protein Value': food_diet.get_protein()})
+                    'Fats Value': food_diet.get_fats(), 'Carbohydrates Value': food_diet.get_carbohydrates(),
+                     'Protein Value': food_diet.get_protein()})
         flash('Diet updated successfully', 'success')
 
         return redirect(url_for('diet'))
@@ -397,11 +398,10 @@ def update_diet(id):
         food.set_dietID(id)
         update_form.food_name.data = food.get_name()
         update_form.food_type.data = food.get_type()
-        print(food.get_calories(),food.get_carbohydrates(),food.get_fats(), food.get_protein())
-        update_diet.calories.data = food.get_calories()
-        update_diet.fats.data = food.get_fats()
-        update_diet.carbohydrates.data =  food.get_carbohydrates()
-        update_diet.protein.data = food.get_protein()
+        update_form.calories.data = food.get_calories()
+        update_form.fats.data = food.get_fats()
+        update_form.carbohydrates.data = food.get_carbohydrates()
+        update_form.proteins.data = food.get_protein()
 
         return render_template('update_diet.html', form=update_form)
 
