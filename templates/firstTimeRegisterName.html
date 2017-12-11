@@ -1,23 +1,30 @@
 {% extends 'layout.html' %}
 {% block body %}
+    {% macro render_field(field) %}
+      {{ field(**kwargs)|safe }}
+      {% if field.errors %}
+        {% for error in field.errors %}
+            <div class="alert alert-danger col-12 m-auto">
+                {{ error }}
+            </div>
+        {% endfor %}
+      {% endif %}
+    {% endmacro %}
     <div class="account-box">
         <form method="post" action="" class="main-form" >
             <div class="box-header">Hello UserName</div>
             <div class="box-text">How should we call you?</div>
             <div class="form-group account-content">
             <div class="form-coltrol row m-auto">
-            <div class="form-group col-6">
-				<label for="firstName">First Name</label>
-				<input type="text" class="form-control" id="firstName" placeholder="Enter First Name">
+            <div class="form-group col-6  p-0">
+				{{ render_field(name_form.first_name, class_="form-control mt-3 mb-3", placeholder="First Name", style="width:95%") }}
 		  	</div>
-		  	<div class="form-group col-6">
-				<label for="lastName">Last Name</label>
-				<input type="text" class="form-control" id="lastName" placeholder="Enter Last Name">
+		  	<div class="form-group col-6  p-0">
+				{{ render_field(name_form.last_name, class_="form-control mt-3 mb-3", placeholder="Last Name", style="width:95%") }}
 		  	</div>
 		  	</div>
-		  	<div class="form-group m-3">
-				<label for="userName">Display Name</label>
-				<input type="text" class="form-control" id="userName" placeholder="Enter Display Name">
+		  	<div class="form-group">
+				{{ render_field(name_form.display_name, class_="form-control mt-3 mb-3 ml-auto", placeholder="Display Name") }}
 				<small class="form-control-description text-muted">This is how your name will appear to others. If you want them to search for you, they'll need to know this</small>
 		  	</div>
 			<button type="submit" class="form-control submit-btn" style="margin-top: 30px;margin-bottom: 0;">Next</button>

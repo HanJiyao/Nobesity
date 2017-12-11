@@ -1,50 +1,45 @@
 {% extends 'layout.html' %}
 {% block body %}
 <form class="mx-auto account_info">
-  <div class="form-group form-row">
-      <span>Hello, </span><span id="first_name">Jiyao</span> <span id="last_name">Han</span>
+  <div class="form-group form-row account-detail">
+      <div class="col-2"><i class="material-icons">person</i></div>
+    <div class="col-4"> Name :</div>
+    <div class="col-6 text-right" id="first_name">Jiyao Han</div>
   </div>
-  <div class="form-group group-row">
-  	<div class="row gender-row">
-        <label for="gender" class="col-2">Gender</label>
-        <div class="col-10" data-toggle="buttons">
-		  <label class="col-5 btn btn-primary gender-radio disable">
-			Male
-		  </label>
-		  <label class="col-5 btn btn-primary gender-radio-female disable">
-          	Female
-		  </label>
+  <div class="form-group form-row account-detail">
+      <div class="col-2"><i class="material-icons">share</i></div>
+    <div class="col-4"> Display Name :</div>
+    <div class="col-6 text-right" id="display_name">MrHan</div>
+  </div>
+  <div class="form-group form-row account-detail">
+      <div class="col-2"><i class="material-icons">wc</i></div>
+  	<div class="col-4"> Gender :</div>
+    <div class="col-6 text-right">Male</div>
+  </div>
+  <div class="form-group form-row account-detail">
+      <div class="col-2"><i class="material-icons">cake</i></div>
+    <div class="col-4"> Birth Date :</div>
+    <div class="col-6 text-right">1996-01-01</div>
+  </div>
+  <div class="form-group form-row account-detail">
+      <div class="col-2"><i class="material-icons">accessibility</i></div>
+    <div class="col-4"> Current Weight :</div>
+    <div class="col-6 text-right"> 70 kg </div>
+  </div>
+  <div class="form-group form-row account-detail">
+      <div class="col-2"><i class="material-icons">straighten</i></div>
+    <div class="col-4"> Height :</div>
+    <div class="col-6 text-right"> 1.75 m </div>
+  </div>
+  <div class="form-group account-detail">
+      <div class="form-row">
+          <div class="col-2"><i class="material-icons">local_hospital</i></div>
+          <div class="col-2">BP: </div>
+          <div class="col-3"> Systol 130</div>
+          <div class="col-3"> Diastol 80</div>
+          <div class="col-2"> Pulse 70</div>
       </div>
-  	</div>
   </div>
-  <div class="form-group">
-    <label for="birth">Birth date</label>
-    <input type="date" class="form-control" id="birth">
-  </div>
-  <div class="form-group form-row">
-    <div class="col-md-6">
-    <label for="weight">Weight</label>
-    <input type="text" class="form-control" id="weight" placeholder="Weight">
-    </div>
-      <div class="col-md-6">
-    <label for="height">Height</label>
-    <input type="text" class="form-control" id="height" placeholder="Height">
-    </div>
-  </div>
-  <div class="form-group form-row">
-    <div class="col-md-4">
-      <label for="inputCity">Systol</label>
-      <input type="text" class="form-control" id="inputCity">
-    </div>
-    <div class="col-md-4">
-      <label for="diastol">Diastol</label>
-      <input  id="diastol" class="form-control">
-    </div>
-    <div class="col-md-4">
-      <label for="pluse">Pulse</label>
-      <input type="text" class="form-control" id="pluse">
-    </div>
-  </div>
-  <button class="btn btn-primary form-control" id="update_info">Update</button>
+  <a href="/setup" class=" form-control btn btn-primary" id="update_info">Update Account Details</a>
 </form>
 {% endblock %}

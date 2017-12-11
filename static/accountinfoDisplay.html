@@ -42,8 +42,8 @@
 		<a class="nav-link sep">|</a>
 	  </li>
 	  <!-- {% if not session.logged_in %} -->
-		<li class="nav-item dropdown account-btn">
-			<a class="dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		<li class="nav-item dropdown">
+			<a class="dropdown-toggle account-btn" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			  UserName
 			</a>
 			<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
@@ -60,51 +60,49 @@
 </nav>
 </div>
 <form class="mx-auto account_info">
-  <div class="form-group form-row">
-      <span>Hello, </span><span id="first_name">Jiyao</span> <span id="last_name">Han</span>
+  <div class="form-group form-row account-detail">
+      <div class="col-2"></div>
+    <div class="col-4"> Name :</div>
+    <div class="col-6" id="first_name">Jiyao Han</div>
   </div>
-  <div class="form-group group-row">
-  	<div class="row gender-row">
-        <label for="gender" class="col-2">Gender</label>
-        <div class="col-10" data-toggle="buttons">
-		  <label class="col-5 btn btn-primary gender-radio disable">
-			Male
-		  </label>
-		  <label class="col-5 btn btn-primary gender-radio-female disable">
-          	Female
-		  </label>
+  <div class="form-group form-row account-detail">
+      <div class="col-2"></div>
+    <div class="col-4"> Display Name :</div>
+    <div class="col-6" id="display_name">MrHan</div>
+  </div>
+  <div class="form-group form-row account-detail">
+      <div class="col-2"></div>
+  	<div class="col-4"> Gender :</div>
+    <div class="col-6" id="display_name">Male</div>
+  </div>
+  <div class="form-group form-row account-detail">
+      <div class="col-2"></div>
+    <div class="col-4"> Birth Date :</div>
+    <div class="col-6" id="display_name">1996-01-01</div>
+  </div>
+  <div class="form-group form-row account-detail">
+      <div class="col-2"></div>
+    <div class="col-4"> Current Weight :</div>
+    <div class="col-6"> 70 kg </div>
+  </div>
+  <div class="form-group form-row account-detail">
+      <div class="col-2"></div>
+    <div class="col-4"> Height :</div>
+    <div class="col-6"> 1.75 m </div>
+  </div>
+  <div class="form-group account-detail">
+      <div class="form-row">
+          <div class="col-2"></div>
+          <div class="col-10" style="margin-bottom: 10px">Blood Pressure: </div>
       </div>
-  	</div>
+      <div class="form-row">
+          <div class="col-2"></div>
+            <div class="col-3"> Systol <span>130</span></div>
+            <div class="col-3"> Diastol <span>80</span></div>
+            <div class="col-3"> Pulse <span>70</span></div>
+      </div>
   </div>
-  <div class="form-group">
-    <label for="birth">Birth date</label>
-    <input type="date" class="form-control" id="birth">
-  </div>
-  <div class="form-group form-row">
-    <div class="col-md-6">
-    <label for="weight">Weight</label>
-    <input type="text" class="form-control" id="weight" placeholder="Weight">
-    </div>
-      <div class="col-md-6">
-    <label for="height">Height</label>
-    <input type="text" class="form-control" id="height" placeholder="Height">
-    </div>
-  </div>
-  <div class="form-group form-row">
-    <div class="col-md-4">
-      <label for="inputCity">Systol</label>
-      <input type="text" class="form-control" id="inputCity">
-    </div>
-    <div class="col-md-4">
-      <label for="diastol">Diastol</label>
-      <input  id="diastol" class="form-control">
-    </div>
-    <div class="col-md-4">
-      <label for="pluse">Pulse</label>
-      <input type="text" class="form-control" id="pluse">
-    </div>
-  </div>
-  <button class="btn btn-primary form-control" id="update_info">Update</button>
+  <a href="/setup" class=" form-control btn btn-primary" id="update_info">Update Account Details</a>
 </form>
 <footer class="footer">
 		<div class="container-fluid text-center">

@@ -13,18 +13,27 @@
 	padding-top: 6px;
 }
 .gender-radio{
-	margin-left: 50px; 
+	background: white;
+	color: black;
+	border:#ced4da solid 1px;
+    text-align: center;
+    transition: color 0.5s, background-color 0.5s, border 0.5s;
 }
-.gender-radio, .gender-radio-female{
-	background: #03A9F4;
+.gender-radio:hover{
+    color:#03A9FA;
+    border:#03A9FA solid 1px;
 }
-.gender-radio-female{
-	float: right;
+.gender-radio.active{
+    background: #03A9F4;
+    color:white;
 }
 #update_info{
-	background: #03A9F4
+	background: #03A9F4;
 }
 .account_info .form-group{
-	padding-bottom: 30px;
+	padding-bottom: 25px;
 	border-bottom: #e0e0e0 dashed 1px;
+}
+.account-detail{
+	padding-top: 12px;
 }

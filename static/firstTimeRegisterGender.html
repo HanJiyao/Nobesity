@@ -14,7 +14,26 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
-
+<script>
+     $(document).ready(function () {
+         var male = $("#male");
+         var female = $("#female");
+         var select_male = $("#select_male");
+         var select_female = $("#select_female");
+         select_male.click(function(){
+             male.prop("checked","True");
+             female.removeProp("checked","True");
+             select_male.attr("class","col-5 gender-img card active");
+             select_female.attr("class","col-5 gender-img card  ml-auto");
+         });
+         select_female.click(function(){
+             female.prop("checked","True");
+             male.removeProp("checked","True");
+             select_female.attr("class","col-5 gender-img card  ml-auto active");
+             select_male.attr("class","col-5 gender-img card");
+         });
+     })
+</script>
 	<div class="nav-wrapper">
 	<nav class="navbar navbar-expand navbar-light">
 	  <a class="navbar-brand" href="#">NObesity</a>
@@ -67,19 +86,27 @@
             <div class="form-group account-content">
             <div class="gender-select">
 				<div class="row">
-					<div class="col-5 gender-img card">
+					<div class="col-5 gender-img card" id="select_male">
 						<img class="card-img-top" alt="male_avatar" src="images/male_avatar.jpg">
 						<div class="card-body">
 							<p class="card-text">Male</p>
 						</div>
 					</div>
-					<div class="col-5 gender-img card ml-auto  active">
+					<div class="col-5 gender-img card ml-auto" id="select_female">
 						<img class="card-img-top" alt="female_avatar" src="images/female_avatar.jpg">
-						<div class="card-body">
+						<div class="card-body gender-text">
 							<p class="card-text">Female</p>
 						</div>
 					</div>
-				</div>	
+				</div>
+				<div class="form-group row">
+                    <label class="radio-inline col-6">
+                      <input id="male" name="gender" type="radio">Male
+                    </label>
+                    <label class="radio-inline col-6">
+                      <input id="female" name="gender" type="radio">Female
+                    </label>
+				</div>
            </div><button type="submit" class="form-control submit-btn" style="margin-top: 50px;     margin-bottom: 0;">Next</button>
            </div>
         </form>
