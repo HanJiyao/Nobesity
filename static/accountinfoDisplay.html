@@ -6,10 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
     <link rel="stylesheet" href="../static/css/layout.css" type="text/css">
-    <link rel="stylesheet" href="../static/css/forum.css" type="text/css">
     <link rel="stylesheet" href="../static/css/Diet.css" type="text/css">
     <link href="../static/css/login.css" rel="stylesheet" type="text/css">
-    <link href="../static/css/accountinfo.css" rel="stylesheet" type="text/css">
+    <link href="../static/css/account.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" >
 </head>
 <body>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
@@ -61,48 +61,52 @@
 </div>
 <form class="mx-auto account_info">
   <div class="form-group form-row account-detail">
-      <div class="col-2"></div>
+      <div class="col-1"><i class="material-icons">person</i></div>
     <div class="col-4"> Name :</div>
     <div class="col-6" id="first_name">Jiyao Han</div>
+      <div class="col-1"><i class="material-icons">keyboard_arrow_right</i></div>
   </div>
   <div class="form-group form-row account-detail">
-      <div class="col-2"></div>
+      <div class="col-1"><i class="material-icons">share</i></div>
     <div class="col-4"> Display Name :</div>
     <div class="col-6" id="display_name">MrHan</div>
+      <div class="col-1"><i class="material-icons">keyboard_arrow_right</i></div>
   </div>
   <div class="form-group form-row account-detail">
-      <div class="col-2"></div>
+      <div class="col-1"><i class="material-icons">wc</i></div>
   	<div class="col-4"> Gender :</div>
-    <div class="col-6" id="display_name">Male</div>
+    <div class="col-6">Male</div>
+      <div class="col-1"><i class="material-icons">keyboard_arrow_right</i></div>
   </div>
   <div class="form-group form-row account-detail">
-      <div class="col-2"></div>
+      <div class="col-1"><i class="material-icons">cake</i></div>
     <div class="col-4"> Birth Date :</div>
-    <div class="col-6" id="display_name">1996-01-01</div>
+    <div class="col-6">1996-01-01</div>
+      <div class="col-1"><i class="material-icons">keyboard_arrow_right</i></div>
   </div>
   <div class="form-group form-row account-detail">
-      <div class="col-2"></div>
-    <div class="col-4"> Current Weight :</div>
+      <div class="col-1"><i class="material-icons">accessibility</i></div>
+    <div class="col-4"> Initial Weight :</div>
     <div class="col-6"> 70 kg </div>
+      <div class="col-1"><i class="material-icons">keyboard_arrow_right</i></div>
   </div>
   <div class="form-group form-row account-detail">
-      <div class="col-2"></div>
+      <div class="col-1"><i class="material-icons">straighten</i></div>
     <div class="col-4"> Height :</div>
     <div class="col-6"> 1.75 m </div>
+      <div class="col-1"><i class="material-icons">keyboard_arrow_right</i></div>
   </div>
-  <div class="form-group account-detail">
-      <div class="form-row">
-          <div class="col-2"></div>
-          <div class="col-10" style="margin-bottom: 10px">Blood Pressure: </div>
-      </div>
-      <div class="form-row">
-          <div class="col-2"></div>
-            <div class="col-3"> Systol <span>130</span></div>
-            <div class="col-3"> Diastol <span>80</span></div>
-            <div class="col-3"> Pulse <span>70</span></div>
-      </div>
+  <div class="form-group form-row account-detail">
+      <div class="col-1"><i class="material-icons">local_hospital</i></div>
+      <div class="col-4"> Blood Pressure: </div>
+      <div class="col-4"> 130/80 mmHg</div>
+      <div class="col-2"> 70 bpm</div>
+      <div class="col-1"><i class="material-icons">keyboard_arrow_right</i></div>
   </div>
-  <a href="/setup" class=" form-control btn btn-primary" id="update_info">Update Account Details</a>
+    <div class="form-group form-row">
+        <a href="/account" class="col-5 btn btn-outline-secondary" id="reset_info">Cancel</a>
+        <button type="submit" class="col-5 ml-auto btn btn-outline-secondary" id="save_info" disabled value="Login">Save</button>
+    </div>
 </form>
 <footer class="footer">
 		<div class="container-fluid text-center">

@@ -277,8 +277,8 @@ class UserAccountSetupForm(Form):
     pulse = DecimalField('Pulse')
 
 
-@app.route('/setup', methods=['GET', 'POST'])
-def setup_accountinfo():
+@app.route('/account/info', methods=['GET', 'POST'])
+def account_info():
     setup_date = '{:%Y-%m-%d}'.format(datetime.date.today())
     setup_form = UserAccountSetupForm(request.form)
     if request.method == 'POST' and setup_form.validate():
@@ -307,13 +307,8 @@ def setup_accountinfo():
             'weight_dict': user_setup.get_weight_dict(),
             'bp_dict': user_setup.get_bp_dict()
         })
-        return redirect(url_for('accountinfo'))
-    return render_template('accountinfoUpdate.html', setup_form=setup_form)
-
-
-@app.route('/account')
-def accountinfo():
-    return render_template('accountinfoDisplay.html')
+        return redirect(url_for('account_info'))
+    return render_template('accountInfo.html', setup_form=setup_form)
 
 
 @app.route('/profile')

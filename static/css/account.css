@@ -17,6 +17,7 @@
 	color: black;
 	border:#ced4da solid 1px;
     text-align: center;
+	margin-top: 3px;
     transition: color 0.5s, background-color 0.5s, border 0.5s;
 }
 .gender-radio:hover{
@@ -30,10 +31,16 @@
 #update_info{
 	background: #03A9F4;
 }
-.account_info .form-group{
+.account-detail{
+	padding-top: 30px;
 	padding-bottom: 25px;
+	margin: 0;
 	border-bottom: #e0e0e0 dashed 1px;
 }
-.account-detail{
-	padding-top: 12px;
+.account-detail .col-1, .account-detail .col-4{
+	padding-top: 10px;
+	padding-bottom: 5px;
+}
+#reset_info, #save_info{
+	margin-top: 50px;
 }
