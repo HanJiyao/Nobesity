@@ -31,10 +31,11 @@
         });
     </script>
     <form class="mx-auto account_info">
-      <div class="form-group form-row account-detail">
+      <div class="form-group form-row account-detail" id="user_name">
         <div class="col-1"><i class="material-icons">person</i></div>
         <div class="col-4"> Name :</div>
         <div class="col-6 sr-only" id="first_name">Jiyao Han</div>
+          <div ></div>
           {{ render_field(setup_form.first_name, class_="form-control col-6", placeholder="First Name") }}
         <div class="col-1"><i class="material-icons">keyboard_arrow_right</i></div>
       </div>
