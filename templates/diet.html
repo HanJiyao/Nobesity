@@ -25,13 +25,13 @@
             <td>{{eachdiet.get_fats()}}</td>
             <td>{{eachdiet.get_carbohydrates()}}</td>
             <td>{{eachdiet.get_protein()}}</td>
-            {% endfor %}
-            <td><a href ="/update_diet" class="btn btn-warning">Update</a></td>
+            <td><a href ="/update_diet/{{eachdiet.get_dietID()}}" class="btn btn-warning">Update</a></td>
             <td>
                 <form action="{{ url_for('delete_diet')}}" method = "post">
                 <input type ="Submit" value = "Delete" class = "btn btn-danger" onclick="return confirm('Are you sure you want to delete this diet')">
                 </form>
             </td>
+            {% endfor %}
         </tr>
         <tr>
             <td><a href="/new_diet">Create New Diet</a></td>

@@ -393,10 +393,11 @@ def update_diet(id):
         url = 'Food/' + id
         eachdiet = root.child(url).get()
         food = Diet(eachdiet['Name'], eachdiet['Type'], eachdiet['Calories Value'], eachdiet['Fats Value'],
-                    eachdiet['Carbohydrates Value'], eachdiet['Protein '])
+                    eachdiet['Carbohydrates Value'], eachdiet['Protein Value'])
         food.set_dietID(id)
         update_form.food_name.data = food.get_name()
         update_form.food_type.data = food.get_type()
+        print(food.get_calories(),food.get_carbohydrates(),food.get_fats(), food.get_protein())
         update_diet.calories.data = food.get_calories()
         update_diet.fats.data = food.get_fats()
         update_diet.carbohydrates.data =  food.get_carbohydrates()
