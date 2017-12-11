@@ -95,16 +95,16 @@
 function myFunction() {
   // Declare variables
   var input, filter, div, p, i, j;
-  input = document.getElementById("myInput");
-  filter = input.value.toUpperCase();
-  div = document.getElementsByClassName("faq-question");
-console.log(div)
+  filter = document.getElementById("myInput").value.toUpperCase();
+  div = document.getElementsByClassName("faq");
   // Loop through all table rows, and hide those who don't match the search query
-  for (i = 0; i < div.length; i++) {
-      p = div[i].getElementsByTagName("p");
-      for (j = 0; j < p.length; j++) {
+  for (i = 0; i < 5; i++) {
+      p = div[i].getElementsByTagName("p")[0];
+      console.log(p.innerText.toUpperCase());
+      console.log(p.innerText.toUpperCase().indexOf(filter) );
+      for (j = 0; j < div.length; j++) {
         if (p.innerHTML.toUpperCase().indexOf(filter) > -1) {
-          div[i].style.display = "";
+          div[i].style.display = "block";
         } else {
           div[i].style.display = "none";
       }
