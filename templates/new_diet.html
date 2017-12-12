@@ -15,31 +15,27 @@
 
         <div class="form-group">
             <div class="form-row">
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-3">
                     {{ render_field(form.calories, class_="form-control") }}
                 </div>
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-3">
                     {{ render_field(form.fats, class_="form-control") }}
                 </div>
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-3">
                     {{ render_field(form.carbohydrates, class_="form-control") }}
                 </div>
-                  <div class="form-group col-md-4">
+                  <div class="form-group col-md-3">
                     {{ render_field(form.proteins, class_="form-control") }}
                 </div>
             </div>
         </div>
         <div class="form-group">
             <div class="form-row">
-                <div class="form-group col-md-11">
+                <div class="form-group col-md-6 text-right">
+                    <input type ="submit" value="submit" class="btn btn-submit btn-lg">
                 </div>
-                <div class="form-group col-md-1">
-                    <input type ="submit" value="submit" class="btn btn-submit">
-                </div>
-                 <div class="form-group col-md-11">
-                </div>
-                 <div class="form-group col-md-1">
-                     <input type ="reset" value="clear" class="btn btn-reset">
+                 <div class="form-group col-md-6">
+                     <input type ="reset" value="clear" class="btn btn-reset btn-lg">
                 </div>
             </div>
         </div>
