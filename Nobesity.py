@@ -1,7 +1,5 @@
 from flask import Flask, render_template, request, flash, redirect, url_for, session
-from wtforms import Form, \
-    StringField, TextAreaField, RadioField, SelectField, PasswordField, DecimalField, IntegerField, DateField, \
-    validators, ValidationError
+from wtforms import Form, StringField, TextAreaField, RadioField, SelectField, PasswordField, DecimalField, IntegerField, DateField, validators, ValidationError
 import firebase_admin
 from firebase_admin import credentials, db
 import datetime
@@ -389,20 +387,20 @@ def diet():
 
 
 class Food(Form):
-    food_name = StringField('Name',[validators.length(min=1,max=150),validators.DataRequired()])
-    food_type = StringField('Type',[validators.length(min=1,max=150),validators.DataRequired()])
-    calories = StringField('Calories Value',[validators.length(min=1,max=3),validators.DataRequired()])
-    fats = StringField('Fats Value',[validators.length(min=1,max=3),validators.DataRequired()])
-    carbohydrates = StringField('Carbohydrates Value',[validators.length(min=1,max=3),validators.DataRequired()])
-    proteins = StringField('Protein Value',[validators.length(min=1,max=3),validators.DataRequired()])
+    diet_name = StringField('Name',[validators.length(min=1,max=150),validators.DataRequired()])
+    diet_type = SelectField('Type',[validators.DataRequired()],choices=[("","Select"),("F","Food"),("D","Drinks"),("F","Fruits")])
+    calories = IntegerField('Calories Value',[validators.length(min=1,max=3),validators.DataRequired()])
+    fats = IntegerField('Fats Value',[validators.length(min=1,max=3),validators.DataRequired()])
+    carbohydrates = IntegerField('Carbohydrates Value',[validators.length(min=1,max=3),validators.DataRequired()])
+    proteins = IntegerField('Protein Value',[validators.length(min=1,max=3),validators.DataRequired()])
 
 
 @app.route('/new_diet', methods=['GET','POST'])
 def new_diet():
     new_form = Food(request.form)
     if request.method == 'POST' and new_form.validate():
-            name = new_form.food_name.data
-            type = new_form.food_type.data
+            name = new_form.diet_name.data
+            type = new_form.diet_type.data
             calories = new_form.calories.data
             fats = new_form.fats.data
             carbohydrates = new_form.carbohydrates.data
@@ -424,8 +422,8 @@ def new_diet():
 def update_diet(id):
     update_form = Food(request.form)
     if request.method == 'POST' and update_form.validate():
-        name = update_form.food_name.data
-        food_type = update_form.food_type.data
+        name = update_form.diet_name.data
+        food_type = update_form.diet_type.data
         calories = update_form.calories.data
         fats = update_form.fats.data
         carbohydrates = update_form.carbohydrates.data
@@ -444,8 +442,8 @@ def update_diet(id):
         food = Diet(eachdiet['Name'], eachdiet['Type'], eachdiet['Calories Value'], eachdiet['Fats Value'],
                     eachdiet['Carbohydrates Value'], eachdiet['Protein Value'])
         food.set_dietID(id)
-        update_form.food_name.data = food.get_name()
-        update_form.food_type.data = food.get_type()
+        update_form.diet_name.data = food.get_name()
+        update_form.diet_type.data = food.get_type()
         update_form.calories.data = food.get_calories()
         update_form.fats.data = food.get_fats()
         update_form.carbohydrates.data = food.get_carbohydrates()
