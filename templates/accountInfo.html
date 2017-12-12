@@ -16,6 +16,11 @@
             var female = $("#gender-1");
             var select_male = $("#gender_male");
             var select_female = $("#gender_female");
+            if (male.checked == true){
+                select_male.attr("class","form-control gender-radio active");
+            } else {
+                select_female.attr("class","form-control gender-radio ml-auto active");
+            }
             select_male.click(function(){
                 male.prop("checked","True");
                 female.removeProp("checked","True");
@@ -31,19 +36,25 @@
         });
     </script>
     <form class="mx-auto account_info">
-      <div class="form-group form-row account-detail" id="user_name">
+      <div class="form-group form-row account-detail">
         <div class="col-1"><i class="material-icons">person</i></div>
         <div class="col-4"> Name :</div>
         <div class="col-6 sr-only" id="first_name">Jiyao Han</div>
-          <div ></div>
-          {{ render_field(setup_form.first_name, class_="form-control col-6", placeholder="First Name") }}
+          <div class="col-3">
+          {{ render_field(setup_form.first_name, class_="form-control", placeholder="First Name") }}
+          </div>
+          <div class="col-3">
+          {{ render_field(setup_form.last_name, class_="form-control", placeholder="Last Name") }}
+          </div>
         <div class="col-1"><i class="material-icons">keyboard_arrow_right</i></div>
       </div>
       <div class="form-group form-row account-detail">
         <div class="col-1"><i class="material-icons">share</i></div>
         <div class="col-4"> Display Name :</div>
         <div class="col-6  sr-only" id="display_name">MrHan</div>
-          {{ render_field(setup_form.display_name, class_="form-control col-6", placeholder="Last Name") }}
+          <div class="col-6">
+          {{ render_field(setup_form.display_name, class_="form-control", placeholder="Display Name") }}
+          </div>
         <div class="col-1"><i class="material-icons">keyboard_arrow_right</i></div>
       </div>
       <div class="form-group form-row account-detail">
@@ -53,7 +64,7 @@
           <div class="col-6">
             <div class="form-row">
                 <div class="col-6">
-                  <div class="form-control gender-radio active" id="gender_male">
+                  <div class="form-control gender-radio" id="gender_male">
                     Male
                   </div>
                 </div>
@@ -73,21 +84,27 @@
         <div class="col-1"><i class="material-icons">cake</i></div>
         <div class="col-4"> Birth Date :</div>
         <div class="col-6 sr-only">1996-01-01</div>
-          {{ render_field(setup_form.birthday, class_="form-control col-6", placeholder="YYYY-MM-DD") }}
+          <div class="col-6">
+          {{ render_field(setup_form.birthday, class_="form-control", placeholder="YYYY-MM-DD") }}
+          </div>
         <div class="col-1"><i class="material-icons">keyboard_arrow_right</i></div>
       </div>
       <div class="form-group form-row account-detail">
         <div class="col-1"><i class="material-icons">accessibility</i></div>
         <div class="col-4"> Initial Weight :</div>
         <div class="col-6 sr-only"> 70 kg </div>
-          {{ render_field(setup_form.current_weight, class_="form-control col-6", placeholder="Enter Current Weight") }}
+          <div class="col-6">
+          {{ render_field(setup_form.current_weight, class_="form-control", placeholder="Enter Current Weight") }}
+          </div>
         <div class="col-1"><i class="material-icons">keyboard_arrow_right</i></div>
       </div>
       <div class="form-group form-row account-detail">
         <div class="col-1"><i class="material-icons">straighten</i></div>
         <div class="col-4"> Height :</div>
         <div class="col-6 sr-only"> 1.75 m </div>
-          {{ render_field(setup_form.height, class_="form-control col-6", placeholder="Enter Height") }}
+          <div class="col-6">
+          {{ render_field(setup_form.height, class_="form-control", placeholder="Enter Height") }}
+          </div>
         <div class="col-1"><i class="material-icons">keyboard_arrow_right</i></div>
       </div>
       <div class="form-group form-row account-detail">
@@ -95,19 +112,19 @@
         <div class="col-4"> Initial BP : </div>
         <div class="col-4 sr-only"> 130/80 mmHg</div>
         <div class="col-2 sr-only"> 70 bpm</div>
-        <div class="col-2">
-          {{ render_field(setup_form.systol, class_="form-control", placeholder="Systolic") }}
+        <div class="col-2 pl-1 pr-1">
+          {{ render_field(setup_form.systol, class_="form-control pl-1", placeholder="Systol") }}
         </div>
-        <div class="col-2">
-          {{ render_field(setup_form.diastol, class_="form-control", placeholder="Diastalic") }}
+        <div class="col-2 pl-1 pr-1">
+          {{ render_field(setup_form.diastol, class_="form-control pl-1", placeholder="Diastal") }}
         </div>
-        <div class="col-2">
-          {{ render_field(setup_form.pulse, class_="form-control", placeholder="Pulse") }}
+        <div class="col-2 pl-1 pr-1">
+          {{ render_field(setup_form.pulse, class_="form-control pl-1", placeholder="Pulse") }}
         </div>
         <div class="col-1"><i class="material-icons">keyboard_arrow_right</i></div>
       </div>
       <div class="form-group form-row">
-        <a href="/account" class="col-5 btn btn-outline-secondary" id="reset_info">Cancel</a>
+        <a href="/account/info" class="col-5 btn btn-outline-secondary" id="reset_info">Cancel</a>
         <button type="submit" class="col-5 ml-auto btn btn-outline-secondary" id="save_info" disabled value="Login">Save</button>
       </div>
     </form>

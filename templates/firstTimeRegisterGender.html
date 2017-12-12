@@ -17,12 +17,14 @@
         var select_male = $("#select_male");
         var select_female = $("#select_female");
         select_male.click(function(){
+            $('#next_btn').attr("style", "background-color: #03A9F4");
             male.prop("checked","True");
             female.removeProp("checked","True");
             select_male.attr("class","col-5 gender-img card active");
             select_female.attr("class","col-5 gender-img card  ml-auto");
         });
         select_female.click(function(){
+            $('#next_btn').attr("style", "background-color: #03A9F4");
             female.prop("checked","True");
             male.removeProp("checked","True");
             select_female.attr("class","col-5 gender-img card  ml-auto active");
@@ -32,7 +34,7 @@
 </script>
 	<div class="account-box">
         <form method="post" action="" class="main-form" >
-            <div class="box-header">Let's Get Started</div>
+            <div class="box-header">Please Select Your Gender</div>
             <div class="box-text">This will help us tailor your health journey</div>
             <div class="form-group account-content">
             <div class="gender-select">
@@ -53,7 +55,8 @@
 				<div class="form-row sr-only">
                      {{ render_field(gender_form.gender, class_="radio-inline") }}
 				</div>
-           </div><button value="Gender" type="submit" class="form-control submit-btn" style="margin-top: 50px;margin-bottom: 0;">Next</button>
+           </div>
+                <button type="submit" class="form-control submit-btn" id="next_btn" >Next</button>
            </div>
         </form>
     </div>

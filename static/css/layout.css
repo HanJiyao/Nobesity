@@ -3,14 +3,14 @@ body{
     background: #f0f0f0;
 }
 .wrapper{
-    padding-top: 80px;
+    padding-top: 70px;
 	max-width: 1000px;
     margin: auto;
 }
 .nav-wrapper{
 	background: white;
 	box-shadow:#e0e0e0 0 3px 20px;
-	font-size:16px;
+	font-size:15px;
 	text-align: center;
 	position: fixed;
     top: 0;
@@ -32,38 +32,39 @@ body{
 	float:left;
 }
 .navbar{
-    height:75px;
+    height:60px;
 	max-width:1000px;
 	margin:auto;
-	padding:0 20px;
 }
-.nav-link{
+.navbar-light .nav-link{
 	text-align: center;
-	height: 75px;
-    padding: 25px 0;
+	height: 60px;
+    padding-top: 20px;
     width: 70px;
-	transition: background 0.5s;
+	color: black !important;
+	transition: color 0.3s;
 }
 .nav-link.sep{
-	color:#f0f0f0;
+	color:#e0e0e0 !important;
 }
 .nav-link.sep:hover{
-	background: white;
+	color: #e0e0e0 !important;
 }
-.nav-link:hover{
-	background: #f9f9f9;
+.navbar-light .nav-link:hover{
+	color: #03A9F4!important;
 }
 .account-btn {
 	background: #03A9F4;
-	border-radius: 5px;
+	border-radius: 3px;
 	border: #03A9F4 solid 1px;
-	transition: background 0.5s, color 0.5s;
+	transition: background 0.3s, color 0.3s;
 	display: block;
 	text-decoration: none;
 	color: white !important;
 	padding: 10px;
 	width: 160px;
-	margin-top: 15px;
+	margin-top: 8px;
+	box-shadow:#e0e0e0 3px 3px 10px;
 }
 .account-btn:hover{
 	text-decoration: none;
@@ -74,6 +75,9 @@ body{
 .dropdown-item{
 	text-align: center;
 }
+.dropdown-menu{
+	box-shadow:#e0e0e0 3px 3px 10px;
+}
 .footer {
 	color: #e0e0e0;
 	padding: 1rem;
@@ -83,4 +87,10 @@ body{
 .layout-wrapper{
 	max-width: 1000px;
 	margin:auto;
+}
+.alert-danger{
+	background: white;
+	color: #F44336;
+	font-size: 16px;
+	padding: 0.5rem 0.75rem !important;
 }

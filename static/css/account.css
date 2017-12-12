@@ -14,10 +14,9 @@
 }
 .gender-radio{
 	background: white;
-	color: black;
+	color: #ced4da;
 	border:#ced4da solid 1px;
     text-align: center;
-	margin-top: 3px;
     transition: color 0.5s, background-color 0.5s, border 0.5s;
 }
 .gender-radio:hover{
@@ -43,4 +42,11 @@
 }
 #reset_info, #save_info{
 	margin-top: 50px;
+}
+#next_btn{
+	background-color: #cccccc;
+	color:white;
+}
+.account-box .form-control{
+	padding: 0.5rem 0.75rem;
 }
