@@ -224,8 +224,8 @@ def register_gender():
 
 
 class MoreInfoForm(Form):
-    height = DecimalField('Current Height (m)', [validators.DataRequired()], places=2)
-    current_weight = DecimalField('Current Weight (kg)', [validators.DataRequired()], places=2)
+    height = DecimalField('Current Height (m)', places=2)
+    current_weight = DecimalField('Current Weight (kg)', places=2)
     birth_day = SelectField('Day', choices=[('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'), ('5', '5'),
                                             ('6', '6'), ('7', '7'), ('8', '8'), ('9', '9'), ('10', '10'),
                                             ('11', '11'), ('12', '12'), ('13', '13'), ('14', '14'), ('15', '15'),
@@ -388,11 +388,11 @@ def diet():
 
 class Food(Form):
     diet_name = StringField('Name',[validators.length(min=1,max=150),validators.DataRequired()])
-    diet_type = SelectField('Type',[validators.DataRequired()],choices=[("","Select"),("F","Food"),("D","Drinks"),("F","Fruits")])
-    calories = IntegerField('Calories Value',[validators.length(min=1,max=3),validators.DataRequired()])
-    fats = IntegerField('Fats Value',[validators.length(min=1,max=3),validators.DataRequired()])
-    carbohydrates = IntegerField('Carbohydrates Value',[validators.length(min=1,max=3),validators.DataRequired()])
-    proteins = IntegerField('Protein Value',[validators.length(min=1,max=3),validators.DataRequired()])
+    diet_type = SelectField('Type',[validators.DataRequired()],choices=[("","Select"),("Foods","Foods"),("Drinks","Drinks"),("Fruits","Fruits")])
+    calories = IntegerField('Calories Value')
+    fats = IntegerField('Fats Value')
+    carbohydrates = IntegerField('Carbohydrates Value')
+    proteins = IntegerField('Protein Value')
 
 
 @app.route('/new_diet', methods=['GET','POST'])
