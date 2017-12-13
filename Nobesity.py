@@ -475,6 +475,27 @@ def faq():
 def record():
     return render_template('track_and_record.html')
 
+class ActivityForm(Form):
+    activity = StringField('Activity', [validators.Length(min=1, max=15), validators.DataRequired()])
+    date = DateField('Start Date', format='%m/%d/%Y')
+
+class Activity:
+    def __init__(self, activity, date):
+        self.__activity = activity
+        self.__date = ''
+
+    def get_activity(self):
+        return self.__activity
+
+    def get_date(self):
+        return self.__date
+
+    def set_activity(self, activity):
+        self.__activity = activity
+
+    def set_date(self, date):
+        self.__date = date
+
 
 @app.route('/rewards')
 def rewards():
