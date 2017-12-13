@@ -2,13 +2,6 @@
 {% block body %}
     {% macro render_field(field) %}
       {{ field(**kwargs)|safe }}
-      {% if field.errors %}
-        {% for error in field.errors %}
-            <div class="alert alert-danger col-12 mt-3">
-                {{ error }}
-            </div>
-        {% endfor %}
-      {% endif %}
     {% endmacro %}
     <script>
         $(document).ready(function () {
@@ -16,7 +9,7 @@
             var female = $("#gender-1");
             var select_male = $("#gender_male");
             var select_female = $("#gender_female");
-            if (male.checked == true){
+            if (male[0].checked == true){
                 select_male.attr("class","form-control gender-radio active");
             } else {
                 select_female.attr("class","form-control gender-radio ml-auto active");
@@ -34,34 +27,51 @@
                 select_male.attr("class","form-control gender-radio");
             });
         });
+        $(document).ready(function(){
+            $('[data-toggle="tooltip"]').tooltip();
+        });
     </script>
-    <form class="mx-auto account_info">
+    <form method="post" class="mx-auto account-box p-5">
       <div class="form-group form-row account-detail">
         <div class="col-1"><i class="material-icons">person</i></div>
         <div class="col-4"> Name :</div>
-        <div class="col-6 sr-only" id="first_name">Jiyao Han</div>
-          <div class="col-3">
-          {{ render_field(setup_form.first_name, class_="form-control", placeholder="First Name") }}
+          <div class="col-7">
+              <div class="form-row">
+                  <div class="col-6">
+                  {{ render_field(setup_info_form.first_name, class_="form-control", placeholder="First Name") }}
+                  </div>
+                  <div class="col-6">
+                  {{ render_field(setup_info_form.last_name, class_="form-control", placeholder="Last Name") }}
+                  </div>
+              </div>
           </div>
-          <div class="col-3">
-          {{ render_field(setup_form.last_name, class_="form-control", placeholder="Last Name") }}
-          </div>
-        <div class="col-1"><i class="material-icons">keyboard_arrow_right</i></div>
+        {% if setup_info_form['first_name'].errors %}
+            {% for error in setup_info_form['first_name'].errors %}
+            <div class="alert alert-danger mt-1 mb-1 mb-0 col-12">{{ setup_info_form['first_name'].label }} : {{ error }}</div>
+            {% endfor %}
+        {% endif %}
+        {% if setup_info_form['last_name'].errors %}
+            {% for error in setup_info_form['last_name'].errors %}
+            <div class="alert alert-danger mt-1 mb-1 col-12">{{ setup_info_form['last_name'].label }} : {{ error }}</div>
+            {% endfor %}
+        {% endif %}
       </div>
       <div class="form-group form-row account-detail">
         <div class="col-1"><i class="material-icons">share</i></div>
         <div class="col-4"> Display Name :</div>
-        <div class="col-6  sr-only" id="display_name">MrHan</div>
-          <div class="col-6">
-          {{ render_field(setup_form.display_name, class_="form-control", placeholder="Display Name") }}
+          <div class="col-7">
+          {{ render_field(setup_info_form.display_name, class_="form-control", placeholder="Display Name") }}
           </div>
-        <div class="col-1"><i class="material-icons">keyboard_arrow_right</i></div>
+          {% if setup_info_form['display_name'].errors %}
+            {% for error in setup_info_form['display_name'].errors %}
+            <div class="alert alert-danger mt-1 mb-1 col-12">{{ setup_info_form['display_name'].label }} : {{ error }}</div>
+            {% endfor %}
+          {% endif %}
       </div>
       <div class="form-group form-row account-detail">
         <div class="col-1"><i class="material-icons">wc</i></div>
         <div class="col-4"> Gender :</div>
-        <div class="col-6  sr-only">Male</div>
-          <div class="col-6">
+          <div class="col-7">
             <div class="form-row">
                 <div class="col-6">
                   <div class="form-control gender-radio" id="gender_male">
@@ -75,57 +85,106 @@
                 </div>
             </div>
           </div>
-        <div class="col-1"><i class="material-icons">keyboard_arrow_right</i></div>
           <div class="form-group sr-only">
-            {{ render_field(setup_form.gender, class_="radio-inline") }}
+            {{ render_field(setup_info_form.gender, class_="radio-inline") }}
           </div>
+          {% if setup_info_form['gender'].errors %}
+            {% for error in setup_info_form['gender'].errors %}
+            <div class="alert alert-danger mt-1 mb-1 col-12">{{ setup_info_form['gender'].label }} : {{ error }}</div>
+            {% endfor %}
+          {% endif %}
       </div>
       <div class="form-group form-row account-detail">
         <div class="col-1"><i class="material-icons">cake</i></div>
         <div class="col-4"> Birth Date :</div>
-        <div class="col-6 sr-only">1996-01-01</div>
-          <div class="col-6">
-          {{ render_field(setup_form.birthday, class_="form-control", placeholder="YYYY-MM-DD") }}
+          <div class="col-7">
+              <div class="form-row">
+                  <div class="col-4">
+                    {{ render_field(setup_info_form.birth_day, class_="form-control") }}
+                  </div>
+                  <div class="col-4">
+                    {{ render_field(setup_info_form.birth_month, class_="form-control") }}
+                  </div>
+                  <div class="col-4">
+                    {{ render_field(setup_info_form.birth_year, class_="form-control") }}
+                  </div>
+              </div>
           </div>
-        <div class="col-1"><i class="material-icons">keyboard_arrow_right</i></div>
+          {% if setup_info_form['birth_day'].errors %}
+            {% for error in setup_info_form['birth_day'].errors %}
+            <div class="alert alert-danger mt-1 mb-1 col-12">{{ setup_info_form['birth_day'].label }} : {{ error }}</div>
+            {% endfor %}
+          {% endif %}
+          {% if setup_info_form['birth_month'].errors %}
+            {% for error in setup_info_form['birth_month'].errors %}
+            <div class="alert alert-danger mt-1 mb-1 col-12">{{ setup_info_form['birth_month'].label }} : {{ error }}</div>
+            {% endfor %}
+          {% endif %}
+          {% if setup_info_form['birth_year'].errors %}
+            {% for error in setup_info_form['birth_year'].errors %}
+            <div class="alert alert-danger mt-1 mb-1 col-12">{{ setup_info_form['birth_year'].label }} : {{ error }}</div>
+            {% endfor %}
+          {% endif %}
       </div>
       <div class="form-group form-row account-detail">
         <div class="col-1"><i class="material-icons">accessibility</i></div>
         <div class="col-4"> Initial Weight :</div>
-        <div class="col-6 sr-only"> 70 kg </div>
-          <div class="col-6">
-          {{ render_field(setup_form.current_weight, class_="form-control", placeholder="Enter Current Weight") }}
+          <div class="col-7">
+          {{ render_field(setup_info_form.initial_weight, class_="form-control", placeholder="Enter Initial Weight") }}
           </div>
-        <div class="col-1"><i class="material-icons">keyboard_arrow_right</i></div>
+          {% if setup_info_form['initial_weight'].errors %}
+            {% for error in setup_info_form['initial_weight'].errors %}
+            <div class="alert alert-danger mt-1 mb-1 col-12">{{ setup_info_form['initial_weight'].label }} : {{ error }}</div>
+            {% endfor %}
+          {% endif %}
       </div>
       <div class="form-group form-row account-detail">
         <div class="col-1"><i class="material-icons">straighten</i></div>
         <div class="col-4"> Height :</div>
-        <div class="col-6 sr-only"> 1.75 m </div>
-          <div class="col-6">
-          {{ render_field(setup_form.height, class_="form-control", placeholder="Enter Height") }}
+          <div class="col-7">
+          {{ render_field(setup_info_form.height, class_="form-control", placeholder="Enter Height") }}
           </div>
-        <div class="col-1"><i class="material-icons">keyboard_arrow_right</i></div>
+          {% if setup_info_form['height'].errors %}
+            {% for error in setup_info_form['height'].errors %}
+            <div class="alert alert-danger mt-1 mb-1 col-12">{{ setup_info_form['height'].label }} : {{ error }}</div>
+            {% endfor %}
+          {% endif %}
       </div>
       <div class="form-group form-row account-detail">
         <div class="col-1"><i class="material-icons">local_hospital</i></div>
         <div class="col-4"> Initial BP : </div>
-        <div class="col-4 sr-only"> 130/80 mmHg</div>
-        <div class="col-2 sr-only"> 70 bpm</div>
-        <div class="col-2 pl-1 pr-1">
-          {{ render_field(setup_form.systol, class_="form-control pl-1", placeholder="Systol") }}
-        </div>
-        <div class="col-2 pl-1 pr-1">
-          {{ render_field(setup_form.diastol, class_="form-control pl-1", placeholder="Diastal") }}
-        </div>
-        <div class="col-2 pl-1 pr-1">
-          {{ render_field(setup_form.pulse, class_="form-control pl-1", placeholder="Pulse") }}
-        </div>
-        <div class="col-1"><i class="material-icons">keyboard_arrow_right</i></div>
+          <div class="col-7">
+              <div class="form-row">
+                <div class="col-4 pt-0">
+                  {{ render_field(setup_info_form.initial_systol, class_="form-control", placeholder="Systol") }}
+                </div>
+                <div class="col-4 pt-0">
+                  {{ render_field(setup_info_form.initial_diastol, class_="form-control", placeholder="Diastal") }}
+                </div>
+                <div class="col-4 pt-0">
+                  {{ render_field(setup_info_form.initial_pulse, class_="form-control", placeholder="Pulse") }}
+                </div>
+              </div>
+          </div>
+          {% if setup_info_form['initial_systol'].errors %}
+            {% for error in setup_info_form['initial_systol'].errors %}
+            <div class="alert alert-danger mt-1 mb-1 col-12">{{ setup_info_form['initial_systol'].label }} : {{ error }}</div>
+            {% endfor %}
+          {% endif %}
+          {% if setup_info_form['initial_diastol'].errors %}
+            {% for error in setup_info_form['initial_diastol'].errors %}
+            <div class="alert alert-danger mt-1 mb-1 col-12">{{ setup_info_form['initial_diastol'].label }} : {{ error }}</div>
+            {% endfor %}
+          {% endif %}
+          {% if setup_info_form['initial_pulse'].errors %}
+            {% for error in setup_info_form['initial_pulse'].errors %}
+            <div class="alert alert-danger mt-1 mb-1 col-12">{{ setup_info_form['initial_pulse'].label }} : {{ error }}</div>
+            {% endfor %}
+          {% endif %}
       </div>
-      <div class="form-group form-row">
+      <div class="form-group form-row save-cancel-btn">
         <a href="/account/info" class="col-5 btn btn-outline-secondary" id="reset_info">Cancel</a>
-        <button type="submit" class="col-5 ml-auto btn btn-outline-secondary" id="save_info" disabled value="Login">Save</button>
+        <button type="submit" class="col-5 ml-auto btn btn-outline-primary" id="update_info" value="update_info">Update</button>
       </div>
     </form>
 {% endblock %}

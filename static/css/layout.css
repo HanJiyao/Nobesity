@@ -41,12 +41,14 @@ body{
 	text-align: center;
 	height: 60px;
     padding-top: 20px;
-    width: 70px;
+    width: 60px;
 	color: black !important;
 	transition: color 0.3s;
 }
 .nav-link.sep{
 	color:#e0e0e0 !important;
+	width: 10px;
+	padding-right: 30px !important;
 }
 .nav-link.sep:hover{
 	color: #e0e0e0 !important;
@@ -55,6 +57,7 @@ body{
 	color: #03A9F4!important;
 }
 .account-btn {
+	font-size: 0.8rem;
 	background: #03A9F4;
 	border-radius: 3px;
 	border: #03A9F4 solid 1px;
@@ -64,10 +67,36 @@ body{
 	color: white !important;
 	padding: 10px;
 	width: 160px;
-	margin-top: 8px;
+	margin-top: 10px;
 	box-shadow:#e0e0e0 3px 3px 10px;
 }
-.account-btn:hover{
+.account-btn-half {
+	font-size: 0.8rem;
+	background: #03A9F4;
+	border-radius: 3px;
+	border: #03A9F4 solid 1px;
+	transition: background 0.3s, color 0.3s;
+	display: block;
+	text-decoration: none;
+	color: white !important;
+	padding: 10px;
+	width: 80px;
+	margin-top: 10px;
+	box-shadow:#e0e0e0 3px 3px 10px;
+}
+.account-btn-half.left{
+	border-bottom-right-radius: 0;
+	border-top-right-radius: 0;
+}
+.account-btn-half.right{
+	border-bottom-left-radius: 0;
+	border-top-left-radius: 0;
+}
+.account-btn-row{
+	margin-right: 0;
+	margin-left: 0;
+}
+.account-btn:hover, .account-btn-half:hover{
 	text-decoration: none;
 	background: white;
 	color: #03A9F4 !important;
@@ -106,7 +135,7 @@ body{
 	box-shadow:#e0e0e0 0 3px 20px;
 }
 .alert.alert-success.alert-dismissable{
-	background: #4CAF50;
+	background: #64DD17;
 	color:white;
 
 }

@@ -1,0 +1,34 @@
+{% extends 'layout.html' %}
+{% block body %}
+    {% macro render_field(field) %}
+      {{ field(**kwargs)|safe }}
+      {% if field.errors %}
+        {% for error in field.errors %}
+            <div class="alert alert-danger col-12 mt-2">
+                {{ error }}
+            </div>
+        {% endfor %}
+      {% endif %}
+    {% endmacro %}
+	<div class="account-box">
+        <form method="post" action="" class="main-form" >
+            <div class="box-header">Blood Pressure Condition</div>
+            <div class="box-text">It is important to check and record your BP</div>
+            <div class="form-group account-content">
+              <div class="form-group">
+				<label for="inputHeight">Systolic Pressure (mmHg)</label>
+				{{ render_field(bp_info_form.systol, class_="form-control", placeholder="Enter Systolic Pressure") }}
+			  </div>
+			  <div class="form-group">
+				<label for="weight">Diastolic Pressure (mmHg)</label>
+				{{ render_field(bp_info_form.diastol, class_="form-control", placeholder="Enter Diastolic Pressure") }}
+			  </div>
+          	  <div class="form-group">
+				<label for="weight">Pulse (bpm)</label>
+				{{ render_field(bp_info_form.pulse, class_="form-control", placeholder="Enter Pulse Rate") }}
+			  </div>
+                <button type="submit" class="form-control submit-btn" style="margin-top: 30px;     margin-bottom: 0;">Next</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

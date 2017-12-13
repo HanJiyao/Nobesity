@@ -80,7 +80,7 @@ def login():
                 if uid_db[i]['email'] == login_id:
                     if uid_db[i]['password'] == request.form.to_dict()['password']:
                         valid = True
-                        session['username'] = uid_db[i]
+                        session['username'] = i
         finally:
             if valid is False:
                 password_check = 'Invalid'
@@ -136,6 +136,7 @@ def signup():
         })
         session['logged_in'] = True
         session['username'] = signup_form.username.data
+        flash('You are successfully signed up as ' + session['username'], 'success')
         return redirect(url_for('register_name'))
     return render_template('signup.html', form=signup_form)
 
@@ -153,46 +154,46 @@ def timeline():
     return render_template('timeline.html')
 
 
+class AccountInfoSetup:
+    def __init__(self, first_name, last_name, display_name, gender, birth, height, weight_dict, bp_dict):
+        self.__first_name = first_name
+        self.__last_name = last_name
+        self.__display_name = display_name
+        self.__gender = gender
+        self.__birth = birth
+        self.__height = height
+        self.__weight_dict = weight_dict
+        self.__bp_dict = bp_dict
+
+    def get_first_name(self):
+        return self.__first_name
+
+    def get_last_name(self):
+        return self.__last_name
+
+    def get_display_name(self):
+        return self.__display_name
+
+    def get_gender(self):
+        return self.__gender
+
+    def get_birth(self):
+        return self.__birth
+
+    def get_height(self):
+        return self.__height
+
+    def get_weight_dict(self):
+        return self.__weight_dict
+
+    def get_bp_dict(self):
+        return self.__bp_dict
+
+
 class NameForm(Form):
     first_name = StringField('First Name', [validators.length(min=1, max=20), validators.DataRequired()])
     last_name = StringField('Last Name', [validators.length(min=1, max=20), validators.DataRequired()])
     display_name = StringField('Display Name', [validators.length(min=1, max=20), validators.DataRequired()])
-
-
-class AccountSetup:
-    def __init__(self, first_name, last_name, display_name, gender, birth, height, weight_dict, bp_dict):
-        self.first_name = first_name
-        self.last_name = last_name
-        self.display_name = display_name
-        self.gender = gender
-        self.birth = birth
-        self.height = height
-        self.weight_dict = weight_dict
-        self.bp_dict = bp_dict
-
-    def get_first_name(self):
-        return self.first_name
-
-    def get_last_name(self):
-        return self.last_name
-
-    def get_display_name(self):
-        return self.display_name
-
-    def get_gender(self):
-        return self.gender
-
-    def get_birth(self):
-        return self.birth
-
-    def get_height(self):
-        return self.height
-
-    def get_weight_dict(self):
-        return self.weight_dict
-
-    def get_bp_dict(self):
-        return self.bp_dict
 
 
 @app.route('/setup/name', methods=['GET', 'POST'])
@@ -225,87 +226,155 @@ def register_gender():
 
 class MoreInfoForm(Form):
     height = DecimalField('Current Height (m)', places=2)
-    current_weight = DecimalField('Current Weight (kg)', places=2)
-    birth_day = SelectField('Day', choices=[('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'), ('5', '5'),
-                                            ('6', '6'), ('7', '7'), ('8', '8'), ('9', '9'), ('10', '10'),
-                                            ('11', '11'), ('12', '12'), ('13', '13'), ('14', '14'), ('15', '15'),
-                                            ('16', '16'), ('17', '17'), ('18', '18'), ('19', '19'), ('20', '20'),
-                                            ('21', '21'), ('22', '22'), ('23', '23'), ('24', '24'), ('25', '25'),
-                                            ('26', '26'), ('27', '27'), ('28', '28'), ('29', '29'), ('30', '30'),
-                                            ('31', '31'),
-                                            ], default='Day'
-                            )
-    birth_month = SelectField('Month', choices=[('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'), ('5', '5'),
-                                                ('6', '6'), ('7', '7'), ('8', '8'), ('9', '9'), ('10', '10'),
-                                                ('11', '11'), ('12', '12')
-                                                ], default='Month'
-                              )
-    birth_year = IntegerField('Year')
+    initial_weight = DecimalField('Current Weight (kg)', places=1)
+    birth_day = SelectField(
+        'Day', choices=[
+            ('01', '1'), ('02', '2'), ('03', '3'), ('04', '4'), ('05', '5'), ('06', '6'), ('07', '7'), ('08', '8'),
+            ('09', '9'), ('10', '10'), ('11', '11'), ('12', '12'), ('13', '13'), ('14', '14'), ('15', '15'),
+            ('16', '16'), ('17', '17'), ('18', '18'), ('19', '19'), ('20', '20'), ('21', '21'), ('22', '22'),
+            ('23', '23'), ('24', '24'), ('25', '25'), ('26', '26'), ('27', '27'), ('28', '28'), ('29', '29'),
+            ('30', '30'), ('31', '31'),
+        ]
+    )
+    birth_month = SelectField(
+        'Month', choices=[
+            ('01', 'Jan'), ('02', 'Feb'), ('03', 'Mar'), ('04', 'Apr'), ('05', 'May'), ('06', 'Jun'), ('07', 'Jul'),
+            ('08', 'Aug'), ('09', 'Sep'), ('10', 'Oct'), ('11', 'Nov'), ('12', 'Dec')
+        ]
+    )
+    birth_year = IntegerField('Year', [validators.NumberRange(min=1000, max=9999, message="Invalid Year Input")])
     
 
-@app.route('/setup/moreinfo', methods=['GET', 'POST'])
+@app.route('/setup/detail', methods=['GET', 'POST'])
 def register_info():
     moreinfo_form = MoreInfoForm(request.form)
-    register_date = '{:%Y-%m-%d}'.format(datetime.date.today())
+    register_date = '{:%Y%m%d}'.format(datetime.date.today())
     if request.method == 'POST' and moreinfo_form.validate():
         root.child('UserAccount').child(session['username']).update({
             'height': str(moreinfo_form.height.data),
             'weight_dict': {
-                register_date: str(moreinfo_form.current_weight.data)
+                register_date: str(moreinfo_form.initial_weight.data)
             },
-            'birthday': str(moreinfo_form.birth_year.data) + '-' +
-                        str(moreinfo_form.birth_month.data) + '-' +
-                        str(moreinfo_form.birth_day.data)
+            'birthday': str(moreinfo_form.birth_year.data) + str(moreinfo_form.birth_month.data)
+                        + str(moreinfo_form.birth_day.data)
         })
-        return redirect(url_for('profile'))
+        return redirect(url_for('register_bp'))
     return render_template('firstTimeRegisterInfo.html', moreinfo_form=moreinfo_form)
 
 
-class UserAccountSetupForm(Form):
+class BpInfoForm(Form):
+    systol = IntegerField('Systolic Pressure')
+    diastol = IntegerField('Diastolic Pressure')
+    pulse = IntegerField('Pulse Rate')
+
+
+@app.route('/setup/bp', methods=['GET', 'POST'])
+def register_bp():
+    bp_info_form = BpInfoForm(request.form)
+    register_time = '{:%Y%m%d%H}'.format(datetime.datetime.now())
+    if request.method == 'POST' and bp_info_form.validate():
+        root.child('UserAccount').child(session['username']).update({
+            'bp_dict': {
+                register_time: {
+                    'systolic': str(bp_info_form.systol.data),
+                    'diastolic': str(bp_info_form.diastol.data),
+                    'pulse': str(bp_info_form.pulse.data)
+                }
+            }
+        })
+        return redirect(url_for('profile'))
+    return render_template('firstTimeRegisterBp.html', bp_info_form=bp_info_form)
+
+
+class UserAccountSetupInfoForm(Form):
     first_name = StringField('First Name', [validators.length(min=1, max=20), validators.DataRequired()])
     last_name = StringField('Last Name', [validators.length(min=1, max=20), validators.DataRequired()])
     display_name = StringField('Display Name', [validators.length(min=1, max=20), validators.DataRequired()])
     gender = RadioField('Gender', [validators.DataRequired()], choices=[('male', 'Male'), ('female', 'Female')])
-    current_weight = DecimalField('Current Weight (kg)', [validators.DataRequired()], places=2)
-    birthday = DateField('Birthday')
+    initial_weight = DecimalField('Current Weight (kg)', [validators.DataRequired()], places=1)
+    birth_day = SelectField(
+        'Day', choices=[
+            ('01', '1'), ('02', '2'), ('03', '3'), ('04', '4'), ('05', '5'),('06', '6'), ('07', '7'), ('08', '8'),
+            ('09', '9'), ('10', '10'), ('11', '11'), ('12', '12'), ('13', '13'), ('14', '14'), ('15', '15'),
+            ('16', '16'), ('17', '17'), ('18', '18'), ('19', '19'), ('20', '20'), ('21', '21'), ('22', '22'),
+            ('23', '23'), ('24', '24'), ('25', '25'), ('26', '26'), ('27', '27'), ('28', '28'), ('29', '29'),
+            ('30', '30'), ('31', '31'),
+        ]
+    )
+    birth_month = SelectField(
+        'Month', choices=[
+            ('01', 'Jan'), ('02', 'Feb'), ('03', 'Mar'), ('04', 'Apr'),('05', 'May'), ('06', 'Jun'), ('07', 'Jul'),
+            ('08', 'Aug'), ('09', 'Sep'), ('10', 'Oct'), ('11', 'Nov'), ('12', 'Dec')
+        ]
+    )
+    birth_year = IntegerField('Year', [validators.NumberRange(min=1000, max=9999, message="Invalid Year Input")])
     height = DecimalField('Current Height (m)', [validators.DataRequired()], places=2)
-    systol = DecimalField('Systol')
-    diastol = DecimalField('Diastol')
-    pulse = DecimalField('Pulse')
+    initial_systol = IntegerField('Systol')
+    initial_diastol = IntegerField('Diastol')
+    initial_pulse = IntegerField('Pulse')
 
 
 @app.route('/account/info', methods=['GET', 'POST'])
 def account_info():
-    setup_date = '{:%Y-%m-%d}'.format(datetime.date.today())
-    setup_form = UserAccountSetupForm(request.form)
-    if request.method == 'POST' and setup_form.validate():
-        first_name = setup_form.first_name.data
-        last_name = setup_form.last_name.data
-        display_name = setup_form.display_name.data
-        gender = setup_form.gender.data
-        birthday = str(setup_form.birthday.data)
-        height = str(setup_form.height.data)
-        weight_dict = {setup_date: str(setup_form.current_weight.data)}
+    setup_date = '{:%Y%m%d}'.format(datetime.date.today())
+    setup_info_form = UserAccountSetupInfoForm(request.form)
+    uid_db = root.child('UserAccount').child(session['username'])
+    if request.method == 'POST' and setup_info_form.validate():
+        first_name = setup_info_form.first_name.data
+        last_name = setup_info_form.last_name.data
+        display_name = setup_info_form.display_name.data
+        gender = setup_info_form.gender.data
+        birthday = str(setup_info_form.birth_year.data)+setup_info_form.birth_month.data+setup_info_form.birth_day.data
+        height = str(setup_info_form.height.data)
+        weight_dict = {setup_date: str(setup_info_form.initial_weight.data)}
         bp_dict = {
             setup_date: {
-                'systol': str(setup_form.systol.data),
-                'diastol': str(setup_form.diastol.data),
-                'pulse': str(setup_form.pulse.data)
+                'systolic': str(setup_info_form.initial_systol.data),
+                'diastolic': str(setup_info_form.initial_diastol.data),
+                'pulse': str(setup_info_form.initial_pulse.data)
             }
         }
-        user_setup = AccountSetup(first_name, last_name, display_name, gender, birthday, height, weight_dict, bp_dict)
-        root.child('UserAccount').child(session['username']).update({
-            'first_name': user_setup.get_first_name(),
-            'last_name': user_setup.get_last_name(),
-            'display_name': user_setup.get_display_name(),
-            'gender': user_setup.get_gender(),
-            'birthday': user_setup.get_birth(),
-            'height': user_setup.get_height(),
-            'weight_dict': user_setup.get_weight_dict(),
-            'bp_dict': user_setup.get_bp_dict()
+        user_info = AccountInfoSetup(first_name, last_name, display_name, gender, birthday, height, weight_dict, bp_dict)
+        uid_db.update({
+            'first_name': user_info.get_first_name(),
+            'last_name': user_info.get_last_name(),
+            'display_name': user_info.get_display_name(),
+            'gender': user_info.get_gender(),
+            'birthday': user_info.get_birth(),
+            'height': user_info.get_height(),
+            'weight_dict': user_info.get_weight_dict(),
+            'bp_dict': user_info.get_bp_dict()
         })
+        flash('Account Details Updated Successfully', 'success')
         return redirect(url_for('account_info'))
-    return render_template('accountInfo.html', setup_form=setup_form)
+    else:
+        user_info_db = uid_db.get()
+        user_info = AccountInfoSetup(user_info_db['first_name'], user_info_db['last_name'],user_info_db['display_name'],
+                                     user_info_db['gender'],user_info_db['birthday'], user_info_db['height'],
+                                     user_info_db['weight_dict'], user_info_db['bp_dict']
+                                     )
+        setup_info_form.first_name.data = user_info.get_first_name()
+        setup_info_form.last_name.data = user_info.get_last_name()
+        setup_info_form.display_name.data = user_info.get_display_name()
+        setup_info_form.gender.data = user_info.get_gender()
+        setup_info_form.birth_year.data = user_info.get_birth()[:4]
+        setup_info_form.birth_month.data = user_info.get_birth()[4:6]
+        setup_info_form.birth_day.data = user_info.get_birth()[6:8]
+        weight_dict = user_info.get_weight_dict()
+        weight_date_list = []
+        for date in weight_dict:
+            weight_date_list.append(date)
+        setup_info_form.initial_weight.data = float(user_info.get_weight_dict()[weight_date_list[0]])
+        setup_info_form.height.data = float(user_info.get_height())
+        bp_dict = user_info.get_bp_dict()
+        bp_time_list = []
+        for time in bp_dict:
+            bp_time_list.append(time)
+        setup_info_form.initial_systol.data = int(user_info.get_bp_dict()[bp_time_list[0]]['systolic'])
+        setup_info_form.initial_diastol.data = int(user_info.get_bp_dict()[bp_time_list[0]]['diastolic'])
+        setup_info_form.initial_pulse.data = int(user_info.get_bp_dict()[bp_time_list[0]]['pulse'])
+
+    return render_template('accountInfo.html', setup_info_form=setup_info_form)
 
 
 @app.route('/profile')
@@ -378,7 +447,7 @@ def diet():
     for dietID in Diet_db:
         eachdiet = Diet_db[dietID]
         food = Diet(eachdiet['Name'],eachdiet['Type'], eachdiet['Calories Value'], eachdiet['Fats Value'],
-                    eachdiet['Carbohydrates Value'], eachdiet['Protein Value'] )
+                    eachdiet['Carbohydrates Value'], eachdiet['Protein Value'])
         food.set_dietID(dietID)
         diet_list.append(food)
 
@@ -386,8 +455,9 @@ def diet():
 
 
 class Food(Form):
-    diet_name = StringField('Name',[validators.length(min=1,max=150),validators.DataRequired()])
-    diet_type = SelectField('Type',[validators.DataRequired()],choices=[("","Select"),("Foods","Foods"),("Drinks","Drinks"),("Fruits","Fruits")])
+    diet_name = StringField('Name', [validators.length(min=1,max=150),validators.DataRequired()])
+    diet_type = SelectField('Type', [validators.DataRequired()], choices=[("", "Select"), ("Foods","Foods"),
+                                                                          ("Drinks", "Drinks"), ("Fruits", "Fruits")])
     calories = IntegerField('Calories Value')
     fats = IntegerField('Fats Value')
     carbohydrates = IntegerField('Carbohydrates Value')
@@ -406,9 +476,12 @@ def new_diet():
             protein = new_form.proteins.data
             food_diet = Diet(name, type, calories, fats, carbohydrates, protein)
             food_diet.db = root.child('Food')
-            food_diet.db.push({'Name': food_diet.get_name(), 'Type': food_diet.get_type(),
-                      'Calories Value': food_diet.get_calories(), 'Fats Value': food_diet.get_fats(),
-                      'Carbohydrates Value': food_diet.get_carbohydrates(),'Protein Value': food_diet.get_protein()
+            food_diet.db.push({'Name': food_diet.get_name(),
+                               'Type': food_diet.get_type(),
+                               'Calories Value': food_diet.get_calories(),
+                               'Fats Value': food_diet.get_fats(),
+                               'Carbohydrates Value': food_diet.get_carbohydrates(),
+                               'Protein Value': food_diet.get_protein()
             })
             flash('New Diet inserted successfully', 'success')
 

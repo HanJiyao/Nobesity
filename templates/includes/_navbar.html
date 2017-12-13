@@ -40,7 +40,16 @@
                         </div>
                     </li>
                 {% else %}
-                    <li><a href="/signup" class="account-btn">Log In &nbsp / &nbsp Sign Up</a></li>
+                    <li>
+                    <div class="row account-btn-row">
+                        <div class="col-6 p-0">
+                            <a href="/login" class="account-btn-half left">Log In</a>
+                        </div>
+                        <div class="col-6 p-0">
+                            <a href="/signup" class="account-btn-half right">Sign Up</a>
+                        </div>
+                    </div>
+                    </li>
                 {% endif %}
             </ul>
         </div>

@@ -1,10 +1,6 @@
 @charset "utf-8";
-.account_info{
-	max-width: 600px!important;
-	background: white;
-	margin: 50px 0;
-	padding: 80px;
-	box-shadow:#e0e0e0 0 5px 50px;
+.account-info{
+	padding: 60px;
 }
 .gender-row{
 	padding-top: 20px;
@@ -27,21 +23,28 @@
     background: #03A9F4;
     color:white;
 }
-#update_info{
-	background: #03A9F4;
-}
 .account-detail{
-	padding-top: 30px;
-	padding-bottom: 25px;
+	padding: 25px 0;
 	margin: 0;
 	border-bottom: #e0e0e0 dashed 1px;
 }
-.account-detail .col-1, .account-detail .col-4{
-	padding-top: 10px;
-	padding-bottom: 5px;
+.account-detail .col-4, .account-detail .col-1, .account-detail .col-10{
+	padding-top: 0.5rem;
 }
-#reset_info, #save_info{
+.account-detail .col-7 .col-4{
+	padding-top: 0;
+}
+#birth_day, #birth_month{
+	height: 42px;
+}
+#reset_info, #update_info{
 	margin-top: 50px;
+}
+#update_info{
+	background: white;
+}
+#update_info:hover{
+	background-color: #03A9F4 !important;
 }
 #next_btn{
 	background-color: #cccccc;
@@ -54,4 +57,7 @@
 }
 .account-box .alert-danger{
 	border-radius: 2px;
+}
+.save-cancel-btn{
+	margin: 0;
 }
