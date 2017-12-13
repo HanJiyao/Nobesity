@@ -15,7 +15,7 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
-<div class="wrapper">
+
 	<div class="nav-wrapper">
 	<nav class="navbar navbar-expand navbar-light">
 	  <a class="navbar-brand" href="#">NObesity</a>
@@ -43,8 +43,8 @@
 			<a class="nav-link">|</a>
 		  </li>
 		  <!-- {% if not session.logged_in %} -->
-			<li class="nav-item dropdown account-btn">
-				<a class="dropdown-toggle" href="#" id="navbarDropdownMenuLink"
+			<li class="nav-item dropdown">
+				<a class="dropdown-toggle account-btn" href="#" id="navbarDropdownMenuLink"
                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 				  UserName
 				</a>
@@ -61,6 +61,7 @@
 		</div>
 	  </nav>
 	</div>
+	<div class="wrapper">
 	<div class="container text-center profile">
     	<div class="user_profile">
             <h3 id="user_name" class="text-center">User Name</h3>
@@ -147,7 +148,7 @@
 						</div>
 						<div class="card-body-desc-text">
 							It's important to note target heart rate is just a guide.<br>
-							If you want a more definitive range, discussing with an trainer.
+							If you want more definitive range, discussing with an trainer.
 						</div>
                     </div>
                 </div>
@@ -185,11 +186,12 @@
             </div>
         </div>
 </div>
-<footer class="footer">
+</div>
+	<footer class="footer">
 		<div class="container-fluid text-center">
 			<span> © 2017 NYP SIT Nobesity Singapore</span>
 		</div>
 	</footer>
-</div>
+
 </body>
 </html>

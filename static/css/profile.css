@@ -33,7 +33,7 @@
 	padding: 50px;
 }
 .card-body h1{
-	font-size:50px;
+	font-size:4rem;
 	font-weight:400;
 	display:inline-block;
 }
@@ -58,7 +58,9 @@
 	text-align: left;
 }
 .card-body-desc-text{
-	display: inline-block;
+	text-align: center;
+    padding-right: 100px;
+	font-size: 1.1rem;
 }
 .card-body-desc .desc-text{
 	width: 80%;

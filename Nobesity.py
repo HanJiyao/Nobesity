@@ -318,7 +318,6 @@ def plans():
     return render_template('plans.html')
 
 
-
 class Diet:
     def __init__(self,name,type,calories,fats,carbohydrates,protein):
         self.dietID = ''
@@ -471,18 +470,15 @@ def faq():
     return render_template('faq.html')
 
 
-@app.route('/record')
-def record():
-    return render_template('track_and_record.html')
-
 class ActivityForm(Form):
     activity = StringField('Activity', [validators.Length(min=1, max=15), validators.DataRequired()])
     date = DateField('Start Date', format='%m/%d/%Y')
 
+
 class Activity:
     def __init__(self, activity, date):
         self.__activity = activity
-        self.__date = ''
+        self.__date = date
 
     def get_activity(self):
         return self.__activity
@@ -496,30 +492,20 @@ class Activity:
     def set_date(self, date):
         self.__date = date
 
+
 @app.route('/record', methods=['GET','POST'])
-def new_activity():
-    new_actform = ActivityForm(request.form)
-    if request.method == 'POST' and new_actform.validate():
-            activity = new_actform.activity.data
-            date = new_actform.date.data
-            #protein = new_form.proteins.data
-            latest_activity = Activity(activity, date)
-            #food_diet = Diet(name, type, calories, fats, carbohydrates, protein)
-            latest_activity.db = root.child('Activities')
-            #food_diet.db = root.child('Food')
-            latest_activity.db.push({'Activity': latest_activity.get_activity(), 'Date': latest_activity.get_date()})
-            # food_diet.db.push({'Name': food_diet.get_name(), 'Type': food_diet.get_type(),
-            #           'Calories Value': food_diet.get_calories(), 'Fats Value': food_diet.get_fats(),
-            #           'Carbohydrates Value': food_diet.get_carbohydrates(),'Protein Value': food_diet.get_protein()
-            # })
-            flash('New activity updated successfully', 'success')
-            #flash('New Diet inserted successfully', 'success')
+def record():
+    actform = ActivityForm(request.form)
+    if request.method == 'POST' and actform.validate():
+        activity = actform.activity.data
+        date = str(actform.date.data)
+        latest_activity = Activity(activity, date)
+        latest_activity.db = root.child('Activities')
+        latest_activity.db.push({'Activity': latest_activity.get_activity(), 'Date': latest_activity.get_date()})
+        flash('New activity updated successfully', 'success')
+        return redirect(url_for('new_activity'))
 
-            return redirect(url_for('record'))
-            #return redirect(url_for('diet'))
-
-    return render_template('track_and_record.html', form = new_actform)
-    #return render_template('new_diet.html', form=new_form)
+    return render_template('track_and_record.html', actform=actform)
 
 
 @app.route('/rewards')

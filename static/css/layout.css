@@ -35,6 +35,7 @@ body{
     height:60px;
 	max-width:1000px;
 	margin:auto;
+	padding: 0;
 }
 .navbar-light .nav-link{
 	text-align: center;
@@ -89,8 +90,27 @@ body{
 	margin:auto;
 }
 .alert-danger{
-	background: white;
-	color: #F44336;
+	background: #F44336;
+	color: white;
 	font-size: 16px;
 	padding: 0.5rem 0.75rem !important;
+}
+.alert.alert-dismissable{
+	text-align: center;
+	position: fixed;
+	top:60px;
+	font-weight: 500;
+	width: 100%;
+	border-radius: 0;
+	z-index: 1100;
+	box-shadow:#e0e0e0 0 3px 20px;
+}
+.alert.alert-success.alert-dismissable{
+	background: #4CAF50;
+	color:white;
+
+}
+.alert.alert-danger.alert-dismissable{
+	background: #F44336;
+	color: white;
 }

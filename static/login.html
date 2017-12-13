@@ -40,8 +40,8 @@
 		<a class="nav-link sep">|</a>
 	  </li>
 	  <!-- {% if not session.logged_in %} -->
-		<li class="nav-item dropdown account-btn">
-			<a class="dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		<li class="nav-item dropdown">
+			<a class="dropdown-toggle account-btn" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			  UserName
 			</a>
 			<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
@@ -57,22 +57,24 @@
   </div>
 </nav>
 </div>
-    <div class="account-box" style="height: 556px;">
+    <div class="wrapper">
+    <div class="account-box">
+        <div class="row switch-page">
+            <div class="current-box col-6">LOG IN</div>
+            <div class="link-box col-6"><a href="/signup">SIGN UP</a></div>
+        </div>
         <form action="" class="main-form" >
-            <div class="row switch-page">
-                <div class="current-box col-6">Log in</div>
-                <div class="link-box col-6"><a href="/signup">Sign up</a></div>
-            </div>
             <div class="form-group account-content">
                 <div class="container">
                     <input type="text" class="form-control mt-3 mb-3" placeholder="email/username" name="uname" required>
                     <input type="password" class="form-control mt-3 mb-3" placeholder="password" name="psw" required>
-                    <button type="submit" class="form-control submit-btn">Log in</button>
+                    <button type="submit" class="form-control submit-btn">LOG IN</button>
                     <div class="psw"><a href="#">Forgot password?</a></div>
                 </div>
             </div>
         </form>
 	</div>
+    </div>
 	<footer class="footer">
 		<div class="container-fluid text-center">
 			<span> © 2017 NYP SIT Nobesity Singapore</span>

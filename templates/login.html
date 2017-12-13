@@ -11,11 +11,11 @@
       {% endif %}
     {% endmacro %}
     <div class="account-box">
+        <div class="row switch-page">
+            <div class="current-box col-6">LOG IN</div>
+            <div class="link-box col-6"><a href="/signup">SIGN UP</a></div>
+        </div>
         <form method="post" action="" class="main-form" >
-            <div class="row switch-page">
-                <div class="current-box col-6">Log in</div>
-                <div class="link-box col-6"><a href="/signup">Sign up</a></div>
-            </div>
             <div class="form-group account-content">
                 <div class="container">
                     <div class="form-row">
@@ -29,7 +29,7 @@
                             <div class="alert alert-danger col-12 m-auto">Invalid Password</div>
                         </div>
                     {% endif %}
-                    <button type="submit" class="form-control submit-btn" value="Login">Log in</button>
+                    <button type="submit" class="form-control submit-btn" value="Login">LOG IN</button>
                     <div class="psw"><a href="#">Forgot password?</a></div>
                 </div>
             </div>
