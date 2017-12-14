@@ -545,7 +545,7 @@ def faq():
 
 class ActivityForm(Form):
     activity = StringField('Activity', [validators.Length(min=1, max=15), validators.DataRequired()])
-    date = DateField('Start Date', format='%m/%d/%Y')
+    date = DateField('Start Date', format='%d/%M/%Y')
 
 
 class Activity:
@@ -566,8 +566,8 @@ class Activity:
         self.__date = date
 
 
-@app.route('/addact', methods=['GET','POST'])
-def addact():
+@app.route('/input_activity', methods=['GET','POST'])
+def input_activity():
     actform = ActivityForm(request.form)
     if request.method == 'POST' and actform.validate():
         activity = actform.activity.data
@@ -576,17 +576,15 @@ def addact():
         latest_activity.db = root.child('Activities')
         latest_activity.db.push({'Activity': latest_activity.get_activity(), 'Date': latest_activity.get_date()})
         flash('New activity updated successfully', 'success')
-        return redirect(url_for('new_activity'))
+        return redirect(url_for('record'))
 
-    return render_template('unknown.html', actform=actform)
+    return render_template('input_activity.html', actform=actform)
 
 @app.route('/record')
 def record():
+
     return render_template('track_and_record.html')
 
-@app.route('/input_activity')
-def input_activity():
-    return render_template('input_activity.html')
 
 @app.route('/rewards')
 def rewards():
