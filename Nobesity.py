@@ -533,11 +533,6 @@ def delete_diet(id):
     return redirect(url_for('diet'))
 
 
-@app.route('/quiz')
-def quiz():
-    return render_template('quiz.html')
-
-
 @app.route('/faq')
 def faq():
     return render_template('faq.html')
@@ -587,6 +582,7 @@ def input_activity():
 
     return render_template('input_activity.html', actform=actform)
 
+
 @app.route('/record')
 def record():
     Act_db = root.child('Activities').get()
@@ -599,14 +595,42 @@ def record():
     return render_template('track_and_record.html', activity=act_list)
 
 
-@app.route('/rewards')
-def rewards():
-    return render_template('rewards.html')
+@app.route('/quiz', methods=['GET','POST'])
+def quiz():
+    new_form = leaderboardform(request.form)
+    if request.method == 'POST' and new_form.validate():
+        score = new_form.score.data
+        username=session["username"]
+        userscore = leaderboard(username,score)
+        userscore.db = root.child('Leaderboard')
+        userscore.db.push({"username":userscore.get_username(),"Score":userscore.get_score()})
+        flash('New score inserted successfully', 'success')
+
+        return redirect(url_for('leaderboards'))
+    return render_template('quiz.html', new_form=new_form)
 
 
 @app.route('/leaderboards')
 def leaderboards():
     return render_template('leaderboards.html')
+
+
+class leaderboard:
+    def __init__(self,username,score):
+        self.__username=username
+        self.__score=score
+    def set_score(self,score):
+        self.__score=score
+    def set_username(self,username):
+        self.__username=username
+    def get_score(self):
+        return self.__score
+    def get_username(self):
+        return self.__username
+
+
+class leaderboardform(Form):
+    score=StringField("Score")
 
 
 if __name__ == '__main__':
