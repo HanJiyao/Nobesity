@@ -550,6 +550,7 @@ class ActivityForm(Form):
 
 class Activity:
     def __init__(self, activity, date):
+        self.__actID = ''
         self.__activity = activity
         self.__date = date
 
@@ -559,11 +560,17 @@ class Activity:
     def get_date(self):
         return self.__date
 
+    def get_actID(self):
+        return self.__actID
+
     def set_activity(self, activity):
         self.__activity = activity
 
     def set_date(self, date):
         self.__date = date
+
+    def set_actID(self, actID):
+        self.__actID = actID
 
 
 @app.route('/input_activity', methods=['GET','POST'])
@@ -582,8 +589,14 @@ def input_activity():
 
 @app.route('/record')
 def record():
-
-    return render_template('track_and_record.html')
+    Act_db = root.child('Activities').get()
+    act_list = []
+    for actID in Act_db:
+        eachact = Act_db[actID]
+        activities = Activity(eachact['Activity'], eachact['Date'])
+        activities.set_actID(actID)
+        act_list.append(activities)
+    return render_template('track_and_record.html', activity=act_list)
 
 
 @app.route('/rewards')
