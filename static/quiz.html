@@ -57,7 +57,12 @@ body{
 </div>
 <button id="previous">Previous Question</button>
 <button id="next">Next Question</button>
-<button id="submit">Submit Quiz</button>
+<form method="post">
+    <div>
+         {{ render_field(new_form.score, class_="form-control") }}
+    </div>
+<button id="submit" type ="submit" value="submit" class="btn btn-submit">Submit Quiz</button>
+</form>
 <div id="results"></div>
 <script>
 (function() {
@@ -122,7 +127,7 @@ body{
     });
 
     // show number of correct answers out of total
-    resultsContainer.innerHTML = `${numCorrect} out of ${myQuestions.length}`;
+    resultsContainer.innerHTML = `${numCorrect}`;
   }
 
   const quizContainer = document.getElementById("quiz");
@@ -140,7 +145,7 @@ body{
       correctAnswer: "c"
     },
     {
-      question: "2.What types of food should Obese people eat to lose weight?",
+      question: "2.What types of food should Obese people eat to reduce weight gain?",
       answers: {
         a: "Burgers",
         b: "Deserts and ice cream",
@@ -201,3 +206,17 @@ body{
     </a>
 
 </div>
+<script src="https://www.gstatic.com/firebasejs/4.8.0/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyA6AxHkjLYxqZ65zgqr6ym47ojE5KOvNkU",
+    authDomain: "quiz-and-leaderboards.firebaseapp.com",
+    databaseURL: "https://quiz-and-leaderboards.firebaseio.com",
+    projectId: "quiz-and-leaderboards",
+    storageBucket: "quiz-and-leaderboards.appspot.com",
+    messagingSenderId: "364640632237"
+  };
+  firebase.initializeApp(config);
+</script>
+<script src="Index.js"></script>
