@@ -566,8 +566,8 @@ class Activity:
         self.__date = date
 
 
-@app.route('/record', methods=['GET','POST'])
-def record():
+@app.route('/addact', methods=['GET','POST'])
+def addact():
     actform = ActivityForm(request.form)
     if request.method == 'POST' and actform.validate():
         activity = actform.activity.data
@@ -578,8 +578,15 @@ def record():
         flash('New activity updated successfully', 'success')
         return redirect(url_for('new_activity'))
 
-    return render_template('track_and_record.html', actform=actform)
+    return render_template('unknown.html', actform=actform)
 
+@app.route('/record')
+def record():
+    return render_template('track_and_record.html')
+
+@app.route('/input_activity')
+def input_activity():
+    return render_template('input_activity.html')
 
 @app.route('/rewards')
 def rewards():

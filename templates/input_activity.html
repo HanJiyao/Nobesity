@@ -1,0 +1,34 @@
+{% extends 'layout.html' %}
+{% block body %}
+    {% from "includes/_formhelper.html" import render_field %}
+
+    <div class="jumbotron text-center">
+        <section id="top-container">
+                <div class="title">
+                    <h1>NObesity SG</h1>
+                    <br>
+                    <h4>Track and Record your activities!</h4>
+                </div>
+                <div class="image-container">
+                    <img src="../static/images/group_exercise.jpg">
+                </div>
+        </section>
+        <div class="form-body">
+            <form method="post" id="activity-form" action="">
+                <div class="form-group">
+                    {{ render_field(actform.activity, class="form-control") }}
+                    <!--<label for="actname">Activity</label>
+				    <input required type="actname" class="form-control input-lg col-sm-4" id="actname" placeholder="">-->
+                </div>
+                <div class="form-group">
+                    {{ render_field(actform.date, class="form-control") }}
+                    <!--<label for="date">Date</label>
+					<input required type="date" class="form-control input-lg col-sm-4" id="date" placeholder="testing">-->
+                </div>
+                <button type="submit" value="submit" class="btn btn-submit btn-lg">Save</button>
+                <button type="button" class="btn btn-secondary">Return</button>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
