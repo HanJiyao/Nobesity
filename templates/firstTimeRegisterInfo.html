@@ -45,25 +45,28 @@
 			    </div>
 			  </div>
                   {% if moreinfo_form['birth_day'].errors %}
-                    {% for error in moreinfo_form['birth_day'].errors %}
-                    <div class="form-group">
-                        <div class="alert alert-danger mt-1 mb-1 col-12">{{ moreinfo_form['birth_day'].label }} : {{ error }}</div>
-                    </div>
-                    {% endfor %}
+                      <div class="form-group">
+                        <div class="alert alert-danger mt-1 mb-1 col-12">
+                        {% for error in moreinfo_form['birth_day'].errors %}
+                            </div>{{ moreinfo_form['birth_day'].label }} : {{ error }}</div>
+                        {% endfor %}
+                      </div>
                   {% endif %}
                   {% if moreinfo_form['birth_month'].errors %}
-                    {% for error in moreinfo_form['birth_month'].errors %}
-                    <div class="form-group">
-                        <div class="alert alert-danger mt-1 mb-1 col-12">{{ moreinfo_form['birth_month'].label }} : {{ error }}</div>
-                    </div>
-                    {% endfor %}
+                      <div class="form-group">
+                        <div class="alert alert-danger mt-1 mb-1 col-12">
+                            {% for error in moreinfo_form['birth_month'].errors %}
+                                <div>{{ moreinfo_form['birth_month'].label }} : {{ error }}</div>
+                            {% endfor %}
+                        </div>
                   {% endif %}
                   {% if moreinfo_form['birth_year'].errors %}
-                    {% for error in moreinfo_form['birth_year'].errors %}
-                    <div class="form-group">
-                        <div class="alert alert-danger mt-1 mb-1 col-12">{{ moreinfo_form['birth_year'].label }} : {{ error }}</div>
-                    </div>
-                    {% endfor %}
+                      <div class="form-group">
+                        <div class="alert alert-danger mt-1 mb-1 col-12">
+                            {% for error in moreinfo_form['birth_year'].errors %}
+                                <div>{{ moreinfo_form['birth_year'].label }} : {{ error }}</div>
+                            {% endfor %}
+                        </div>
                   {% endif %}
 				<button type="submit" class="form-control submit-btn" style="margin-top: 30px;     margin-bottom: 0;">Next</button>
            	</div>

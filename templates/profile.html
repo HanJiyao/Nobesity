@@ -1,127 +1,148 @@
 {% extends 'layout.html' %}
 {% block body %}
-	<div class="container text-center profile">
-    	<div class="user_profile">
-            <h3 id="user_name" class="text-center">User Name</h3>
-			<div class="header-desc"><span id="user_account" >@UserAccount</span> • Health Report</div>
-            <div id="profile_image">
-                <img src="../static/images/451370.jpg" alt="Profile Image">
-            </div>
+    <script>
+        $(document).ready(function () {
+            var grade = $('#grade_display')[0].innerText;
+            var a = $('#class_a');
+            var b = $('#class_b');
+            var c = $('#class_c');
+            var d = $('#class_d');
+            var e = $('#class_e');
+            if (grade == 'A'){
+                a.addClass('active');
+            } else if (grade == 'B'){
+                b.addClass('active');
+            } else if (grade == 'C'){
+                c.addClass('active');
+            } else if (grade == 'D'){
+                d.addClass('active');
+            } else if (grade == 'E') {
+                e.addClass('active');
+            }
+        })
+    </script>
+<div class="container text-center profile">
+    <div class="user_profile">
+        <h3 id="user_name" class="text-center">{{ user.get_display_name() }}</h3>
+        <div class="header-desc"><span id="user_account" >{{ user.get_first_name()}}  {{ user.get_last_name() }}</span> • Health Report</div>
+        <div id="profile_image">
+            <img src="../static/images/health_profile.png" alt="Profile Image">
         </div>
-        <div class="health_point card">
-			<h5>Health Grade</h5>
-            <h1 id="health_point">76</h1>
-            <ul class="list-inline">
-                <li class="list-inline-item class_a">A</li>
-                <li class="list-inline-item class_b active">B</li>
-                <li class="list-inline-item class_c">C</li>
-                <li class="list-inline-item class_d">D</li>
-                <li class="list-inline-item class_e">E</li>
-            </ul>
+    </div>
+    <div class="health_point card">
+        <h5>Health Grade: <span id="grade_display">{{ user.get_grade_display() }}</span></h5>
+        <h1 id="health_point">{{ user.get_grade() }}</h1>
+        <ul class="list-inline">
+            <li class="list-inline-item class_a" id="class_a">A</li>
+            <li class="list-inline-item class_b" id="class_b">B</li>
+            <li class="list-inline-item class_c" id="class_c">C</li>
+            <li class="list-inline-item class_d" id="class_d">D</li>
+            <li class="list-inline-item class_e" id="class_e">E</li>
+        </ul>
+    </div>
+    <div class="calculator card">
+        <div class="card-header">
+            <div class="card-header-text">How is my Body Shape?</div>
         </div>
-        <div class="calculator card">
-            <div class="card-header">
-            	<div class="card-header-text">How is my Body Shape?</div>
-            </div>
-            <div class="card-body">
-                <div class="card-body-title">Health Status</div>
-                <div class="row statistics">
-                    <div class="col-4">
-                        <h1 id="weight">60</h1><span class="unit-small">kg</span>
-                        <div>Current Weight</div>
-                    </div>
-                    <div class="col-4">
-                        <h1 id="bmi">24</h1><span class="unit-small">kg/m2</span>
-                        <div>Body Mass Index (BMI)</div>
-                    </div>
-                    <div class="col-4">
-                        <h1 id="bfp">26</h1><span class="unit-small">%</span>
-                        <div>Body Fat Percentage (BFP)</div>
-                    </div>
+        <div class="card-body">
+            <div class="card-body-title">Health Status</div>
+            <div class="row stat">
+                <div class="col-4">
+                    <h1 id="weight">{{ user.get_current_weight() }}</h1><span class="unit-small">kg</span>
+                    <div class="stat-text">Current Weight</div>
                 </div>
-                <div class="card-body-desc">
-                    <div class="desc-text">
-						<div class="lightbulb">
-							<i class="material-icons">lightbulb_outline</i>
-						</div>
-                        <div class="card-body-desc-text">
-							Base on your age and gender, your healthy range of<br>
-							Weight: <span> 50-70kg </span>,
-							BMI: <span> 18.5–24.9 </span>,
-							BFP: <span> 19-23% </span>.
-                        </div>
-                    </div>
+                <div class="col-4">
+                    <h1 id="bmi">{{ user.get_bmi() }}</h1>
+                    <div class="stat-text">Body Mass Index</div>
                 </div>
-            </div>
-        </div>
-        <div class="calories card">
-        	<div class="card-header"><div class="card-header-text">How should I eat?</div></div>
-            <div class="card-body">
-                <div class="card-body-title">Recommend Calorie Intake</div>
-                <div><h1 id="calories">2000</h1><span class="unit-small">Cal</span></div>
-                <div class="card-body-desc">
-                    <div class="desc-text">
-						<div class="lightbulb">
-							<i class="material-icons">lightbulb_outline</i>
-						</div>
-						<div class="card-body-desc-text">
-							You need Calories consumption range:
-							<span>1000-3000</span>daily.<br>
-							Try to keep energy balance, calories consume and burn.
-						</div>
-                	</div>
-            	</div>
-			</div>
-        </div>
-        <div class="exercise card">
-        	<div class="card-header"><div class="card-header-text">How should I Exercise?</div></div>
-            <div class="card-body">
-                <div class="card-body-title">Target Heart Rate</div>
-                <h1 id="heart_rate">120</h1>
-                <span class="unit-small">b/min</span>
-                <div class="card-body-desc">
-                    <div class="desc-text">
-						<div class="lightbulb">
-							<i class="material-icons">lightbulb_outline</i>
-						</div>
-						<div class="card-body-desc-text">
-							It's important to note target heart rate is just a guide.<br>
-							If you want more definitive range, discussing with an trainer.
-						</div>
-                    </div>
+                <div class="col-4">
+                    <h1 id="bfp">{{ user.get_bfp() }}</h1><span class="unit-small">%</span>
+                    <div class="stat-text">Body Fat Percentage</div>
                 </div>
             </div>
-        </div>
-		<div class="blood_pressure card">
-        	<div class="card-header"><div class="card-header-text">How is my blood pressure?</div></div>
-            <div class="card-body">
-                <div class="card-body-title">Blood Pressure</div>
-                <div class="row statistics">
-                    <div class="col-4">
-                        <h1 id="systol">130</h1><span class="unit-small">mmHg</span>
-                        <div>Systolic pressure</div>
+            <div class="card-body-desc">
+                <div class="desc-text">
+                    <div class="lightbulb">
+                        <i class="material-icons">lightbulb_outline</i>
                     </div>
-                    <div class="col-4">
-                        <h1 id="diastol">85</h1><span class="unit-small">mmHg</span>
-                        <div>Diastolic pressure</div>
-                    </div>
-                    <div class="col-4">
-                        <h1 id="pulse">90</h1><span class="unit-small">b/min</span>
-                        <div>Pulse rate</div>
-                    </div>
-                </div>
-                <div class="card-body-desc">
-                    <div class="desc-text">
-                    	<div class="lightbulb">
-                    		<i class="material-icons">lightbulb_outline</i>
-                    	</div>
-						<div class="card-body-desc-text">
-							Blood pressure is important because the higher your BP is,<br>
-							the higher your risk of health problems in the future.
-						</div>
+                    <div class="card-body-desc-text">
+                        Base on your height, age and gender, we calculated<br>
+                        Health Range of Weight: <span> {{ user.get_suggest_weight() }}kg </span>,
+                        BMI: <span> 18.5 – 22.9 </span>,
+                        BFP: <span> {{ user.get_suggest_bfp() }} </span>.
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <div class="calories card">
+        <div class="card-header"><div class="card-header-text">How should I eat?</div></div>
+        <div class="card-body">
+            <div class="card-body-title">Recommend Calorie Intake</div>
+            <div><h1 id="calories">{{ user.get_suggest_cal() }}</h1><span class="unit-small">Cal</span></div>
+            <div class="card-body-desc">
+                <div class="desc-text">
+                    <div class="lightbulb">
+                        <i class="material-icons">lightbulb_outline</i>
+                    </div>
+                    <div class="card-body-desc-text">
+                        You need Calories consumption range:
+                        <span>{{ user.get_suggest_cal_range() }}</span>daily.<br>
+                        Try to keep energy balance, calories consume and burn.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="exercise card">
+        <div class="card-header"><div class="card-header-text">How should I Exercise?</div></div>
+        <div class="card-body">
+            <div class="card-body-title">Target Heart Rate</div>
+            <h1 id="heart_rate">{{ user.get_suggest_hr() }}</h1>
+            <span class="unit-small">bpm</span>
+            <div class="card-body-desc">
+                <div class="desc-text">
+                    <div class="lightbulb">
+                        <i class="material-icons">lightbulb_outline</i>
+                    </div>
+                    <div class="card-body-desc-text">
+                        It's important to note target heart rate is just a guide.<br>
+                        If you want more definitive range, discussing with an trainer.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="blood_pressure card">
+        <div class="card-header"><div class="card-header-text">How is my blood pressure?</div></div>
+        <div class="card-body">
+            <div class="card-body-title">Blood Pressure</div>
+            <div class="row stat">
+                <div class="col-4">
+                    <h1 id="systol">{{ user.get_current_systolic() }}</h1><span class="unit-small">mmHg</span>
+                    <div class="stat-text">Systolic Pressure</div>
+                </div>
+                <div class="col-4">
+                    <h1 id="diastol">{{ user.get_current_diastolic() }}</h1><span class="unit-small">mmHg</span>
+                    <div class="stat-text">Diastolic Pressure</div>
+                </div>
+                <div class="col-4">
+                    <h1 id="pulse">{{ user.get_current_pulse() }}</h1><span class="unit-small">bpm</span>
+                    <div class="stat-text">Pulse Rate</div>
+                </div>
+            </div>
+            <div class="card-body-desc">
+                <div class="desc-text">
+                    <div class="lightbulb">
+                        <i class="material-icons">lightbulb_outline</i>
+                    </div>
+                    <div class="card-body-desc-text">
+                        Blood pressure is important because the higher your BP is,<br>
+                        the higher your risk of health problems in the future.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

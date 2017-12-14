@@ -1,6 +1,6 @@
 @charset "utf-8";
 .account-box {
-	margin: 50px auto;
+	margin: 0 auto 50px;
 	background: white;
 	max-width: 600px;
 	box-shadow:#e0e0e0 5px 10px 25px;

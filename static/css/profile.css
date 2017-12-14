@@ -3,7 +3,6 @@
 	max-width: 1000px;
 }
 #user_name{
-	padding-top: 50px;
 	font-size: 50px;
 	font-weight: 100;
 }
@@ -33,7 +32,7 @@
 	padding: 50px;
 }
 .card-body h1{
-	font-size:4rem;
+	font-size:3.6rem;
 	font-weight:400;
 	display:inline-block;
 }
@@ -49,35 +48,35 @@
 	font-size: 20px;
 	border-left: #64DD17 solid thick;
 	padding: 0 10px;
-	margin-bottom: 30px;
+	margin-bottom: 2rem;
 }
 .card-body-desc{
-	margin: 40px 0 0;
-	padding: 30px;
+	margin: 3rem;
 	border: #e0e0e0 solid 1px;
 	text-align: left;
 }
 .card-body-desc-text{
 	text-align: center;
-    padding-right: 100px;
 	font-size: 1.1rem;
+	padding: 2rem 0;
 }
 .card-body-desc .desc-text{
-	width: 80%;
 	margin: auto;
+	position:relative;
 }
-.lightbulb i{
-	float: left;
+.lightbulb{
+	position: absolute;
+	left: 2rem;
+    top: 2rem;
 	height: 50px;
 	width: 50px;
-	color:white;
 	background: #64DD17;
 	padding: 10px;
-	font-size: 30px;
 	border-radius: 100%;
-	margin-left: 20px;
-	margin-right: 50px;
-	display: inline-block;
+}
+.lightbulb i{
+	color:white;
+	font-size: 30px;
 }
 .header-desc{
 	font-size: 20px;
@@ -98,8 +97,6 @@
 #profile_image img{
 	height: 150px;
 	width: auto;
-	position: relative;
-	left: -45px;
 }
 .health_point{
 	position: relative;
@@ -114,7 +111,7 @@
 	font-size: 30px;
 }
 #health_point{
-	font-size: 90px;
+	font-size: 5rem;
 	padding-bottom: 10px;
 	font-weight: 400;
 }
@@ -150,7 +147,12 @@
 	position: relative;
 	top:3px;
 }
-.statistics{
+.stat{
 	max-width: 80%;
 	margin:auto;
+}
+.stat-text{
+	color:grey;
+	font-weight: 400;
+	font-size: 1.1rem;
 }

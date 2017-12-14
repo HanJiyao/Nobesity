@@ -1,11 +1,22 @@
 @charset "utf-8";
-body{
+html, body{
     background: #f0f0f0;
+	height: 100%;
 }
-.wrapper{
-    padding-top: 70px;
+.jumbotron {
+    background-color:transparent !important;
+}
+.content-wrapper{
+    padding: 120px 60px 100px;
 	max-width: 1000px;
     margin: auto;
+	background: rgba(255,255,255,0.36);
+	box-shadow:#e0e0e0 0 0 5px;
+	min-height: 90vh;
+}
+.master-wrapper{
+	min-height: 100%;
+  	position: relative;
 }
 .nav-wrapper{
 	background: white;
@@ -15,7 +26,7 @@ body{
 	position: fixed;
     top: 0;
     z-index: 1000;
-    width: 100vw;
+    width: 100%;
 }
 .navbar-brand{
 	font-size:20px!important;
@@ -57,7 +68,7 @@ body{
 	color: #03A9F4!important;
 }
 .account-btn {
-	font-size: 0.8rem;
+	font-size: 1rem;
 	background: #03A9F4;
 	border-radius: 3px;
 	border: #03A9F4 solid 1px;
@@ -67,11 +78,11 @@ body{
 	color: white !important;
 	padding: 10px;
 	width: 160px;
-	margin-top: 10px;
+	margin-top: 0.45rem;
 	box-shadow:#e0e0e0 3px 3px 10px;
 }
 .account-btn-half {
-	font-size: 0.8rem;
+	font-size: 1rem;
 	background: #03A9F4;
 	border-radius: 3px;
 	border: #03A9F4 solid 1px;
@@ -81,7 +92,7 @@ body{
 	color: white !important;
 	padding: 10px;
 	width: 80px;
-	margin-top: 10px;
+	margin-top: 0.45rem;
 	box-shadow:#e0e0e0 3px 3px 10px;
 }
 .account-btn-half.left{
@@ -104,15 +115,21 @@ body{
 }
 .dropdown-item{
 	text-align: center;
+	z-index: 9999;
 }
 .dropdown-menu{
 	box-shadow:#e0e0e0 3px 3px 10px;
+	z-index: 9999;
 }
 .footer {
 	color: #e0e0e0;
 	padding: 1rem;
 	background-color: #222222;
 	text-align: center;
+	position: absolute;
+	bottom: 0;
+	height: 100px;
+	width: 100%
 }
 .layout-wrapper{
 	max-width: 1000px;
@@ -137,9 +154,12 @@ body{
 .alert.alert-success.alert-dismissable{
 	background: #64DD17;
 	color:white;
-
 }
 .alert.alert-danger.alert-dismissable{
 	background: #F44336;
 	color: white;
+}
+.alert.alert-primary.alert-dismissable{
+	background: #03A9F4;
+	color:white;
 }

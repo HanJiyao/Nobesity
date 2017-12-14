@@ -3,6 +3,7 @@ from wtforms import Form, StringField, TextAreaField, RadioField, SelectField, P
 import firebase_admin
 from firebase_admin import credentials, db
 import datetime
+import math
 cred = credentials.Certificate('./cred/nobesity-it1705-firebase-adminsdk-xo793-bbfa4432da.json')
 default_app = firebase_admin.initialize_app(cred, {'databaseURL': 'https://nobesity-it1705.firebaseio.com/'})
 root = db.reference()
@@ -86,7 +87,8 @@ def login():
                 password_check = 'Invalid'
             else:
                 session['logged_in'] = True
-                return redirect(url_for('index'))
+                flash('Welcome Back, '+session['username'], 'primary')
+                return redirect(url_for('profile'))
     return render_template('login.html', form=login_form, password_check=password_check)
 
 
@@ -162,8 +164,74 @@ class AccountInfoSetup:
         self.__gender = gender
         self.__birth = birth
         self.__height = height
+        height = float(height)
         self.__weight_dict = weight_dict
         self.__bp_dict = bp_dict
+        today = '{:%Y%m%d}'.format(datetime.date.today())
+        weight_date = []
+        for i in weight_dict:
+            weight_date.append(i)
+        weight_date.sort()
+        current_weight = float(weight_dict[weight_date[-1]])
+        self.__age = int(str(int(today)-int(birth))[:2])
+        self.__current_weight = round(current_weight, 1)
+        self.__bmi = round(float(current_weight)/(height**2), 1)
+        if gender == 'male':
+            gender_index = 1
+            self.__suggest_bfp = '21 - 30%'
+            self.__suggest_cal = math.ceil(9.99 * current_weight + 6.25 * height * 100 - 4.92 * self.__age + 5)
+        else:
+            gender_index = 0
+            self.__suggest_bfp = '14 - 25%'
+            self.__suggest_cal = math.ceil(9.99 * current_weight + 6.25 * height * 100 - 4.92 * self.__age - 161)
+        if self.__age < 18:
+            self.__bfp = round(self.__bmi * 1.51 - 0.70 * self.__age - 3.6 * gender_index + 1.4, 1)
+        else:
+            self.__bfp = round(self.__bmi * 1.20 + 0.23 * self.__age - 10.8 * gender_index - 5.4, 1)
+        self.__suggest_cal_range = str(math.ceil(self.__suggest_cal*0.9))+' - '+str(math.ceil(self.__suggest_cal*1.1))
+        self.__suggest_weight_min = math.ceil(18.5*(height**2))
+        self.__suggest_weight_max = math.ceil(23*(height**2))
+        self.__suggest_weight = str(self.__suggest_weight_min)+' - '+str(self.__suggest_weight_max)
+        bp_time = []
+        for i in bp_dict:
+            bp_time.append(i)
+        bp_time.sort()
+        self.__current_pulse = int(bp_dict[bp_time[-1]]['pulse'])
+        self.__current_systolic = int(bp_dict[bp_time[-1]]['systolic'])
+        self.__current_diastolic = int(bp_dict[bp_time[-1]]['diastolic'])
+        self.__hr_hrr = 207 - self.__age * 0.7 - int(self.__current_pulse)
+        self.__suggest_hr_min = math.ceil(0.5 * self.__hr_hrr)
+        self.__suggest_hr_max = math.ceil(0.85 * self.__hr_hrr)
+        self.__suggest_hr = str(self.__suggest_hr_min)+' - '+str(self.__suggest_hr_max)
+        self.__diet_grade = 10
+        self.__quiz_grade = 5
+        self.__activity_grade = 10
+        self.__plan_grade = 15
+        self.__bmi_grade = 0
+        if 18.5 < self.__bmi < 22.9:
+            self.__bmi_grade = 20
+        self.__bfp_grade = 0
+        if gender == 'male':
+            if 21 < self.__bfp < 30:
+                self.__bfp_grade = 20
+        if gender == 'female':
+            if 14 < self.__bfp < 25:
+                self.__bfp_grade = 20
+        self.__bp_grade = 0
+        if 120 < self.__current_systolic < 140 and 80 < self.__current_diastolic <90:
+            self.__bp_grade = 20
+        self.__grade = (self.__diet_grade + self.__quiz_grade + self.__activity_grade + self.__plan_grade+
+                        self.__bmi_grade + self.__bfp_grade + self.__bp_grade)
+        if 80 <= self.__grade <= 100:
+            self.__grade_display = 'A'
+        elif 60 <= self.__grade < 80:
+            self.__grade_display = 'B'
+        elif 40 <= self.__grade < 60:
+            self.__grade_display = 'C'
+        elif 20 <= self.__grade < 40:
+            self.__grade_display = 'D'
+        elif 0 <= self.__grade < 20:
+            self.__grade_display = 'E'
 
     def get_first_name(self):
         return self.__first_name
@@ -188,6 +256,45 @@ class AccountInfoSetup:
 
     def get_bp_dict(self):
         return self.__bp_dict
+
+    def get_current_weight(self):
+        return self.__current_weight
+
+    def get_bmi(self):
+        return self.__bmi
+
+    def get_bfp(self):
+        return self.__bfp
+
+    def get_suggest_weight(self):
+        return self.__suggest_weight
+
+    def get_suggest_bfp(self):
+        return self.__suggest_bfp
+
+    def get_suggest_cal(self):
+        return self.__suggest_cal
+
+    def get_suggest_cal_range(self):
+        return self.__suggest_cal_range
+
+    def get_suggest_hr(self):
+        return self.__suggest_hr
+
+    def get_current_pulse(self):
+        return self.__current_pulse
+
+    def get_current_systolic(self):
+        return self.__current_systolic
+
+    def get_current_diastolic(self):
+        return self.__current_diastolic
+
+    def get_grade(self):
+        return self.__grade
+
+    def get_grade_display(self):
+        return self.__grade_display
 
 
 class NameForm(Form):
@@ -255,8 +362,9 @@ def register_info():
             'weight_dict': {
                 register_date: str(moreinfo_form.initial_weight.data)
             },
-            'birthday': str(moreinfo_form.birth_year.data) + str(moreinfo_form.birth_month.data)
-                        + str(moreinfo_form.birth_day.data)
+            'birthday': str(moreinfo_form.birth_year.data) +
+                        str(moreinfo_form.birth_month.data) +
+                        str(moreinfo_form.birth_day.data)
         })
         return redirect(url_for('register_bp'))
     return render_template('firstTimeRegisterInfo.html', moreinfo_form=moreinfo_form)
@@ -271,7 +379,7 @@ class BpInfoForm(Form):
 @app.route('/setup/bp', methods=['GET', 'POST'])
 def register_bp():
     bp_info_form = BpInfoForm(request.form)
-    register_time = '{:%Y%m%d%H}'.format(datetime.datetime.now())
+    register_time = '{:%Y%m%d%H%M}'.format(datetime.datetime.now())
     if request.method == 'POST' and bp_info_form.validate():
         root.child('UserAccount').child(session['username']).update({
             'bp_dict': {
@@ -282,6 +390,7 @@ def register_bp():
                 }
             }
         })
+        flash('You have Completed the Account Setup', 'success')
         return redirect(url_for('profile'))
     return render_template('firstTimeRegisterBp.html', bp_info_form=bp_info_form)
 
@@ -294,7 +403,7 @@ class UserAccountSetupInfoForm(Form):
     initial_weight = DecimalField('Current Weight (kg)', [validators.DataRequired()], places=1)
     birth_day = SelectField(
         'Day', choices=[
-            ('01', '1'), ('02', '2'), ('03', '3'), ('04', '4'), ('05', '5'),('06', '6'), ('07', '7'), ('08', '8'),
+            ('01', '1'), ('02', '2'), ('03', '3'), ('04', '4'), ('05', '5'), ('06', '6'), ('07', '7'), ('08', '8'),
             ('09', '9'), ('10', '10'), ('11', '11'), ('12', '12'), ('13', '13'), ('14', '14'), ('15', '15'),
             ('16', '16'), ('17', '17'), ('18', '18'), ('19', '19'), ('20', '20'), ('21', '21'), ('22', '22'),
             ('23', '23'), ('24', '24'), ('25', '25'), ('26', '26'), ('27', '27'), ('28', '28'), ('29', '29'),
@@ -303,7 +412,7 @@ class UserAccountSetupInfoForm(Form):
     )
     birth_month = SelectField(
         'Month', choices=[
-            ('01', 'Jan'), ('02', 'Feb'), ('03', 'Mar'), ('04', 'Apr'),('05', 'May'), ('06', 'Jun'), ('07', 'Jul'),
+            ('01', 'Jan'), ('02', 'Feb'), ('03', 'Mar'), ('04', 'Apr'), ('05', 'May'), ('06', 'Jun'), ('07', 'Jul'),
             ('08', 'Aug'), ('09', 'Sep'), ('10', 'Oct'), ('11', 'Nov'), ('12', 'Dec')
         ]
     )
@@ -317,6 +426,7 @@ class UserAccountSetupInfoForm(Form):
 @app.route('/account/info', methods=['GET', 'POST'])
 def account_info():
     setup_date = '{:%Y%m%d}'.format(datetime.date.today())
+    setup_time = '{:%Y%m%d%H%M}'.format(datetime.datetime.now())
     setup_info_form = UserAccountSetupInfoForm(request.form)
     uid_db = root.child('UserAccount').child(session['username'])
     if request.method == 'POST' and setup_info_form.validate():
@@ -326,15 +436,19 @@ def account_info():
         gender = setup_info_form.gender.data
         birthday = str(setup_info_form.birth_year.data)+setup_info_form.birth_month.data+setup_info_form.birth_day.data
         height = str(setup_info_form.height.data)
-        weight_dict = {setup_date: str(setup_info_form.initial_weight.data)}
+        weight_dict = {
+            setup_date: str(setup_info_form.initial_weight.data)
+        }
         bp_dict = {
-            setup_date: {
+            setup_time: {
                 'systolic': str(setup_info_form.initial_systol.data),
                 'diastolic': str(setup_info_form.initial_diastol.data),
                 'pulse': str(setup_info_form.initial_pulse.data)
             }
         }
-        user_info = AccountInfoSetup(first_name, last_name, display_name, gender, birthday, height, weight_dict, bp_dict)
+        user_info = AccountInfoSetup(
+            first_name, last_name, display_name, gender, birthday, height, weight_dict, bp_dict
+        )
         uid_db.update({
             'first_name': user_info.get_first_name(),
             'last_name': user_info.get_last_name(),
@@ -379,7 +493,13 @@ def account_info():
 
 @app.route('/profile')
 def profile():
-    return render_template('profile.html')
+    uid_db = root.child('UserAccount').child(session['username'])
+    user_info_db = uid_db.get()
+    user_info = AccountInfoSetup(user_info_db['first_name'], user_info_db['last_name'], user_info_db['display_name'],
+                                 user_info_db['gender'], user_info_db['birthday'], user_info_db['height'],
+                                 user_info_db['weight_dict'], user_info_db['bp_dict']
+                                 )
+    return render_template('profile.html', user=user_info)
 
 
 @app.route('/plans')
@@ -502,8 +622,11 @@ def update_diet(id):
         protein = update_form.proteins.data
         food_diet = Diet(name,food_type, calories,fats,carbohydrates,protein)
         Diet_db = root.child('Food/' + id)
-        Diet_db.set({'Name': food_diet.get_name(), 'Type': food_diet.get_type(),'Calories Value': food_diet.get_calories(),
-                    'Fats Value': food_diet.get_fats(), 'Carbohydrates Value': food_diet.get_carbohydrates(),
+        Diet_db.set({'Name': food_diet.get_name(),
+                     'Type': food_diet.get_type(),
+                     'Calories Value': food_diet.get_calories(),
+                     'Fats Value': food_diet.get_fats(),
+                     'Carbohydrates Value': food_diet.get_carbohydrates(),
                      'Protein Value': food_diet.get_protein()})
         flash('Diet updated successfully', 'success')
 
@@ -609,9 +732,6 @@ def quiz():
         return redirect(url_for('leaderboards'))
     return render_template('quiz.html', new_form=new_form)
 
-@app.route('/rewards')
-def rewards():
-    return render_template('rewards.html')
 
 @app.route('/leaderboards')
 def leaderboards():
@@ -634,6 +754,11 @@ class leaderboard:
 
 class leaderboardform(Form):
     score=StringField("Score")
+
+
+@app.route('/rewards')
+def rewards():
+    return render_template('rewards.html')
 
 
 if __name__ == '__main__':
