@@ -609,6 +609,9 @@ def quiz():
         return redirect(url_for('leaderboards'))
     return render_template('quiz.html', new_form=new_form)
 
+@app.route('/rewards')
+def rewards():
+    return render_template('rewards.html')
 
 @app.route('/leaderboards')
 def leaderboards():
