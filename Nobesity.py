@@ -661,7 +661,7 @@ def faq():
     return render_template('faq.html')
 
 
-class ActivityForm(Form):
+    class ActivityForm(Form):
     activity = StringField('Activity', [validators.Length(min=1, max=15), validators.DataRequired()])
     date = DateField('Start Date', format='%d/%M/%Y')
 
