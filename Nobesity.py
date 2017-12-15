@@ -1,9 +1,11 @@
 from flask import Flask, render_template, request, flash, redirect, url_for, session
-from wtforms import Form, StringField, TextAreaField, RadioField, SelectField, PasswordField, DecimalField, IntegerField, DateField, validators, ValidationError
+from wtforms import Form, StringField, TextAreaField, RadioField, SelectField, PasswordField, DecimalField, \
+    IntegerField, DateField, validators, ValidationError
 import firebase_admin
 from firebase_admin import credentials, db
 import datetime
 import math
+
 cred = credentials.Certificate('./cred/nobesity-it1705-firebase-adminsdk-xo793-bbfa4432da.json')
 default_app = firebase_admin.initialize_app(cred, {'databaseURL': 'https://nobesity-it1705.firebaseio.com/'})
 root = db.reference()
@@ -87,7 +89,7 @@ def login():
                 password_check = 'Invalid'
             else:
                 session['logged_in'] = True
-                flash('Welcome Back, '+session['username'], 'primary')
+                flash('Welcome Back, ' + session['username'], 'primary')
                 return redirect(url_for('profile'))
     return render_template('login.html', form=login_form, password_check=password_check)
 
@@ -173,9 +175,9 @@ class AccountInfoSetup:
             weight_date.append(i)
         weight_date.sort()
         current_weight = float(weight_dict[weight_date[-1]])
-        self.__age = int(str(int(today)-int(birth))[:2])
+        self.__age = int(str(int(today) - int(birth))[:2])
         self.__current_weight = round(current_weight, 1)
-        self.__bmi = round(float(current_weight)/(height**2), 1)
+        self.__bmi = round(float(current_weight) / (height ** 2), 1)
         if gender == 'male':
             gender_index = 1
             self.__suggest_bfp = '21 - 30%'
@@ -188,10 +190,11 @@ class AccountInfoSetup:
             self.__bfp = round(self.__bmi * 1.51 - 0.70 * self.__age - 3.6 * gender_index + 1.4, 1)
         else:
             self.__bfp = round(self.__bmi * 1.20 + 0.23 * self.__age - 10.8 * gender_index - 5.4, 1)
-        self.__suggest_cal_range = str(math.ceil(self.__suggest_cal*0.9))+' - '+str(math.ceil(self.__suggest_cal*1.1))
-        self.__suggest_weight_min = math.ceil(18.5*(height**2))
-        self.__suggest_weight_max = math.ceil(23*(height**2))
-        self.__suggest_weight = str(self.__suggest_weight_min)+' - '+str(self.__suggest_weight_max)
+        self.__suggest_cal_range = str(math.ceil(self.__suggest_cal * 0.9)) + ' - ' + str(
+            math.ceil(self.__suggest_cal * 1.1))
+        self.__suggest_weight_min = math.ceil(18.5 * (height ** 2))
+        self.__suggest_weight_max = math.ceil(23 * (height ** 2))
+        self.__suggest_weight = str(self.__suggest_weight_min) + ' - ' + str(self.__suggest_weight_max)
         bp_time = []
         for i in bp_dict:
             bp_time.append(i)
@@ -202,7 +205,7 @@ class AccountInfoSetup:
         self.__hr_hrr = 207 - self.__age * 0.7 - int(self.__current_pulse)
         self.__suggest_hr_min = math.ceil(0.5 * self.__hr_hrr)
         self.__suggest_hr_max = math.ceil(0.85 * self.__hr_hrr)
-        self.__suggest_hr = str(self.__suggest_hr_min)+' - '+str(self.__suggest_hr_max)
+        self.__suggest_hr = str(self.__suggest_hr_min) + ' - ' + str(self.__suggest_hr_max)
         self.__diet_grade = 10
         self.__quiz_grade = 5
         self.__activity_grade = 10
@@ -218,9 +221,9 @@ class AccountInfoSetup:
             if 14 < self.__bfp < 25:
                 self.__bfp_grade = 20
         self.__bp_grade = 0
-        if 120 < self.__current_systolic < 140 and 80 < self.__current_diastolic <90:
+        if 120 < self.__current_systolic < 140 and 80 < self.__current_diastolic < 90:
             self.__bp_grade = 20
-        self.__grade = (self.__diet_grade + self.__quiz_grade + self.__activity_grade + self.__plan_grade+
+        self.__grade = (self.__diet_grade + self.__quiz_grade + self.__activity_grade + self.__plan_grade +
                         self.__bmi_grade + self.__bfp_grade + self.__bp_grade)
         if 80 <= self.__grade <= 100:
             self.__grade_display = 'A'
@@ -350,7 +353,7 @@ class MoreInfoForm(Form):
         ]
     )
     birth_year = IntegerField('Year', [validators.NumberRange(min=1000, max=9999, message="Invalid Year Input")])
-    
+
 
 @app.route('/setup/detail', methods=['GET', 'POST'])
 def register_info():
@@ -434,7 +437,8 @@ def account_info():
         last_name = setup_info_form.last_name.data
         display_name = setup_info_form.display_name.data
         gender = setup_info_form.gender.data
-        birthday = str(setup_info_form.birth_year.data)+setup_info_form.birth_month.data+setup_info_form.birth_day.data
+        birthday = str(
+            setup_info_form.birth_year.data) + setup_info_form.birth_month.data + setup_info_form.birth_day.data
         height = str(setup_info_form.height.data)
         weight_dict = {
             setup_date: str(setup_info_form.initial_weight.data)
@@ -463,8 +467,9 @@ def account_info():
         return redirect(url_for('account_info'))
     else:
         user_info_db = uid_db.get()
-        user_info = AccountInfoSetup(user_info_db['first_name'], user_info_db['last_name'],user_info_db['display_name'],
-                                     user_info_db['gender'],user_info_db['birthday'], user_info_db['height'],
+        user_info = AccountInfoSetup(user_info_db['first_name'], user_info_db['last_name'],
+                                     user_info_db['display_name'],
+                                     user_info_db['gender'], user_info_db['birthday'], user_info_db['height'],
                                      user_info_db['weight_dict'], user_info_db['bp_dict']
                                      )
         setup_info_form.first_name.data = user_info.get_first_name()
@@ -508,7 +513,7 @@ def plans():
 
 
 class Diet:
-    def __init__(self,name,type,calories,fats,carbohydrates,protein):
+    def __init__(self, name, type, calories, fats, carbohydrates, protein):
         self.dietID = ''
         self.name = name
         self.type = type
@@ -538,7 +543,7 @@ class Diet:
     def get_protein(self):
         return self.protein
 
-    def set_dietID(self,dietID):
+    def set_dietID(self, dietID):
         self.dietID = dietID
 
     def set_name(self, name):
@@ -547,16 +552,16 @@ class Diet:
     def set_type(self, type):
         self.type = type
 
-    def set_calories(self,calories):
+    def set_calories(self, calories):
         self.calories = calories
 
     def set_fats(self, fats):
-            self.fats = fats
+        self.fats = fats
 
-    def set_carbohydrates(self,cabohydrates):
+    def set_carbohydrates(self, cabohydrates):
         self.cabohydrates = cabohydrates
 
-    def set_protein(self,protein):
+    def set_protein(self, protein):
         self.protein = protein
 
 
@@ -566,7 +571,7 @@ def diet():
     diet_list = []
     for dietID in Diet_db:
         eachdiet = Diet_db[dietID]
-        food = Diet(eachdiet['Name'],eachdiet['Type'], eachdiet['Calories Value'], eachdiet['Fats Value'],
+        food = Diet(eachdiet['Name'], eachdiet['Type'], eachdiet['Calories Value'], eachdiet['Fats Value'],
                     eachdiet['Carbohydrates Value'], eachdiet['Protein Value'])
         food.set_dietID(dietID)
         diet_list.append(food)
@@ -575,8 +580,8 @@ def diet():
 
 
 class Food(Form):
-    diet_name = StringField('Name', [validators.length(min=1,max=150),validators.DataRequired()])
-    diet_type = SelectField('Type', [validators.DataRequired()], choices=[("", "Select"), ("Foods","Foods"),
+    diet_name = StringField('Name', [validators.length(min=1, max=150), validators.DataRequired()])
+    diet_type = SelectField('Type', [validators.DataRequired()], choices=[("", "Select"), ("Foods", "Foods"),
                                                                           ("Drinks", "Drinks"), ("Fruits", "Fruits")])
     calories = IntegerField('Calories Value')
     fats = IntegerField('Fats Value')
@@ -584,33 +589,33 @@ class Food(Form):
     proteins = IntegerField('Protein Value')
 
 
-@app.route('/new_diet', methods=['GET','POST'])
+@app.route('/new_diet', methods=['GET', 'POST'])
 def new_diet():
     new_form = Food(request.form)
     if request.method == 'POST' and new_form.validate():
-            name = new_form.diet_name.data
-            type = new_form.diet_type.data
-            calories = new_form.calories.data
-            fats = new_form.fats.data
-            carbohydrates = new_form.carbohydrates.data
-            protein = new_form.proteins.data
-            food_diet = Diet(name, type, calories, fats, carbohydrates, protein)
-            food_diet.db = root.child('Food')
-            food_diet.db.push({'Name': food_diet.get_name(),
-                               'Type': food_diet.get_type(),
-                               'Calories Value': food_diet.get_calories(),
-                               'Fats Value': food_diet.get_fats(),
-                               'Carbohydrates Value': food_diet.get_carbohydrates(),
-                               'Protein Value': food_diet.get_protein()
-            })
-            flash('New Diet inserted successfully', 'success')
+        name = new_form.diet_name.data
+        type = new_form.diet_type.data
+        calories = new_form.calories.data
+        fats = new_form.fats.data
+        carbohydrates = new_form.carbohydrates.data
+        protein = new_form.proteins.data
+        food_diet = Diet(name, type, calories, fats, carbohydrates, protein)
+        food_diet.db = root.child('Food')
+        food_diet.db.push({'Name': food_diet.get_name(),
+                           'Type': food_diet.get_type(),
+                           'Calories Value': food_diet.get_calories(),
+                           'Fats Value': food_diet.get_fats(),
+                           'Carbohydrates Value': food_diet.get_carbohydrates(),
+                           'Protein Value': food_diet.get_protein()
+                           })
+        flash('New Diet inserted successfully', 'success')
 
-            return redirect(url_for('diet'))
+        return redirect(url_for('diet'))
 
     return render_template('new_diet.html', form=new_form)
 
 
-@app.route('/update_diet/<string:id>', methods=['GET','POST'])
+@app.route('/update_diet/<string:id>', methods=['GET', 'POST'])
 def update_diet(id):
     update_form = Food(request.form)
     if request.method == 'POST' and update_form.validate():
@@ -620,7 +625,7 @@ def update_diet(id):
         fats = update_form.fats.data
         carbohydrates = update_form.carbohydrates.data
         protein = update_form.proteins.data
-        food_diet = Diet(name,food_type, calories,fats,carbohydrates,protein)
+        food_diet = Diet(name, food_type, calories, fats, carbohydrates, protein)
         Diet_db = root.child('Food/' + id)
         Diet_db.set({'Name': food_diet.get_name(),
                      'Type': food_diet.get_type(),
@@ -651,7 +656,7 @@ def update_diet(id):
 def delete_diet(id):
     Diet_db = root.child('Food/' + id)
     Diet_db.delete()
-    flash('Diet deleted','Success')
+    flash('Diet deleted', 'Success')
 
     return redirect(url_for('diet'))
 
@@ -660,9 +665,9 @@ def delete_diet(id):
 def faq():
     return render_template('faq.html')
 
-
     class ActivityForm(Form):
-    activity = StringField('Activity', [validators.Length(min=1, max=15), validators.DataRequired()])
+        activity = StringField('Activity', [validators.Length(min=1, max=15), validators.DataRequired()])
+
     date = DateField('Start Date', format='%d/%M/%Y')
 
 
@@ -691,7 +696,7 @@ class Activity:
         self.__actID = actID
 
 
-@app.route('/input_activity', methods=['GET','POST'])
+@app.route('/input_activity', methods=['GET', 'POST'])
 def input_activity():
     actform = ActivityForm(request.form)
     if request.method == 'POST' and actform.validate():
@@ -718,15 +723,15 @@ def record():
     return render_template('track_and_record.html', activity=act_list)
 
 
-@app.route('/quiz', methods=['GET','POST'])
+@app.route('/quiz', methods=['GET', 'POST'])
 def quiz():
     new_form = leaderboardform(request.form)
     if request.method == 'POST' and new_form.validate():
         score = new_form.score.data
-        username=session["username"]
-        userscore = leaderboard(username,score)
+        username = session["username"]
+        userscore = leaderboard(username, score)
         userscore.db = root.child('Leaderboard')
-        userscore.db.push({"username":userscore.get_username(),"Score":userscore.get_score()})
+        userscore.db.push({"username": userscore.get_username(), "Score": userscore.get_score()})
         flash('New score inserted successfully', 'success')
 
         return redirect(url_for('leaderboards'))
@@ -739,21 +744,25 @@ def leaderboards():
 
 
 class leaderboard:
-    def __init__(self,username,score):
-        self.__username=username
-        self.__score=score
-    def set_score(self,score):
-        self.__score=score
-    def set_username(self,username):
-        self.__username=username
+    def __init__(self, username, score):
+        self.__username = username
+        self.__score = score
+
+    def set_score(self, score):
+        self.__score = score
+
+    def set_username(self, username):
+        self.__username = username
+
     def get_score(self):
         return self.__score
+
     def get_username(self):
         return self.__username
 
 
 class leaderboardform(Form):
-    score=StringField("Score")
+    score = StringField("Score")
 
 
 @app.route('/rewards')
