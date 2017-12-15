@@ -28,7 +28,8 @@
             <td><a href ="/update_diet/{{eachdiet.get_dietID()}}" class="btn btn-warning btn-lg">Update</a></td>
             <td>
                 <form action="{{ url_for("delete_diet", id=eachdiet.get_dietID())}}" method="POST">
-                <input type ="submit" value="delete" class ="btn btn-danger btn-lg" onclick= "return confirm('Are you sure you want to delete')">
+                <input type ="submit" value="delete" class ="btn btn-danger btn-lg"
+                       onclick= "return confirm('Are you sure you want to delete as data would not be able to recover')">
                 </form>
             </td>
         </tr>
