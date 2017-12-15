@@ -12,8 +12,7 @@
             <th>Fats(%)</th>
             <th>Carbohydrates(%)</th>
             <th>Protein(%)</th>
-            <th></th>
-            <th></th>
+
         </tr>
         </thead>
         <tbody>
@@ -25,8 +24,8 @@
             <td>{{eachdiet.get_fats()}}</td>
             <td>{{eachdiet.get_carbohydrates()}}</td>
             <td>{{eachdiet.get_protein()}}</td>
-            <td><a href ="/update_diet/{{eachdiet.get_dietID()}}" class="btn btn-warning btn-lg">Update</a></td>
-            <td>
+            <td class="updatediet"><a href ="/update_diet/{{eachdiet.get_dietID()}}" class="btn btn-warning btn-lg">Update</a></td>
+            <td class="deletediet">
                 <form action="{{ url_for("delete_diet", id=eachdiet.get_dietID())}}" method="POST">
                 <input type ="submit" value="delete" class ="btn btn-danger btn-lg"
                        onclick= "return confirm('Are you sure you want to delete as data would not be able to recover')">
