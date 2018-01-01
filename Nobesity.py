@@ -366,8 +366,8 @@ def register_info():
                 register_date: str(moreinfo_form.initial_weight.data)
             },
             'birthday': str(moreinfo_form.birth_year.data) +
-                        str(moreinfo_form.birth_month.data) +
-                        str(moreinfo_form.birth_day.data)
+            str(moreinfo_form.birth_month.data) +
+            str(moreinfo_form.birth_day.data)
         })
         return redirect(url_for('register_bp'))
     return render_template('firstTimeRegisterInfo.html', moreinfo_form=moreinfo_form)
@@ -665,9 +665,9 @@ def delete_diet(id):
 def faq():
     return render_template('faq.html')
 
-    class ActivityForm(Form):
-        activity = StringField('Activity', [validators.Length(min=1, max=15), validators.DataRequired()])
 
+class ActivityForm(Form):
+    activity = StringField('Activity', [validators.Length(min=1, max=15), validators.DataRequired()])
     date = DateField('Start Date', format='%d/%M/%Y')
 
 
