@@ -16,7 +16,7 @@
             </section>
             <section id="addition" class="form-group text-center">
                 <button class="btn btn-submit btn-lg" id="activityButton">
-                    <a href="/input_activity">Add activity</a>
+                    <a href="/input_activity">Add An Activity</a>
                 </button>
                 <!--<button class="btn btn-primary btn-lg" id="activityButton" data-toggle="modal" data-target="#addModal">Add activity</button>-->
                 <!--<button class="btn btn-primary btn-lg" id="weightButton" data-toggle="modal" data-target="#logModal">Log your weight</button>-->
@@ -59,51 +59,42 @@
                     <span>Recent activities</span>
                 </div>
                 <div id="bottom" class="overview">
-                    {% for eachact in activity %}
-                    <ul><li>
-                        {{eachact.get_activity()}}
-                        {{eachact.get_date()}}
-                    </li></ul>
-                    <!--<ul><li>
-                        <div class="info">
-                            <span>Running: </span>
-                            <span>3</span>
-                            <span>km</span>
-                        </div>
-                    </li></ul>
-                    <ul><li>
-                        <div class="info">
-                            <span>Zumba: </span>
-                            <span>30</span>
-                            <span>min</span>
-                        </div>
-                    </li></ul>
-                    <ul><li>
-                        <div class="info">
-                            <span>Badminton: </span>
-                            <span>60</span>
-                            <span>min</span>
-                        </div>
-                    </li></ul>-->
-                    {% endfor %}
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>Name Of Activity</th>
+                            <th>Date Of Activity</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {% for eachact in activity %}
+                            <tr>
+
+                                <td>{{eachact.get_activity()}}</td>
+                                <td>{{eachact.get_date()}}</td>
+                            
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </section>
-            <!--bottom section showing the user's weight over a period of time can be shown using a line graph-->
-            <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <!--BOTTOM SECTION showing the user's weight over a period of time can be shown using a line graph-->
+            <!--<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
 					<div class="modal-content">
 					<div class="modal-header">
 					<h5 class="modal-title" id="ModalLabel">Add activity</h5>
 					</div>
-					<!--<div class="modal-body">
+					<div class="modal-body">
 
-					</div> -->
+					</div>
 					<div class="modal-footer">
 
 					</div>
 					</div>
                 </div>
-            </div>
+            </div>-->
     </div>
     </div>
 </div>

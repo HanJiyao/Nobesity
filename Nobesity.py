@@ -667,8 +667,8 @@ def faq():
 
 
 class ActivityForm(Form):
-    activity = StringField('Activity', [validators.Length(min=1, max=15), validators.DataRequired()])
-    date = DateField('Start Date', format='%d/%M/%Y')
+    activity = StringField('Name Of Activity', [validators.Length(min=1, max=15), validators.DataRequired()])
+    date = DateField('Date Of Activity', format='%d/%M/%Y')
 
 
 class Activity:
