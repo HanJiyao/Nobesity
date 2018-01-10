@@ -507,9 +507,9 @@ def profile():
     return render_template('profile.html', user=user_info)
 
 
-@app.route('/plans')
+@app.route('/plan')
 def plans():
-    return render_template('plans.html')
+    return render_template('plan.html')
 
 
 class Diet:
@@ -771,4 +771,4 @@ def rewards():
 
 
 if __name__ == '__main__':
-    app.run(port=80)
+    app.run(port='80')

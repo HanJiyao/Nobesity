@@ -28,9 +28,6 @@ html, body{
     z-index: 1000;
     width: 100%;
 }
-.navbar-brand{
-	font-size:20px!important;
-}
 .navbar-toggler{
 	position:absolute;
 	top:15px;
@@ -39,7 +36,10 @@ html, body{
 .nav-link.dropdown-toggle{
 	width: auto;
 }
-.navbar-brand{
+.nav-link.active{
+	border-bottom:#03A9F4 medium solid !important;
+}
+.navbar-brand {
 	float:left;
 }
 .navbar{
@@ -51,21 +51,18 @@ html, body{
 .navbar-light .nav-link{
 	text-align: center;
 	height: 60px;
-    padding-top: 20px;
-    width: 60px;
+    padding: 1.2rem 1.2rem 0 !important;
 	color: black !important;
-	transition: color 0.3s;
-}
-.nav-link.sep{
-	color:#e0e0e0 !important;
-	width: 10px;
-	padding-right: 30px !important;
-}
-.nav-link.sep:hover{
-	color: #e0e0e0 !important;
+	border-bottom: medium solid white;
+	transition: color 0.3s, border 0.2s, background 0.3s;
 }
 .navbar-light .nav-link:hover{
 	color: #03A9F4!important;
+	background: #f9f9f9;
+	border-bottom:#03A9F4 medium solid;
+}
+#account_login{
+	margin-left: 2rem;
 }
 .account-btn {
 	font-size: 1rem;
@@ -113,6 +110,9 @@ html, body{
 	color: #03A9F4 !important;
 	cursor: pointer;
 }
+.nav-item.dropdown{
+	padding-left:2rem;
+}
 .dropdown-item{
 	text-align: center;
 	z-index: 9999;
@@ -120,6 +120,7 @@ html, body{
 .dropdown-menu{
 	box-shadow:#e0e0e0 3px 3px 10px;
 	z-index: 9999;
+	margin-left: 2rem;
 }
 .footer {
 	color: #e0e0e0;
