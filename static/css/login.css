@@ -8,6 +8,11 @@
 .account-content{
 	padding:50px;
 }
+.email-verify-btn{
+	background: #03A9F4;
+	color: white !important;
+	cursor: pointer;
+}
 .submit-btn{
     display: block;
 	background: #03A9F4;

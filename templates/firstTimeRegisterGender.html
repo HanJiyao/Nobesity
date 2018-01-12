@@ -17,14 +17,14 @@
         var select_male = $("#select_male");
         var select_female = $("#select_female");
         select_male.click(function(){
-            $('#next_btn').attr("style", "background-color: #03A9F4");
+            $('#next_btn').removeAttr("disabled");
             male.prop("checked","True");
             female.removeProp("checked","True");
             select_male.attr("class","col-5 gender-img card active");
             select_female.attr("class","col-5 gender-img card  ml-auto");
         });
         select_female.click(function(){
-            $('#next_btn').attr("style", "background-color: #03A9F4");
+            $('#next_btn').removeAttr("disabled");
             female.prop("checked","True");
             male.removeProp("checked","True");
             select_female.attr("class","col-5 gender-img card  ml-auto active");
@@ -56,7 +56,7 @@
                      {{ render_field(gender_form.gender, class_="radio-inline") }}
 				</div>
            </div>
-                <button type="submit" class="form-control submit-btn" id="next_btn" >Next</button>
+                <button type="submit" class="form-control submit-btn" id="next_btn" disabled>Next</button>
            </div>
         </form>
     </div>

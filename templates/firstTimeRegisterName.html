@@ -15,18 +15,18 @@
             <div class="box-header">Hello {{ session['username'] }}</div>
             <div class="box-text">How Should We Call You?</div>
             <div class="form-group account-content">
-            <div class="row m-auto">
-            <div class="form-group col-md-6  p-0">
-				{{ render_field(name_form.first_name, class_="form-control mt-3 mb-3", placeholder="First Name") }}
-		  	</div>
-		  	<div class="form-group col-md-6  p-0">
-				{{ render_field(name_form.last_name, class_="form-control mt-3 mb-3", placeholder="Last Name") }}
-		  	</div>
-		  	</div>
-		  	<div class="form-group">
-				{{ render_field(name_form.display_name, class_="form-control mt-3 mb-3 ml-auto", placeholder="Display Name") }}
-				<small class="form-control-description text-muted">This is how your name will appear to others. If you want them to search for you, they'll need to know this</small>
-		  	</div>
+{#            <div class="row m-auto">#}
+{#            <div class="form-group col-md-6  p-0">#}
+{#				{{ render_field(name_form.first_name, class_="form-control mt-3 mb-3", placeholder="First Name") }}#}
+{#		  	</div>#}
+{#		  	<div class="form-group col-md-6  p-0">#}
+{#				{{ render_field(name_form.last_name, class_="form-control mt-3 mb-3", placeholder="Last Name") }}#}
+{#		  	</div>#}
+{#		  	</div>#}
+                <div class="form-group">
+                    {{ render_field(name_form.display_name, class_="form-control mt-3 mb-3 ml-auto", placeholder="Display Name") }}
+                    <small class="form-control-description text-muted">This is how your name will appear to others. If you want them to search for you, they'll need to know this</small>
+                </div>
 			<button type="submit" class="form-control submit-btn" style="margin-top: 30px;margin-bottom: 0;">Next</button>
 			</div>
 		</form>

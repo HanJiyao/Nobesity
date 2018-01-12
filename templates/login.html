@@ -18,17 +18,20 @@
         <form method="post" action="" class="main-form" >
             <div class="form-group account-content">
                 <div class="container">
+                    <div class="alert alert-danger col-12 m-auto" style="display:none" id="error_alert">
+                        Invalid Username or Password
+                    </div>
                     <div class="form-row">
                         {{ render_field(form.username, class_="form-control mt-3 mb-3", placeholder="Username / Email") }}
                     </div>
                     <div class="form-row">
                         {{ render_field(form.password, class_="form-control mt-3 mb-3", placeholder="Password") }}
                     </div>
-                    {% if password_check != '' %}
-                        <div class="form-row">
-                            <div class="alert alert-danger col-12 m-auto">Invalid Password</div>
-                        </div>
-                    {% endif %}
+{#                    {% if password_check != '' %}#}
+{#                        <div class="form-row">#}
+{#                            <div class="alert alert-danger col-12 m-auto">Invalid Password</div>#}
+{#                        </div>#}
+{#                    {% endif %}#}
                     <button id="quickstart-sign-in" type="submit" class="form-control submit-btn" value="Login" id="login_button" onclick="userLogin()">LOG IN</button>
                     <div class="psw"><a href="#">Forgot password?</a></div>
                 </div>
@@ -42,12 +45,14 @@
     function userLogin() {
         var email = document.getElementById('username').value;
         var password = document.getElementById('password').value;
-        if (email.length < 4) {
-          alert('Please enter an email address.');
+        if (email.length < 1) {
+          document.getElementById("error_alert").style.display = "block";
+          document.getElementById("error_alert").innerText = "Please enter Username / Email.";
           return;
         }
-        if (password.length < 4) {
-          alert('Please enter a password.');
+        if (password.length < 1) {
+          document.getElementById("error_alert").style.display = "block";
+          document.getElementById("error_alert").innerText = "Please enter Password.";
           return;
         }
         // Sign in with email and pass.
@@ -58,14 +63,16 @@
           var errorMessage = error.message;
           // [START_EXCLUDE]
           if (errorCode === 'auth/wrong-password') {
-            alert('Wrong password.');
+            document.getElementById("error_alert").style.display = "block";
+            document.getElementById("error_alert").innerText = "Invalid Password.";
           } else {
-            alert(errorMessage);
+            document.getElementById("error_alert").style.display = "block";
+            document.getElementById("error_alert").innerText = errorMessage;
           }
           console.log(error);
           // [END_EXCLUDE]
         });
         // [END authwithemail]
-      };
+      }
     </script>
 {% endblock %}

@@ -32,6 +32,9 @@
                         <div class="form-row">
                             {{ render_field(form.confirm, class_="form-control mt-3 mb-3", placeholder="Confirm Passord") }}
                         </div>
+                        <div class="alert alert-danger col-12 m-auto" style="display:none" id="error_alert">
+                            Password Not Match
+                        </div>
                          <button id="quickstart-sign-in" type="submit" class="form-control submit-btn" value="Register" onclick="handleSignUp()">SIGN UP</button>
                     </div>
                 </div>
@@ -40,18 +43,28 @@
         </form>
     </div>
     <script>
+    $(document).ready(function () {
+        $("#password, #confirm").keyup(checkPasswordMatch);
+    });
+    function checkPasswordMatch() {
+        var password = $("#password").val();
+        var confirmPassword = $("#confirm").val();
+
+        if (password != confirmPassword) {
+            $("#error_alert").css('display', 'block');
+            $("#quickstart-sign-in").attr("disabled", "disabled");
+            $("#error_alert").html("Passwords must match");
+        } else{
+            $("#quickstart-sign-in").removeAttr("disabled");
+            $("#error_alert").css('display', 'none');
+        }
+    }
     /**
      * Handles the sign up button press.
      */
     function handleSignUp() {
-      var email = document.getElementById('username').value;
+      var email = document.getElementById('email').value;
       var password = document.getElementById('password').value;
-      if (email.length < 4) {
-        return;
-      }
-      if (password.length < 6) {
-        return;
-      }
       // Sign in with email and pass.
       // [START createwithemail]
       firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
@@ -60,9 +73,7 @@
         var errorMessage = error.message;
         // [START_EXCLUDE]
         if (errorCode == 'auth/weak-password') {
-          alert('The password is too weak.');
         } else {
-          alert(errorMessage);
         }
         console.log(error);
         // [END_EXCLUDE]

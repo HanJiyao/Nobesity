@@ -46,10 +46,6 @@
 #update_info:hover{
 	background-color: #03A9F4 !important;
 }
-#next_btn{
-	background-color: #cccccc;
-	color:white;
-}
 .account-box .form-control{
 	padding: 0.5rem 0.75rem;
 	border-radius: 2px;
