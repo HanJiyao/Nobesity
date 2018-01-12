@@ -29,7 +29,7 @@
                             <div class="alert alert-danger col-12 m-auto">Invalid Password</div>
                         </div>
                     {% endif %}
-                    <button id="quickstart-sign-in" type="submit" class="form-control submit-btn" value="Login" id="login_button">LOG IN</button>
+                    <button id="quickstart-sign-in" type="submit" class="form-control submit-btn" value="Login" id="login_button" onclick="userLogin()">LOG IN</button>
                     <div class="psw"><a href="#">Forgot password?</a></div>
                 </div>
             </div>
@@ -39,14 +39,17 @@
     /**
      * Handles the sign in button press.
      */
-    function toggleSignIn() {
-      if (firebase.auth().currentUser) {
-        // [START signout]
-        firebase.auth().signOut();
-        // [END signout]
-      } else {
-        var email = document.getElementById('email').value;
+    function userLogin() {
+        var email = document.getElementById('username').value;
         var password = document.getElementById('password').value;
+        if (email.length < 4) {
+          alert('Please enter an email address.');
+          return;
+        }
+        if (password.length < 4) {
+          alert('Please enter a password.');
+          return;
+        }
         // Sign in with email and pass.
         // [START authwithemail]
         firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
@@ -54,12 +57,15 @@
           var errorCode = error.code;
           var errorMessage = error.message;
           // [START_EXCLUDE]
-          document.getElementById('quickstart-sign-in').disabled = false;
+          if (errorCode === 'auth/wrong-password') {
+            alert('Wrong password.');
+          } else {
+            alert(errorMessage);
+          }
+          console.log(error);
           // [END_EXCLUDE]
         });
         // [END authwithemail]
-      }
-      document.getElementById('quickstart-sign-in').disabled = true;
-    }
+      };
     </script>
 {% endblock %}

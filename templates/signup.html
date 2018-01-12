@@ -44,12 +44,12 @@
      * Handles the sign up button press.
      */
     function handleSignUp() {
-      var email = document.getElementById('email').value;
+      var email = document.getElementById('username').value;
       var password = document.getElementById('password').value;
       if (email.length < 4) {
         return;
       }
-      if (password.length < 4) {
+      if (password.length < 6) {
         return;
       }
       // Sign in with email and pass.
@@ -60,7 +60,9 @@
         var errorMessage = error.message;
         // [START_EXCLUDE]
         if (errorCode == 'auth/weak-password') {
+          alert('The password is too weak.');
         } else {
+          alert(errorMessage);
         }
         console.log(error);
         // [END_EXCLUDE]
