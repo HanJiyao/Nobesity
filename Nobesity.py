@@ -1,10 +1,12 @@
 from flask import Flask, render_template, request, flash, redirect, url_for, session
 from wtforms import Form, StringField, TextAreaField, RadioField, SelectField, PasswordField, DecimalField, \
     IntegerField, DateField, validators, ValidationError
+from werkzeug.security import generate_password_hash, check_password_hash
 import firebase_admin
 from firebase_admin import credentials, db
 import datetime
 import math
+
 
 cred = credentials.Certificate('./cred/nobesity-it1705-firebase-adminsdk-xo793-bbfa4432da.json')
 default_app = firebase_admin.initialize_app(cred, {'databaseURL': 'https://nobesity-it1705.firebaseio.com/'})
@@ -75,13 +77,15 @@ def login():
         login_id = request.form.to_dict()['username']
         valid = False
         try:
-            if uid_db[login_id]['password'] == request.form.to_dict()['password']:
+            if check_password_hash(pwhash=uid_db[login_id]['pwhash'],
+                                   password=str(request.form.to_dict()['password'])) is True:
                 valid = True
                 session['username'] = login_id
         except KeyError:
             for i in uid_db:
                 if uid_db[i]['email'] == login_id:
-                    if uid_db[i]['password'] == request.form.to_dict()['password']:
+                    if check_password_hash(pwhash=uid_db[i]['pwhash'],
+                                           password=str(request.form.to_dict()['password'])) is True:
                         valid = True
                         session['username'] = i
         finally:
@@ -131,12 +135,12 @@ def signup():
         user_account = UserAccount(
             signup_form.username.data,
             signup_form.email.data,
-            signup_form.password.data
+            generate_password_hash(signup_form.password.data)
         )
         user_db = root.child('UserAccount')
         user_db.child(user_account.get_username()).set({
             'email': user_account.get_email(),
-            'password': user_account.get_password()
+            'pwhash': user_account.get_password()
         })
         session['logged_in'] = True
         session['username'] = signup_form.username.data
@@ -507,9 +511,9 @@ def profile():
     return render_template('profile.html', user=user_info)
 
 
-@app.route('/plans')
+@app.route('/plan')
 def plans():
-    return render_template('plans.html')
+    return render_template('plan.html')
 
 
 class Diet:
@@ -771,4 +775,4 @@ def rewards():
 
 
 if __name__ == '__main__':
-    app.run(port=80)
+    app.run()
