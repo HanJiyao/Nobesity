@@ -42,12 +42,25 @@ class UserAccount:
     def __init__(self, username, email):
         self.username = username
         self.email = email
+        # self.password = password
 
     def get_username(self):
         return self.username
 
     def get_email(self):
         return self.email
+
+    # def get_password(self):
+        # return self.password
+
+
+# def validate_login(form, field):
+#     valid = False
+#     for i in root.child('UserAccount').get():
+#         if field.data == i or field.data == root.child('UserAccount').get()[i]['email']:
+#             valid = True
+#     if valid is False:
+#         raise ValidationError('Invalid User Name or Email')
 
 
 class LoginForm(Form):
@@ -58,16 +71,27 @@ class LoginForm(Form):
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     login_form = LoginForm(request.form)
+    # password_check = ''
     uid_db = root.child('Users/Account').get()
     if request.method == 'POST' and login_form.validate():
         login_id = request.form.to_dict()['username']
         valid = False
+        # try:
+        #     if check_password_hash(pwhash=uid_db[login_id]['pwhash'],
+        #                            password=str(request.form.to_dict()['password'])) is True:
+        #     if
+        #         valid = True
+        #         session['username'] = login_id
+        # except KeyError:
         print(uid_db)
         for i in uid_db:
             print(uid_db[i])
-        if uid_db[i]['email'] == login_id:
-            valid = True
-            session['username'] = i
+            if uid_db[i]['email'] == login_id:
+                # if check_password_hash(pwhash=uid_db[i]['pwhash'],
+                #                        password=str(request.form.to_dict()['password'])) is True:
+                    valid = True
+                    session['username'] = i
+        # finally:
         if valid is False:
             password_check = 'Invalid'
         else:
@@ -119,10 +143,12 @@ def signup():
         user_account = UserAccount(
             signup_form.username.data,
             signup_form.email.data
+            # generate_password_hash(signup_form.password.data)
         )
         user_db = root.child('Users/Account')
         user_db.child(user_account.get_username()).set({
             'email': user_account.get_email(),
+            # 'pwhash': user_account.get_password()
         })
         session['logged_in'] = True
         session['username'] = signup_form.username.data
@@ -146,6 +172,9 @@ def dashboard():
 
 class HealthDetailSetup:
     def __init__(self, gender, birth, height, weight_dict, bp_dict):
+        # self.__first_name = first_name
+        # self.__last_name = last_name
+        # self.__display_name = display_name
         self.__gender = gender
         self.__birth = birth
         self.__height = height
@@ -219,6 +248,15 @@ class HealthDetailSetup:
         elif 0 <= self.__grade < 20:
             self.__grade_display = 'E'
 
+    # def get_first_name(self):
+    #     return self.__first_name
+    #
+    # def get_last_name(self):
+    #     return self.__last_name
+    #
+    # def get_display_name(self):
+    #     return self.__display_name
+
     def get_gender(self):
         return self.__gender
 
@@ -282,6 +320,8 @@ def verify_email():
 
 
 class NameForm(Form):
+    # first_name = StringField('First Name', [validators.length(min=1, max=20), validators.DataRequired()])
+    # last_name = StringField('Last Name', [validators.length(min=1, max=20), validators.DataRequired()])
     display_name = StringField('Display Name', [validators.length(min=1, max=20), validators.DataRequired()])
 
 
@@ -290,6 +330,8 @@ def register_name():
     name_form = NameForm(request.form)
     if request.method == 'POST' and name_form.validate():
         root.child('Users/Account/'+session['username']).update({
+            # 'first_name': name_form.first_name.data,
+            # 'last_name': name_form.last_name.data,
             'display_name': name_form.display_name.data
         })
         return redirect(url_for('register_gender'))
@@ -376,6 +418,9 @@ def register_bp():
 
 
 class UserHealthDetailForm(Form):
+    # first_name = StringField('First Name', [validators.length(min=1, max=20), validators.DataRequired()])
+    # last_name = StringField('Last Name', [validators.length(min=1, max=20), validators.DataRequired()])
+    # display_name = StringField('Display Name', [validators.length(min=1, max=20), validators.DataRequired()])
     gender = RadioField('Gender', [validators.DataRequired()], choices=[('male', 'Male'), ('female', 'Female')])
     initial_weight = DecimalField('Current Weight (kg)', [validators.DataRequired()], places=1)
     birth_day = SelectField(
@@ -407,6 +452,9 @@ def health_detail():
     setup_detail_form = UserHealthDetailForm(request.form)
     uid_db = root.child('Users')
     if request.method == 'POST' and setup_detail_form.validate():
+        # first_name = setup_detail_form.first_name.data
+        # last_name = setup_detail_form.last_name.data
+        # display_name = setup_detail_form.display_name.data
         gender = setup_detail_form.gender.data
         birthday = str(
             setup_detail_form.birth_year.data) + setup_detail_form.birth_month.data + setup_detail_form.birth_day.data
@@ -425,6 +473,8 @@ def health_detail():
             gender, birthday, height, weight_dict, bp_dict
         )
         uid_db.child('HealthDetail/'+session['username']).update({
+            # 'first_name': user_info.get_first_name(),
+            # 'last_name': user_info.get_last_name(),
             'gender': user_info.get_gender(),
             'birthday': user_info.get_birth(),
             'height': user_info.get_height(),
@@ -438,6 +488,9 @@ def health_detail():
         user_info = HealthDetailSetup(user_info_db['gender'], user_info_db['birthday'], user_info_db['height'],
                                       user_info_db['weight_dict'], user_info_db['bp_dict']
                                       )
+        # setup_detail_form.first_name.data = user_info.get_first_name()
+        # setup_detail_form.last_name.data = user_info.get_last_name()
+        # setup_detail_form.display_name.data = user_info.get_display_name()
         setup_detail_form.gender.data = user_info.get_gender()
         setup_detail_form.birth_year.data = user_info.get_birth()[:4]
         setup_detail_form.birth_month.data = user_info.get_birth()[4:6]
