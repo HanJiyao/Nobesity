@@ -34,7 +34,7 @@ class RequiredIf(object):
 @app.route('/')
 def index():
     if session.get('logged_in') is True:
-        return redirect(url_for('timeline'))
+        return redirect(url_for('dashboard'))
     return render_template('home.html')
 
 
@@ -115,15 +115,17 @@ def validate_email(form, field):
 
 class SignUpForm(Form):
     username = StringField('User Name', [
-        validators.length(min=5, max=20),
+        validators.length(min=3, max=20),
         validators.DataRequired(),
         validate_uid])
     email = StringField('Email', [
         validators.email(),
+        validators.length(min=4, max=20),
         validators.DataRequired(),
         validate_email])
     password = PasswordField('Password', [
         validators.DataRequired(),
+        validators.length(min=4, max=20),
         validators.EqualTo('confirm', message='Passwords must match')])
     confirm = PasswordField('Confirm Password')
 
@@ -156,10 +158,10 @@ def logout():
     return redirect(url_for('index'))
 
 
-@app.route('/timeline')
-def timeline():
+@app.route('/dashboard')
+def dashboard():
     session['logged_in'] = True
-    return render_template('timeline.html')
+    return render_template('dashboard.html')
 
 
 class AccountInfoSetup:
@@ -676,11 +678,10 @@ class ActivityForm(Form):
 
 
 class Activity:
-    def __init__(self, activity, date, duration):
+    def __init__(self, activity, date):
         self.__actID = ''
         self.__activity = activity
         self.__date = date
-        self.__duration = duration
 
     def get_activity(self):
         return self.__activity
@@ -691,9 +692,6 @@ class Activity:
     def get_actID(self):
         return self.__actID
 
-    def get_duration(self):
-        return self.__duration
-
     def set_activity(self, activity):
         self.__activity = activity
 
@@ -703,9 +701,6 @@ class Activity:
     def set_actID(self, actID):
         self.__actID = actID
 
-    def set_duration(self, duration):
-        self.__duration = duration
-
 
 @app.route('/input_activity', methods=['GET', 'POST'])
 def input_activity():
@@ -713,10 +708,9 @@ def input_activity():
     if request.method == 'POST' and actform.validate():
         activity = actform.activity.data
         date = str(actform.date.data)
-        duration = int(actform.duration.data)
-        latest_activity = Activity(activity, date, duration)
+        latest_activity = Activity(activity, date)
         latest_activity.db = root.child('Activities')
-        latest_activity.db.push({'Activity': latest_activity.get_activity(), 'Date': latest_activity.get_date(), 'Duration': latest_activity.get_duration()})
+        latest_activity.db.push({'Activity': latest_activity.get_activity(), 'Date': latest_activity.get_date()})
         flash('New activity updated successfully', 'success')
         return redirect(url_for('record'))
 
@@ -729,7 +723,7 @@ def record():
     act_list = []
     for actID in Act_db:
         eachact = Act_db[actID]
-        activities = Activity(eachact['Activity'], eachact['Date'], eachact['Duration'])
+        activities = Activity(eachact['Activity'], eachact['Date'])
         activities.set_actID(actID)
         act_list.append(activities)
     return render_template('track_and_record.html', activity=act_list)
