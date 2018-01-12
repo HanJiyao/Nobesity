@@ -62,18 +62,16 @@ def login():
     if request.method == 'POST' and login_form.validate():
         login_id = request.form.to_dict()['username']
         valid = False
-        print(uid_db)
         for i in uid_db:
-            print(uid_db[i])
-        if uid_db[i]['email'] == login_id:
-            valid = True
-            session['username'] = i
-        if valid is False:
-            password_check = 'Invalid'
-        else:
-            session['logged_in'] = True
-            flash('Welcome Back, ' + session['username'], 'primary')
-            return redirect(url_for('profile'))
+            if uid_db[i]['email'] == login_id:
+                valid = True
+                session['username'] = i
+            if valid is False:
+                password_check = 'Invalid'
+            else:
+                session['logged_in'] = True
+                flash('Welcome Back, ' + session['username'], 'primary')
+                return redirect(url_for('profile'))
 
     return render_template('login.html', form=login_form)
 
