@@ -3,41 +3,55 @@
 {% block body %}
     <div class = 'view_diet'>
     <h1>View Diet</h1>
-    <br/>
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Calories</th>
-            <th>Fats(%)</th>
-            <th>Carbohydrates(%)</th>
-            <th>Protein(%)</th>
-
-        </tr>
-        </thead>
-        <tbody>
-        {% for eachdiet in diet %}
-        <tr>
-            <td>{{eachdiet.get_name()}}</td>
-            <td>{{eachdiet.get_type()}}</td>
-            <td>{{eachdiet.get_calories()}}</td>
-            <td>{{eachdiet.get_fats()}}</td>
-            <td>{{eachdiet.get_carbohydrates()}}</td>
-            <td>{{eachdiet.get_protein()}}</td>
-            <td class="updatediet"><a href ="/update_diet/{{eachdiet.get_dietID()}}" class="btn btn-warning btn-lg">Update</a></td>
-            <td class="deletediet">
-                <form action="{{ url_for("delete_diet", id=eachdiet.get_dietID())}}" method="POST">
-                <input type ="submit" value="delete" class ="btn btn-danger btn-lg"
+    <div class ="newdiet"> <a href="/new_diet"><input type="submit" value="New Diet" class="btn btn-new btn-lg"/></a></div>
+     {% for eachdiet in diet %}
+        <div class="card">
+            <div class="card-header">
+                {% if eachdiet.get_type()=="Fruits"%}
+                    <img src="../static/images/Fruit_Icon.jpg" width="50" height="50">
+                {% elif eachdiet.get_type()=="Foods"%}
+                    <img src="../static/images/Meal_icon.png" width="50" height="50">
+                {% elif eachdiet.get_type()=="Drinks"%}
+                    <img src="../static/images/Drink_icon.png" width="50" height="50">
+                {% endif %}
+                {{ eachdiet.get_type()}}
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">{{eachdiet.get_name()}}</h5>
+                <div class="card-text">
+                <div class ='row'>
+                    <div class ='col-6'>
+                        Calories:{{ eachdiet.get_calories() }}
+                    </div>
+                    <div class ='col-6'>
+                        Fats:{{ eachdiet.get_fats() }}
+                    </div>
+                </div>
+                <div class ='row'>
+                    <div class ='col-6'>
+                        Protein:{{ eachdiet.get_protein() }}
+                    </div>
+                    <div class ='col-6'>
+                        Carbohydrates:{{ eachdiet.get_carbohydrates() }}
+                    </div>
+                </div>
+            </div>
+            <div class ='row'>
+                <div class='col-1'>
+                    <div class="updatediet"><a href ="/update_diet/{{eachdiet.get_dietID()}}" class="btn btn-warning btn-sm">
+                        <i class="material-icons">mode_edit</i></a></div>
+                </div>
+                <div class='col-1'>
+                   <div class="deletediet">
+                    <form action="{{ url_for("delete_diet", id=eachdiet.get_dietID())}}" method="POST">
+                    <input type ="submit" value= 'X' class ="btn btn-danger btn-sm"
                        onclick= "return confirm('Are you sure you want to delete? Data would not be recovered.')">
-                </form>
-            </td>
-        </tr>
-        {% endfor %}
-        <tr>
-            <td> <a href="/new_diet"><input type="submit" value="New Diet" class="btn btn-new btn-lg"/></a></td>
-        </tr>
-        </tbody>
-    </table>
+                    </form>
+                   </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
     </div>
 {% endblock %}
