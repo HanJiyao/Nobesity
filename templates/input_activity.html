@@ -25,6 +25,9 @@
                     <!--<label for="date">Date</label>
 					<input required type="date" class="form-control input-lg col-sm-4" id="date" placeholder="testing">-->
                 </div>
+                <div class="form-group">
+                    {{ render_field(actform.duration, class="form-control") }}
+                </div>
                 <button type="submit" value="submit" class="btn btn-submit btn-lg">Save</button>
                 <button type="button" class="btn btn-submit btn-lg">
                     <a href="/record">Return</a>
