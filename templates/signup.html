@@ -32,11 +32,40 @@
                         <div class="form-row">
                             {{ render_field(form.confirm, class_="form-control mt-3 mb-3", placeholder="Confirm Passord") }}
                         </div>
-                        <button type="submit" class="form-control submit-btn" value="Register">SIGN UP</button>
+                         <button id="quickstart-sign-in" type="submit" class="form-control submit-btn" value="Register" onclick="handleSignUp()">SIGN UP</button>
                     </div>
                 </div>
             </form>
             </div>
         </form>
     </div>
+    <script>
+    /**
+     * Handles the sign up button press.
+     */
+    function handleSignUp() {
+      var email = document.getElementById('email').value;
+      var password = document.getElementById('password').value;
+      if (email.length < 4) {
+        return;
+      }
+      if (password.length < 4) {
+        return;
+      }
+      // Sign in with email and pass.
+      // [START createwithemail]
+      firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        // [START_EXCLUDE]
+        if (errorCode == 'auth/weak-password') {
+        } else {
+        }
+        console.log(error);
+        // [END_EXCLUDE]
+      });
+      // [END createwithemail]
+    }
+    </script>
 {% endblock %}

@@ -13,16 +13,30 @@
             ('/faq', 'faq', 'FAQ')
         ] -%}
         {% set active_page = active_page|default('index') -%}
+
         <ul id="navigation" class="navbar-nav ml-auto">
-        {% for href, id, caption in navigation_bar %}
-            <li class="nav-item">
-                <a href="{{ href|e }}" id="{{ id|e }}"
-                    {% if id == active_page %} class = "nav-link active"
-                    {% else %} class = "nav-link"
-                    {% endif %}>
-                    {{ caption|e }}</a>
-            </li>
-        {% endfor %}
+        {% if session.logged_in %}
+            {% for href, id, caption in navigation_bar %}
+                <li class="nav-item">
+                    <a href="{{ href|e }}" id="{{ id|e }}"
+                        {% if id == active_page %} class = "nav-link active"
+                        {% else %} class = "nav-link"
+                        {% endif %}>
+                        {{ caption|e }}</a>
+                </li>
+            {% endfor %}
+        {% else %}
+           {% for href, id, caption in [('/', 'index', 'Home'), ('/faq', 'faq', 'FAQ')] %}
+                <li class="nav-item">
+                    <a href="{{ href|e }}" id="{{ id|e }}"
+                        {% if id == active_page %} class = "nav-link active"
+                        {% else %} class = "nav-link"
+                        {% endif %}>
+                        {{ caption|e }}
+                    </a>
+                </li>
+            {% endfor %}
+        {% endif %}
         {% if session.logged_in%}
             <li class="nav-item dropdown" id="account_login">
                 <a class="dropdown-toggle account-btn" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -31,7 +45,7 @@
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                     <a class="dropdown-item" href="/profile">Profile</a>
                     <a class="dropdown-item" href="/account/info">Account</a>
-                    <a class="dropdown-item" href="/logout">Log out</a>
+                    <a class="dropdown-item" href="/logout" onClick="firebase.auth().signOut()">Log out</a>
                 </div>
             </li>
         {% else %}
