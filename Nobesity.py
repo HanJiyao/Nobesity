@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, flash, redirect, url_for, session
 from wtforms import Form, StringField, TextAreaField, RadioField, SelectField, PasswordField, DecimalField, \
     IntegerField, DateField, validators, ValidationError
-from werkzeug.security import generate_password_hash, check_password_hash
 import firebase_admin
 from firebase_admin import credentials, db
 import datetime
@@ -61,14 +60,10 @@ def login():
     uid_db = root.child('Users/Account').get()
     if request.method == 'POST' and login_form.validate():
         login_id = request.form.to_dict()['username']
-        valid = False
         for i in uid_db:
             if uid_db[i]['email'] == login_id:
                 valid = True
                 session['username'] = i
-            if valid is False:
-                password_check = 'Invalid'
-            else:
                 session['logged_in'] = True
                 flash('Welcome Back, ' + session['username'], 'primary')
                 return redirect(url_for('profile'))
@@ -272,7 +267,7 @@ class HealthDetailSetup:
         return self.__grade_display
 
 
-@app.route('/setup/email' ,methods=['GET', 'POST'])
+@app.route('/setup/email', methods=['GET', 'POST'])
 def verify_email():
     if request.method == 'POST':
         return redirect(url_for('register_name'))
@@ -462,8 +457,8 @@ def profile():
     uid_db = root.child('Users')
     user_info_db = uid_db.child('HealthDetail/' + session['username']).get()
     user_info = HealthDetailSetup(user_info_db['gender'], user_info_db['birthday'], user_info_db['height'],
-                                 user_info_db['weight_dict'], user_info_db['bp_dict']
-                                 )
+                                  user_info_db['weight_dict'], user_info_db['bp_dict']
+                                  )
     return render_template('profile.html', user=user_info)
 
 
