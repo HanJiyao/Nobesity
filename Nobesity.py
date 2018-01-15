@@ -664,7 +664,6 @@ def input_activity():
     if request.method == 'POST' and actform.validate():
         activity = actform.activity.data
         date = str(actform.date.data)
-        print(date)
         duration = int(actform.duration.data)
         latest_activity = Activity(activity, date, duration)
         latest_activity.db = root.child('Activities')
