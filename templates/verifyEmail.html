@@ -6,15 +6,13 @@
             <div class="box-text">Please Verify your Email</div>
                 <div class="form-group account-content">
                     <div class="row m-auto">
-                        <div class="form-control col-md-6" id="email_display">
+                        <div class="form-control col-md-7" id="email_display">
                             Email
                         </div>
-                        <a class="form-control email-verify-btn col-md-6" id="verify_email" onclick="sendEmailVerification()">
+                        <a class="form-control email-verify-btn col-md-5" id="verify_email" onclick="sendEmailVerification();resendCount()">
                             Send Email Verification
                         </a>
-                        <a class="form-control col-md-6" id="verify_status" style="display:none">
-                            Email Verification sent (<span id="email_timer">30</span>)
-                        </a>
+                        <a class="form-control email-verify-btn col-md-5" id="verify_status" style="display:none; background: #e9ecef; color:#222222">Resend</a>
                     </div>
                 <button type="submit" id="email_confirm" class="form-control submit-btn" style="margin-top: 60px;margin-bottom: 0;" disabled>Next</button>
                 </div>
@@ -31,18 +29,27 @@
         // [START_EXCLUDE]
         document.getElementById("verify_email").style.display = "none";
         document.getElementById("verify_status").style.display = "block";
-        var timeleft = 30;
-        var downloadTimer = setInterval(function(){
-          document.getElementById("email_timer").innerHtml = (30 - --timeleft);
-          if(timeleft <= 0)
-            clearInterval(downloadTimer);
-            document.getElementById("verify_email").style.display = "block";
-            document.getElementById("verify_email").innerText = "Resend Email";
-            document.getElementById("verify_status").style.display = "none"
-        },1000);
-        // [END_EXCLUDE]
       });
       // [END sendemailverification]
+    }
+
+    function resendCount() {
+        var countdownElement = document.getElementById('verify_status'),
+            sendButton = document.getElementById('verify_email'),
+            seconds = 30,
+            second = 0,
+            interval;
+        sendButton.style.display = 'none';
+        countdownElement.style.display = 'block';
+        interval = setInterval(function() {
+            countdownElement.firstChild.data = 'Resend in ' + (seconds - second) + 's';
+            if (second >= seconds) {
+                countdownElement.style.display = 'none';
+                sendButton.style.display = 'block';
+                clearInterval(interval);
+            }
+            second++;
+        }, 1000);
     }
 
     firebase.auth().onAuthStateChanged(function(user) {
@@ -50,6 +57,7 @@
             document.getElementById("email_display").innerText = firebase.auth().currentUser.email;
             document.getElementById("email_confirm").disabled = true;
         } else{
+            document.getElementById("email_display").innerText = firebase.auth().currentUser.email;
             document.getElementById("verify_email").style.display = "none";
             document.getElementById("verify_status").style.display = "block";
             document.getElementById("email_display").style.color = "#64DD17";

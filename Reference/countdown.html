@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="countdown">1</div>
+<div id="email_timer">30</div>
+<script>
+    window.onload = function() {
+    var countdownElement = document.getElementById('countdown'),
+        downloadButton = document.getElementById('download'),
+        seconds = 10,
+        second = 0,
+        interval;
+
+    interval = setInterval(function() {
+        countdownElement.firstChild.data = 'Resend in ' + (seconds - second) + 's';
+        if (second >= seconds) {
+            downloadButton.style.display = 'block';
+            clearInterval(interval);
+        }
+
+        second++;
+    }, 1000);
+}
+</script>
+</body>
+</html>

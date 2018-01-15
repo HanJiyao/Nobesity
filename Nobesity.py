@@ -95,7 +95,6 @@ class SignUpForm(Form):
         validate_uid])
     email = StringField('Email', [
         validators.email(),
-        validators.length(min=4, max=20),
         validators.DataRequired(),
         validate_email])
     password = PasswordField('Password', [
@@ -736,4 +735,4 @@ def rewards():
 
 
 if __name__ == '__main__':
-    app.run(port=80)
+    app.run()
