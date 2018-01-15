@@ -23,8 +23,8 @@
     </script>
 <div class="container text-center profile">
     <div class="user_profile">
-        <h3 id="user_name" class="text-center">{{ user.get_display_name() }}</h3>
-        <div class="header-desc"><span id="user_account" >{{ user.get_first_name()}}  {{ user.get_last_name() }}</span> • Health Report</div>
+        <h3 id="user_name" class="text-center">{{ session['username'] }}</h3>
+        <div class="header-desc">Health Report</div>
         <div id="profile_image">
             <img src="../static/images/health_profile.png" alt="Profile Image">
         </div>

@@ -18,18 +18,21 @@
         <form method="post" action="" class="main-form" >
             <div class="form-group account-content">
                 <div class="container">
+                    <div class="alert alert-danger col-12 m-auto" style="display:none" id="error_alert">
+                        Invalid Username or Password
+                    </div>
                     <div class="form-row">
                         {{ render_field(form.username, class_="form-control mt-3 mb-3", placeholder="Username / Email") }}
                     </div>
                     <div class="form-row">
                         {{ render_field(form.password, class_="form-control mt-3 mb-3", placeholder="Password") }}
                     </div>
-                    {% if password_check != '' %}
-                        <div class="form-row">
-                            <div class="alert alert-danger col-12 m-auto">Invalid Password</div>
-                        </div>
-                    {% endif %}
-                    <button id="quickstart-sign-in" type="submit" class="form-control submit-btn" value="Login" id="login_button">LOG IN</button>
+{#                    {% if password_check != '' %}#}
+{#                        <div class="form-row">#}
+{#                            <div class="alert alert-danger col-12 m-auto">Invalid Password</div>#}
+{#                        </div>#}
+{#                    {% endif %}#}
+                    <button id="quickstart-sign-in" type="submit" class="form-control submit-btn" value="Login" id="login_button" onclick="userLogin()">LOG IN</button>
                     <div class="psw"><a href="#">Forgot password?</a></div>
                 </div>
             </div>
@@ -39,14 +42,19 @@
     /**
      * Handles the sign in button press.
      */
-    function toggleSignIn() {
-      if (firebase.auth().currentUser) {
-        // [START signout]
-        firebase.auth().signOut();
-        // [END signout]
-      } else {
-        var email = document.getElementById('email').value;
+    function userLogin() {
+        var email = document.getElementById('username').value;
         var password = document.getElementById('password').value;
+        if (email.length < 1) {
+          document.getElementById("error_alert").style.display = "block";
+          document.getElementById("error_alert").innerText = "Please enter Username / Email.";
+          return;
+        }
+        if (password.length < 1) {
+          document.getElementById("error_alert").style.display = "block";
+          document.getElementById("error_alert").innerText = "Please enter Password.";
+          return;
+        }
         // Sign in with email and pass.
         // [START authwithemail]
         firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
@@ -54,12 +62,17 @@
           var errorCode = error.code;
           var errorMessage = error.message;
           // [START_EXCLUDE]
-          document.getElementById('quickstart-sign-in').disabled = false;
+          if (errorCode === 'auth/wrong-password') {
+            document.getElementById("error_alert").style.display = "block";
+            document.getElementById("error_alert").innerText = "Invalid Password.";
+          } else {
+            document.getElementById("error_alert").style.display = "block";
+            document.getElementById("error_alert").innerText = errorMessage;
+          }
+          console.log(error);
           // [END_EXCLUDE]
         });
         // [END authwithemail]
       }
-      document.getElementById('quickstart-sign-in').disabled = true;
-    }
     </script>
 {% endblock %}

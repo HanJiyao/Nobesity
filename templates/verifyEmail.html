@@ -1,0 +1,63 @@
+{% extends 'layout.html' %}
+{% block body %}
+    <div class="account-box">
+        <form method="post" action="" class="main-form" >
+            <div class="box-header">Hello {{ session['username'] }}</div>
+            <div class="box-text">Please Verify your Email</div>
+                <div class="form-group account-content">
+                    <div class="row m-auto">
+                        <div class="form-control col-md-6" id="email_display">
+                            Email
+                        </div>
+                        <a class="form-control email-verify-btn col-md-6" id="verify_email" onclick="sendEmailVerification()">
+                            Send Email Verification
+                        </a>
+                        <a class="form-control col-md-6" id="verify_status" style="display:none">
+                            Email Verification sent (<span id="email_timer">30</span>)
+                        </a>
+                    </div>
+                <button type="submit" id="email_confirm" class="form-control submit-btn" style="margin-top: 60px;margin-bottom: 0;" disabled>Next</button>
+                </div>
+		</form>
+    </div>
+    <script>
+    /**
+     * Sends an email verification to the user.
+     */
+    function sendEmailVerification() {
+      // [START sendemailverification]
+      firebase.auth().currentUser.sendEmailVerification().then(function() {
+        // Email Verification sent!
+        // [START_EXCLUDE]
+        document.getElementById("verify_email").style.display = "none";
+        document.getElementById("verify_status").style.display = "block";
+        var timeleft = 30;
+        var downloadTimer = setInterval(function(){
+          document.getElementById("email_timer").innerHtml = (30 - --timeleft);
+          if(timeleft <= 0)
+            clearInterval(downloadTimer);
+            document.getElementById("verify_email").style.display = "block";
+            document.getElementById("verify_email").innerText = "Resend Email";
+            document.getElementById("verify_status").style.display = "none"
+        },1000);
+        // [END_EXCLUDE]
+      });
+      // [END sendemailverification]
+    }
+
+    firebase.auth().onAuthStateChanged(function(user) {
+        if (firebase.auth().currentUser.emailVerified == false){
+            document.getElementById("email_display").innerText = firebase.auth().currentUser.email;
+            document.getElementById("email_confirm").disabled = true;
+        } else{
+            document.getElementById("verify_email").style.display = "none";
+            document.getElementById("verify_status").style.display = "block";
+            document.getElementById("email_display").style.color = "#64DD17";
+            document.getElementById("verify_status").style.background = "#64DD17";
+            document.getElementById("verify_status").style.color = "white";
+            document.getElementById("verify_status").innerText = "Verification Complete";
+            document.getElementById("email_confirm").disabled = false
+        }
+    });
+    </script>
+{% endblock %}
