@@ -674,7 +674,7 @@ def faq():
 
 class ActivityForm(Form):
     activity = StringField('Name Of Activity', [validators.Length(min=1, max=20), validators.DataRequired()])
-    date = DateField('Date Of Activity', format='%d/%M/%Y')
+    date = DateField('Date Of Activity', format='%d-%M-%Y')
     duration = IntegerField('Duration Of Activity')
 
 
@@ -716,6 +716,7 @@ def input_activity():
     if request.method == 'POST' and actform.validate():
         activity = actform.activity.data
         date = str(actform.date.data)
+        print(date)
         duration = int(actform.duration.data)
         latest_activity = Activity(activity, date, duration)
         latest_activity.db = root.child('Activities')
