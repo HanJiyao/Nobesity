@@ -15,7 +15,7 @@
             <div class="link-box col-6"><a href="/login">LOG IN</a></div>
             <div class="current-box col-6">SIGN UP</div>
         </div>
-        <form method="post" action="" class="main-form" >
+        <form method="post" action="" class="main-form" id="signup_form" >
             <div class="form-group account-content">
             <form action="" class="" >
                 <div class="form-group">
@@ -24,7 +24,7 @@
                             <div class="form-control alert alert-danger col-12 mt-mb-3" id="error_alert" style="display: none"></div>
                         </div>
                         <div class="form-row">
-                            {{ render_field(form.username, class_="form-control mt-3 mb-3", placeholder="Username") }}
+                            {{ render_field(form.username, class_="form-control mt-3 mb-3", placeholder="Username", onblur="checkIfUserExits()") }}
                         </div>
                         <div class="form-row">
                             {{ render_field(form.email, class_="form-control mt-3 mb-3", placeholder="Email") }}
@@ -40,7 +40,7 @@
                                 Password Not Match
                             </div>
                         </div>
-                         <button id="quickstart-sign-in" type="button" class="form-control submit-btn" value="Register" onclick="handleSignUp();signupRedirect()">SIGN UP</button>
+                         <button id="quickstart-sign-in" type="button" class="form-control submit-btn" value="Register" onclick="handleSignUp();signupRedirect()" disabled>SIGN UP</button>
                     </div>
                 </div>
             </form>
@@ -48,53 +48,99 @@
         </form>
     </div>
     <script>
-    $(document).ready(function () {
-        $("#password, #confirm").keyup(checkPasswordMatch);
-    });
-    function checkPasswordMatch() {
-        var password = $("#password").val();
-        var confirmPassword = $("#confirm").val();
-
-        if (password != confirmPassword) {
-            $("#error_alert").css('display', 'block');
-            $("#quickstart-sign-in").attr("disabled", "disabled");
-            $("#error_alert").html("Passwords must match");
-        } else{
-            $("#quickstart-sign-in").removeAttr("disabled");
-            $("#error_alert").css('display', 'none');
+        $(document).ready(function () {
+            $("#password, #confirm").keyup(checkPasswordMatch);
+        });
+        function checkPasswordMatch() {
+            var password = $("#password").val();
+            var confirmPassword = $("#confirm").val();
+            var error_alert = $("#error_alert");
+            if (password != confirmPassword) {
+                error_alert.css('display', 'block');
+                $("#quickstart-sign-in").attr("disabled", "disabled");
+                error_alert.html("Passwords must match");
+            } else{
+                $("#quickstart-sign-in").removeAttr("disabled");
+                error_alert.css('display', 'none');
+            }
         }
-    }
-    /**
-     * Handles the sign up button press.
-     */
-    function handleSignUp() {
-      var email = document.getElementById('email').value;
-      var password = document.getElementById('password').value;
-      // Sign in with email and pass.
-      // [START createwithemail]
-      firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
-        // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        // [START_EXCLUDE]
-        if (errorCode === 'auth/wrong-password') {
-            document.getElementById("error_alert").style.display = "block";
-            document.getElementById("error_alert").innerText = "Invalid Password.";
-          } else {
-            document.getElementById("error_alert").style.display = "block";
-            document.getElementById("error_alert").innerText = errorMessage;
-          }
-          console.log(error);
-        // [END_EXCLUDE]
-      });
-      // [END createwithemail]
-    }
-    function signupRedirect() {
-          firebase.auth().onAuthStateChanged(function (user) {
-              if (user) {
-                  document.getElementById("login_form").submit()
-              }
-          })
-      }
+        /**
+        * Handles the sign up button press.
+        */
+        //check on username database
+        function checkIfUserExits() {
+            var userName = document.getElementById('username').value;
+            if (userName != "") {
+                var query = firebase.database().ref("Users");
+                query.child(userName).once('value', function (snapshot) {
+                    var exists = (snapshot.val() !== null);
+                    if (exists) {
+                        document.getElementById("error_alert").style.display = "block";
+                        document.getElementById("error_alert").innerText = "That username is taken. Try another";
+                        $("#quickstart-sign-in").attr("disabled", "disabled");
+                    } else {
+                        document.getElementById("error_alert").style.display = "none";
+                        $("#quickstart-sign-in").removeAttr("disabled");
+                    }
+                });
+            }
+        }
+
+        function handleSignUp() {
+            // check username again
+            var userName = document.getElementById('username').value;
+            var query = firebase.database().ref("Users");
+            query.child(userName).once('value', function(snapshot) {
+                var exists = (snapshot.val() !== null);
+                if (exists) {
+                    document.getElementById("error_alert").style.display = "block";
+                    document.getElementById("error_alert").innerText = "That username is taken. Try another";
+                    $("#quickstart-sign-in").attr("disabled", "disabled");
+                } else {
+                    var username = document.getElementById('username').value;
+                    var email = document.getElementById('email').value;
+                    var password = document.getElementById('password').value;
+                    if (username.length < 1) {
+                        document.getElementById("error_alert").style.display = "block";
+                        document.getElementById("error_alert").innerText = "Please enter Username.";
+                        return;
+                    }
+                    if (email.length < 1) {
+                        document.getElementById("error_alert").style.display = "block";
+                        document.getElementById("error_alert").innerText = "Please enter Email.";
+                        return;
+                    }
+                    if (password.length < 1) {
+                        document.getElementById("error_alert").style.display = "block";
+                        document.getElementById("error_alert").innerText = "Please enter Password.";
+                        return;
+                    }
+                    // Sign in with email and pass.
+                    // [START createwithemail]
+                    firebase.auth().createUserWithEmailAndPassword(email, password).catch(function (error) {
+                        // Handle Errors here.
+                        var errorCode = error.code;
+                        var errorMessage = error.message;
+                        // [START_EXCLUDE]
+                        if (errorCode == 'auth/weak-password') {
+                            document.getElementById("error_alert").style.display = "block";
+                            document.getElementById("error_alert").innerText = "Invalid Password.";
+                        } else {
+                            document.getElementById("error_alert").style.display = "block";
+                            document.getElementById("error_alert").innerText = errorMessage;
+                        }
+                        console.log(error);
+                    })
+                    // [END createwithemail]
+                }
+            })
+        }
+        function signupRedirect() {
+            firebase.auth().onAuthStateChanged(function (user) {
+                if (user) {
+                    document.getElementById("signup_form").submit()
+                }
+            })
+        }
     </script>
 {% endblock %}

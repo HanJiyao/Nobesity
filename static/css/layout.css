@@ -149,7 +149,7 @@ html, body{
 	font-weight: 500;
 	width: 100%;
 	border-radius: 0;
-	z-index: 1100;
+	z-index: 1;
 	box-shadow:#e0e0e0 0 3px 20px;
 }
 .alert.alert-success.alert-dismissable{

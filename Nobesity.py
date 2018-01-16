@@ -49,27 +49,19 @@ class UserAccount:
         return self.email
 
 
-def validate_login_email(form, field):
-    email_list = []
-    for i in root.child('Users/Account').get():
-        email_list.append(root.child('Users/Account').get()[i]['email'].lower())
-    if field.data.lower() not in email_list:
-        raise ValidationError('The Email is invalid')
-
-
 class LoginForm(Form):
-    username = StringField('Email / User Name', [validate_login_email])
+    username = StringField('Email / User Name')
     password = PasswordField('Password')
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     login_form = LoginForm(request.form)
-    uid_db = root.child('Users/Account').get()
+    uid_db = root.child('Users').get()
     if request.method == 'POST' and login_form.validate():
         login_id = request.form.to_dict()['username']
         for i in uid_db:
-            if uid_db[i]['email'] == login_id:
+            if uid_db[i]['email'] == login_id or login_id == i:
                 session['username'] = i
                 session['logged_in'] = True
                 flash('Welcome Back, ' + session['username'], 'primary')
@@ -78,33 +70,10 @@ def login():
     return render_template('login.html', form=login_form)
 
 
-def validate_uid(form, field):
-    for i in root.child('Users/Account').get():
-        if field.data == i:
-            raise ValidationError('The username is already registered')
-
-
-def validate_email(form, field):
-    for i in root.child('Users/Account').get():
-        if field.data == root.child('Users/Account').get()[i]['email']:
-            raise ValidationError('The Email is already registered')
-        else:
-            pass
-
-
 class SignUpForm(Form):
-    username = StringField('User Name', [
-        validators.length(min=4, max=20),
-        validators.DataRequired(),
-        validate_uid])
-    email = StringField('Email', [
-        validators.email(),
-        validators.DataRequired(),
-        validate_email])
-    password = PasswordField('Password', [
-        validators.DataRequired(),
-        validators.length(min=6, max=20),
-        validators.EqualTo('confirm', message='Passwords must match')])
+    username = StringField('User Name')
+    email = StringField('Email')
+    password = PasswordField('Password')
     confirm = PasswordField('Confirm Password')
 
 
@@ -116,14 +85,15 @@ def signup():
             signup_form.username.data,
             signup_form.email.data
         )
-        user_db = root.child('Users/Account')
+        user_db = root.child('Users')
         user_db.child(user_account.get_username()).set({
             'email': user_account.get_email(),
         })
         session['logged_in'] = True
         session['username'] = signup_form.username.data
-        flash('You are successfully signed up as ' + session['username'], 'success')
+        flash('You are successfully signed up as '+session['username'], 'success')
         return redirect(url_for('verify_email'))
+
     return render_template('signup.html', form=signup_form)
 
 
@@ -193,13 +163,13 @@ class HealthDetailSetup:
             self.__bmi_grade = 20
         self.__bfp_grade = 0
         if gender == 'male':
-            if 21 < self.__bfp < 30:
+            if self.__bfp < 30:
                 self.__bfp_grade = 20
         if gender == 'female':
-            if 14 < self.__bfp < 25:
+            if self.__bfp < 25:
                 self.__bfp_grade = 20
         self.__bp_grade = 0
-        if 120 < self.__current_systolic < 140 and 80 < self.__current_diastolic < 90:
+        if 90 < self.__current_systolic < 120 and 60 < self.__current_diastolic < 80:
             self.__bp_grade = 20
         self.__grade = (self.__diet_grade + self.__quiz_grade + self.__activity_grade + self.__plan_grade +
                         self.__bmi_grade + self.__bfp_grade + self.__bp_grade)
@@ -284,7 +254,7 @@ class NameForm(Form):
 def register_name():
     name_form = NameForm(request.form)
     if request.method == 'POST' and name_form.validate():
-        root.child('Users/Account/'+session['username']).update({
+        root.child('Users/'+session['username']).update({
             'display_name': name_form.display_name.data
         })
         return redirect(url_for('register_gender'))
@@ -299,7 +269,7 @@ class GenderForm(Form):
 def register_gender():
     gender_form = GenderForm(request.form)
     if request.method == 'POST' and gender_form.validate():
-        root.child('Users/HealthDetail/'+session['username']).update({
+        root.child('HealthDetail/'+session['username']).update({
             'gender': gender_form.gender.data,
         })
         return redirect(url_for('register_info'))
@@ -332,15 +302,15 @@ def register_info():
     moreinfo_form = MoreInfoForm(request.form)
     register_date = '{:%Y%m%d}'.format(datetime.date.today())
     if request.method == 'POST' and moreinfo_form.validate():
-        root.child('Users/HealthDetail/'+session['username']).update({
+        root.child('HealthDetail/'+session['username']).update({
             'height': str(moreinfo_form.height.data),
-            'weight_dict': {
-                register_date: str(moreinfo_form.initial_weight.data)
-            },
             'birthday': str(moreinfo_form.birth_year.data) +
             str(moreinfo_form.birth_month.data) +
             str(moreinfo_form.birth_day.data)
         })
+        root.child('Weight/'+session['username']).update({
+            register_date: str(moreinfo_form.initial_weight.data)
+        }),
         return redirect(url_for('register_bp'))
     return render_template('firstTimeRegisterInfo.html', moreinfo_form=moreinfo_form)
 
@@ -356,13 +326,11 @@ def register_bp():
     bp_info_form = BpInfoForm(request.form)
     register_time = '{:%Y%m%d%H%M}'.format(datetime.datetime.now())
     if request.method == 'POST' and bp_info_form.validate():
-        root.child('Users/HealthDetail/'+session['username']).update({
-            'bp_dict': {
-                register_time: {
-                    'systolic': str(bp_info_form.systol.data),
-                    'diastolic': str(bp_info_form.diastol.data),
-                    'pulse': str(bp_info_form.pulse.data)
-                }
+        root.child('BloodPressure/'+session['username']).update({
+            register_time: {
+                'systolic': str(bp_info_form.systol.data),
+                'diastolic': str(bp_info_form.diastol.data),
+                'pulse': str(bp_info_form.pulse.data)
             }
         })
         flash('You have Completed the Account Setup', 'success')
@@ -400,7 +368,7 @@ def health_detail():
     setup_date = '{:%Y%m%d}'.format(datetime.date.today())
     setup_time = '{:%Y%m%d%H%M}'.format(datetime.datetime.now())
     setup_detail_form = UserHealthDetailForm(request.form)
-    uid_db = root.child('Users')
+    uid_db = root
     if request.method == 'POST' and setup_detail_form.validate():
         gender = setup_detail_form.gender.data
         birthday = str(
@@ -423,15 +391,25 @@ def health_detail():
             'gender': user_info.get_gender(),
             'birthday': user_info.get_birth(),
             'height': user_info.get_height(),
-            'weight_dict': user_info.get_weight_dict(),
-            'bp_dict': user_info.get_bp_dict()
+
         })
+        for i in user_info.get_weight_dict():
+            uid_db.child('Weight/' + session['username']).update({
+                i: user_info.get_weight_dict()[i]
+            })
+        for i in user_info.get_bp_dict():
+            uid_db.child('BloodPressure/' + session['username']).update({
+                i: user_info.get_bp_dict()[i]
+            })
         flash('Health Details Updated Successfully', 'success')
         return redirect(url_for('health_detail'))
     else:
-        user_info_db = uid_db.child('HealthDetail/'+session['username']).get()
+        uid_db = root
+        user_info_db = uid_db.child('HealthDetail/' + session['username']).get()
+        user_weight_db = uid_db.child('Weight/' + session['username']).get()
+        user_bp_db = uid_db.child('BloodPressure/' + session['username']).get()
         user_info = HealthDetailSetup(user_info_db['gender'], user_info_db['birthday'], user_info_db['height'],
-                                      user_info_db['weight_dict'], user_info_db['bp_dict']
+                                      user_weight_db, user_bp_db
                                       )
         setup_detail_form.gender.data = user_info.get_gender()
         setup_detail_form.birth_year.data = user_info.get_birth()[:4]
@@ -456,10 +434,12 @@ def health_detail():
 
 @app.route('/profile')
 def profile():
-    uid_db = root.child('Users')
+    uid_db = root
     user_info_db = uid_db.child('HealthDetail/' + session['username']).get()
+    user_weight_db = uid_db.child('Weight/' + session['username']).get()
+    user_bp_db = uid_db.child('BloodPressure/' + session['username']).get()
     user_info = HealthDetailSetup(user_info_db['gender'], user_info_db['birthday'], user_info_db['height'],
-                                  user_info_db['weight_dict'], user_info_db['bp_dict']
+                                  user_weight_db, user_bp_db
                                   )
     return render_template('profile.html', user=user_info)
 

@@ -27,54 +27,74 @@
                     <div class="form-row">
                         {{ render_field(form.password, class_="form-control mt-3 mb-3", placeholder="Password") }}
                     </div>
-                    <button id="quickstart-sign-in" type="button" class="form-control submit-btn" value="Login" id="login_button" onclick="userLogin();loginRedirect()">LOG IN</button>
+                    <button id="quickstart-sign-in" type="button" class="form-control submit-btn" value="Login" id="login_button" onclick="replaceEmail();loginRedirect1()">LOG IN</button>
                     <div class="psw"><a href="#">Forgot password?</a></div>
                 </div>
             </div>
         </form>
 	</div>
     <script>
-    /**
-     * Handles the sign in button press.
-     */
-    function userLogin() {
-        var email = document.getElementById('username').value;
-        var password = document.getElementById('password').value;
-        if (email.length < 1) {
-          document.getElementById("error_alert").style.display = "block";
-          document.getElementById("error_alert").innerText = "Please enter Email.";
-          return;
+        /**
+         * Handles the sign in button press.
+         */
+        function replaceEmail() {
+            var usersRef = firebase.database().ref('Users');
+            var login_id = document.getElementById('username').value;
+            usersRef.on('value', function (snapshot) {
+                snapshot.forEach(function (childSnapshot) {
+                    var userName = childSnapshot.key;
+                    var db_email = childSnapshot.child('email').val();
+                    if (login_id == userName) {
+                        document.getElementById('username').value = db_email;
+                    }
+                    handleLogin()
+                })
+            });
         }
-        if (password.length < 1) {
-          document.getElementById("error_alert").style.display = "block";
-          document.getElementById("error_alert").innerText = "Please enter Password.";
-          return;
+
+        function handleLogin() {
+            document.getElementById("error_alert").style.display = "none";
+            var email = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+            if (email.length < 1) {
+                document.getElementById("error_alert").style.display = "block";
+                document.getElementById("error_alert").innerText = "Please enter Email.";
+                return;
+            }
+            if (password.length < 1) {
+                document.getElementById("error_alert").style.display = "block";
+                document.getElementById("error_alert").innerText = "Please enter Password.";
+                return;
+            }
+            // Sign in with email and pass.
+            // [START authwithemail]
+            firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+                // Handle Errors here.
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                // [START_EXCLUDE]
+                if (errorCode === 'auth/wrong-password') {
+                    document.getElementById("error_alert").style.display = "block";
+                    document.getElementById("error_alert").innerText = "Invalid Password.";
+                } else if (errorCode === 'auth/invalid-email'){
+                    document.getElementById("error_alert").style.display = "block";
+                    document.getElementById("error_alert").innerText = "Invalid Username or Email";
+                } else {
+                    document.getElementById("error_alert").style.display = "block";
+                    document.getElementById("error_alert").innerText = errorMessage;
+                }
+                console.log(error);
+                // [END_EXCLUDE]
+            });
+            // [END authwithemail]
         }
-        // Sign in with email and pass.
-        // [START authwithemail]
-        firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
-          // Handle Errors here.
-          var errorCode = error.code;
-          var errorMessage = error.message;
-          // [START_EXCLUDE]
-          if (errorCode === 'auth/wrong-password') {
-            document.getElementById("error_alert").style.display = "block";
-            document.getElementById("error_alert").innerText = "Invalid Password.";
-          } else {
-            document.getElementById("error_alert").style.display = "block";
-            document.getElementById("error_alert").innerText = errorMessage;
-          }
-          console.log(error);
-          // [END_EXCLUDE]
-        });
-        // [END authwithemail]
-      }
-      function loginRedirect() {
-          firebase.auth().onAuthStateChanged(function (user) {
-              if (user) {
-                  document.getElementById("login_form").submit()
-              }
-          })
-      }
+
+        function loginRedirect1() {
+            firebase.auth().onAuthStateChanged(function (user) {
+                if (user) {
+                    document.getElementById("login_form").submit()
+                }
+            })
+        }
     </script>
 {% endblock %}
