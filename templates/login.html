@@ -15,11 +15,11 @@
             <div class="current-box col-6">LOG IN</div>
             <div class="link-box col-6"><a href="/signup">SIGN UP</a></div>
         </div>
-        <form method="post" action="" class="main-form" >
+        <form method="post" action="" class="main-form" id="login_form">
             <div class="form-group account-content">
                 <div class="container">
-                    <div class="alert alert-danger col-12 m-auto" style="display:none" id="error_alert">
-                        Invalid Username or Password
+                    <div class="form-row">
+                        <div class="form-control alert alert-danger col-12 mt-mb-3" id="error_alert" style="display: none"></div>
                     </div>
                     <div class="form-row">
                         {{ render_field(form.username, class_="form-control mt-3 mb-3", placeholder="Username / Email") }}
@@ -27,12 +27,7 @@
                     <div class="form-row">
                         {{ render_field(form.password, class_="form-control mt-3 mb-3", placeholder="Password") }}
                     </div>
-{#                    {% if password_check != '' %}#}
-{#                        <div class="form-row">#}
-{#                            <div class="alert alert-danger col-12 m-auto">Invalid Password</div>#}
-{#                        </div>#}
-{#                    {% endif %}#}
-                    <button id="quickstart-sign-in" type="submit" class="form-control submit-btn" value="Login" id="login_button" onclick="userLogin()">LOG IN</button>
+                    <button id="quickstart-sign-in" type="button" class="form-control submit-btn" value="Login" id="login_button" onclick="userLogin();loginRedirect()">LOG IN</button>
                     <div class="psw"><a href="#">Forgot password?</a></div>
                 </div>
             </div>
@@ -47,7 +42,7 @@
         var password = document.getElementById('password').value;
         if (email.length < 1) {
           document.getElementById("error_alert").style.display = "block";
-          document.getElementById("error_alert").innerText = "Please enter Username / Email.";
+          document.getElementById("error_alert").innerText = "Please enter Email.";
           return;
         }
         if (password.length < 1) {
@@ -73,6 +68,13 @@
           // [END_EXCLUDE]
         });
         // [END authwithemail]
+      }
+      function loginRedirect() {
+          firebase.auth().onAuthStateChanged(function (user) {
+              if (user) {
+                  document.getElementById("login_form").submit()
+              }
+          })
       }
     </script>
 {% endblock %}

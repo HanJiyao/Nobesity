@@ -21,6 +21,9 @@
                 <div class="form-group">
                     <div class="container">
                         <div class="form-row">
+                            <div class="form-control alert alert-danger col-12 mt-mb-3" id="error_alert" style="display: none"></div>
+                        </div>
+                        <div class="form-row">
                             {{ render_field(form.username, class_="form-control mt-3 mb-3", placeholder="Username") }}
                         </div>
                         <div class="form-row">
@@ -32,10 +35,12 @@
                         <div class="form-row">
                             {{ render_field(form.confirm, class_="form-control mt-3 mb-3", placeholder="Confirm Passord") }}
                         </div>
-                        <div class="alert alert-danger col-12 m-auto" style="display:none" id="error_alert">
-                            Password Not Match
+                        <div class="form-row">
+                            <div class="alert alert-danger col-12 m-auto" style="display:none" id="error_alert">
+                                Password Not Match
+                            </div>
                         </div>
-                         <button id="quickstart-sign-in" type="submit" class="form-control submit-btn" value="Register" onclick="handleSignUp()">SIGN UP</button>
+                         <button id="quickstart-sign-in" type="button" class="form-control submit-btn" value="Register" onclick="handleSignUp();signupRedirect()">SIGN UP</button>
                     </div>
                 </div>
             </form>
@@ -72,13 +77,24 @@
         var errorCode = error.code;
         var errorMessage = error.message;
         // [START_EXCLUDE]
-        if (errorCode == 'auth/weak-password') {
-        } else {
-        }
-        console.log(error);
+        if (errorCode === 'auth/wrong-password') {
+            document.getElementById("error_alert").style.display = "block";
+            document.getElementById("error_alert").innerText = "Invalid Password.";
+          } else {
+            document.getElementById("error_alert").style.display = "block";
+            document.getElementById("error_alert").innerText = errorMessage;
+          }
+          console.log(error);
         // [END_EXCLUDE]
       });
       // [END createwithemail]
     }
+    function signupRedirect() {
+          firebase.auth().onAuthStateChanged(function (user) {
+              if (user) {
+                  document.getElementById("login_form").submit()
+              }
+          })
+      }
     </script>
 {% endblock %}

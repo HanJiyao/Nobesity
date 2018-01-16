@@ -49,8 +49,16 @@ class UserAccount:
         return self.email
 
 
+def validate_login_email(form, field):
+    email_list = []
+    for i in root.child('Users/Account').get():
+        email_list.append(root.child('Users/Account').get()[i]['email'].lower())
+    if field.data.lower() not in email_list:
+        raise ValidationError('The Email is invalid')
+
+
 class LoginForm(Form):
-    username = StringField('Email / User Name')
+    username = StringField('Email / User Name', [validate_login_email])
     password = PasswordField('Password')
 
 
@@ -62,7 +70,6 @@ def login():
         login_id = request.form.to_dict()['username']
         for i in uid_db:
             if uid_db[i]['email'] == login_id:
-                valid = True
                 session['username'] = i
                 session['logged_in'] = True
                 flash('Welcome Back, ' + session['username'], 'primary')
@@ -79,12 +86,9 @@ def validate_uid(form, field):
 
 def validate_email(form, field):
     for i in root.child('Users/Account').get():
-        try:
-            if field.data == root.child('Users/Account').get()[i]['email']:
-                raise ValidationError('The Email is already registered')
-        except KeyError:
-            pass
-        except TypeError:
+        if field.data == root.child('Users/Account').get()[i]['email']:
+            raise ValidationError('The Email is already registered')
+        else:
             pass
 
 
@@ -132,7 +136,6 @@ def logout():
 
 @app.route('/dashboard')
 def dashboard():
-    session['logged_in'] = True
     return render_template('dashboard.html')
 
 
