@@ -110,7 +110,7 @@ def dashboard():
 
 
 class HealthDetailSetup:
-    def __init__(self, gender, birth, height, weight_dict, bp_dict):
+    def __init__(self, gender, birth, height, weight_dict, bp_dict={}):
         self.__gender = gender
         self.__birth = birth
         self.__height = height

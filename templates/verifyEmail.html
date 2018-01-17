@@ -3,18 +3,20 @@
     <div class="account-box">
         <form method="post" action="" class="main-form" >
             <div class="box-header">Hello {{ session['username'] }}</div>
-            <div class="box-text">Please Verify your Email</div>
+            <div class="box-text">Please Verify your Email First</div>
                 <div class="form-group account-content">
-                    <div class="row m-auto">
-                        <div class="form-control col-md-7" id="email_display">
+                    <div class="form-group">
+                        <div class="form-control" id="email_display">
                             Email
                         </div>
-                        <a class="form-control email-verify-btn col-md-5" id="verify_email" onclick="sendEmailVerification();resendCount()">
+                    </div>
+                    <div class="form-group">
+                        <a class="form-control email-verify-btn mb-3" id="verify_email" onclick="sendEmailVerification();resendCount()">
                             Send Email Verification
                         </a>
-                        <a class="form-control email-verify-btn col-md-5" id="verify_status" style="display:none; background: #e9ecef; color:#222222">Resend</a>
+                        <a class="form-control email-verify-btn mb-3" id="verify_status" style="display:none; background: #e9ecef; color:#222222">Resend</a>
                     </div>
-                <button type="submit" id="email_confirm" class="form-control submit-btn" style="margin-top: 60px;margin-bottom: 0;" disabled>Next</button>
+                <button type="submit" id="email_confirm" class="form-control submit-btn mt-5" disabled>Next</button>
                 </div>
 		</form>
     </div>
