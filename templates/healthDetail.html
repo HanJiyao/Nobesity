@@ -126,21 +126,21 @@
           </div>
       <div class="form-row col-12 mt-3 mx-auto">
           {% if setup_detail_form['birth_day'].errors %}
-              <div class="alert alert-danger col-12">
+              <div class="alert alert-danger col-12 pt-0 pd-0">
                 {% for error in setup_detail_form['birth_day'].errors %}
                     <div>{{ setup_detail_form['birth_day'].label }} : {{ error }}</div>
                 {% endfor %}
               </div>
           {% endif %}
           {% if setup_detail_form['birth_month'].errors %}
-              <div  class="alert alert-danger col-12">
+              <div  class="alert alert-danger col-12 pt-0 pd-0">
                 {% for error in setup_detail_form['birth_month'].errors %}
                     <div>{{ setup_detail_form['birth_month'].label }} : {{ error }}</div>
                 {% endfor %}
               </div>
           {% endif %}
           {% if setup_detail_form['birth_year'].errors %}
-              <div class="alert alert-danger col-12">
+              <div class="alert alert-danger col-12 pt-0 pd-0">
                 {% for error in setup_detail_form['birth_year'].errors %}
                     <div> {{ setup_detail_form['birth_year'].label }} : {{ error }}</div>
                 {% endfor %}
@@ -156,7 +156,7 @@
           </div>
       <div class="form-row col-12 mt-3 mx-auto">
           {% if setup_detail_form['initial_weight'].errors %}
-              <div  class="alert alert-danger col-12">
+              <div  class="alert alert-danger col-12 pt-0 pd-0">
                 {% for error in setup_detail_form['initial_weight'].errors %}
                     <div>{{ setup_detail_form['initial_weight'].label }} : {{ error }}</div>
                 {% endfor %}
@@ -172,7 +172,7 @@
           </div>
       <div class="form-row col-12 mt-3 mx-auto">
           {% if setup_detail_form['height'].errors %}
-              <div  class="alert alert-danger col-12">
+              <div  class="alert alert-danger col-12 pt-0 pd-0">
                 {% for error in setup_detail_form['height'].errors %}
                     <div>{{ setup_detail_form['height'].label }} : {{ error }}</div>
                 {% endfor %}
@@ -199,17 +199,17 @@
       <div class="form-row col-12 mt-3 mx-auto">
           {% if setup_detail_form['initial_systol'].errors %}
             {% for error in setup_detail_form['initial_systol'].errors %}
-            <div class="alert alert-danger col-12">{{ setup_detail_form['initial_systol'].label }} : {{ error }}</div>
+            <div class="alert alert-danger col-12 pt-0 pd-0">{{ setup_detail_form['initial_systol'].label }} : {{ error }}</div>
             {% endfor %}
           {% endif %}
           {% if setup_detail_form['initial_diastol'].errors %}
             {% for error in setup_detail_form['initial_diastol'].errors %}
-            <div class="alert alert-danger col-12">{{ setup_detail_form['initial_diastol'].label }} : {{ error }}</div>
+            <div class="alert alert-danger col-12 pt-0 pd-0">{{ setup_detail_form['initial_diastol'].label }} : {{ error }}</div>
             {% endfor %}
           {% endif %}
           {% if setup_detail_form['initial_pulse'].errors %}
             {% for error in setup_detail_form['initial_pulse'].errors %}
-            <div class="alert alert-danger col-12">{{ setup_detail_form['initial_pulse'].label }} : {{ error }}</div>
+            <div class="alert alert-danger col-12 pt-0 pd-0">{{ setup_detail_form['initial_pulse'].label }} : {{ error }}</div>
             {% endfor %}
           {% endif %}
       </div>

@@ -47,9 +47,12 @@
 	background-color: #03A9F4 !important;
 }
 .account-box .form-control{
-	padding: 0.5rem 0.75rem;
+	padding: 0.8rem;
 	border-radius: 2px;
 	box-shadow:#f5f5f5 1px 2px 2px;
+}
+.account-box .account-detail .form-control{
+	padding: 0.5rem 0.75rem;
 }
 .account-box .alert-danger{
 	border-radius: 2px;

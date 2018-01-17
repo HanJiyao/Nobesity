@@ -19,9 +19,6 @@
     display: block;
 	background: #03A9F4;
 	color: white;
-	width: 160px;
-	height: 40px;
-	margin: 30px auto 10px;
 	text-align: center;
 }
 .psw{
@@ -91,14 +88,14 @@
 .card-img-top{
 	height: 136px;
 	width: 136px;
-	margin:6px auto 0;
+	margin:12px auto 0;
 }
 .gender-img.active{
 	background: #03A9F4;
 	color:white;
 }
 .gender-select{
-	width: 86%;
+	width: 92%;
 	margin: auto;
 	font-size: 25px;
 }

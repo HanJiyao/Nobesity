@@ -27,7 +27,9 @@
                     <div class="form-row">
                         {{ render_field(form.password, class_="form-control mt-3 mb-3", placeholder="Password") }}
                     </div>
-                    <button id="quickstart-sign-in" type="button" class="form-control submit-btn" value="Login" id="login_button" onclick="replaceEmail();loginRedirect1()">LOG IN</button>
+                    <div class="form-row">
+                        <button id="quickstart-sign-in" type="button" class="form-control submit-btn mt-3 mb-3" value="Login" id="login_button" onclick="replaceEmail();loginRedirect1()">LOG IN</button>
+                    </div>
                     <div class="psw"><a href="#">Forgot password?</a></div>
                 </div>
             </div>
@@ -82,7 +84,7 @@
                 // [START_EXCLUDE]
                 if (errorCode === 'auth/wrong-password') {
                     document.getElementById("error_alert").style.display = "block";
-                    document.getElementById("error_alert").innerText = "Invalid Password.";
+                    document.getElementById("error_alert").innerText = "The password is invalid";
                 } else if (errorCode === 'auth/invalid-email'){
                     document.getElementById("error_alert").style.display = "block";
                     document.getElementById("error_alert").innerText = "Invalid Username or Email";
