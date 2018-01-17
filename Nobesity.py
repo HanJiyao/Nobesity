@@ -59,7 +59,7 @@ def login():
     login_form = LoginForm(request.form)
     uid_db = root.child('Users').get()
     if request.method == 'POST' and login_form.validate():
-        login_id = request.form.to_dict()['username']
+        login_id = request.form.to_dict()['username'].lower()
         for i in uid_db:
             if uid_db[i]['email'] == login_id or login_id == i:
                 session['username'] = i
@@ -82,15 +82,15 @@ def signup():
     signup_form = SignUpForm(request.form)
     if request.method == 'POST' and signup_form.validate():
         user_account = UserAccount(
-            signup_form.username.data,
-            signup_form.email.data
+            signup_form.username.data.lower(),
+            signup_form.email.data.lower()
         )
         user_db = root.child('Users')
         user_db.child(user_account.get_username()).set({
             'email': user_account.get_email(),
         })
         session['logged_in'] = True
-        session['username'] = signup_form.username.data
+        session['username'] = signup_form.username.data.lower()
         flash('You are successfully signed up as '+session['username'], 'success')
         return redirect(url_for('verify_email'))
 

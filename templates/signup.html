@@ -50,6 +50,11 @@
     <script>
         $(document).ready(function () {
             $("#password, #confirm").keyup(checkPasswordMatch);
+            $("#username, #password, #email, #confirm").keyup( function(event) {
+              if (event.keyCode === 13) {
+                document.getElementById("quickstart-sign-in").click();
+              }
+            });
         });
         function checkPasswordMatch() {
             var password = $("#password").val();
@@ -69,7 +74,7 @@
         */
         //check on username database
         function checkIfUserExits() {
-            var userName = document.getElementById('username').value;
+            var userName = document.getElementById('username').value.toLowerCase();
             if (userName != "") {
                 var query = firebase.database().ref("Users");
                 query.child(userName).once('value', function (snapshot) {
@@ -88,7 +93,7 @@
 
         function handleSignUp() {
             // check username again
-            var userName = document.getElementById('username').value;
+            var userName = document.getElementById('username').value.toLowerCase();
             var query = firebase.database().ref("Users");
             query.child(userName).once('value', function(snapshot) {
                 var exists = (snapshot.val() !== null);
@@ -124,7 +129,7 @@
                         // [START_EXCLUDE]
                         if (errorCode == 'auth/weak-password') {
                             document.getElementById("error_alert").style.display = "block";
-                            document.getElementById("error_alert").innerText = "Invalid Password.";
+                            document.getElementById("error_alert").innerText = "Password should be more than 6 digits.";
                         } else {
                             document.getElementById("error_alert").style.display = "block";
                             document.getElementById("error_alert").innerText = errorMessage;

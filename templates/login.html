@@ -37,9 +37,16 @@
         /**
          * Handles the sign in button press.
          */
+        $(document).ready(function () {
+            $("#username, #password").keyup( function(event) {
+              if (event.keyCode === 13) {
+                document.getElementById("quickstart-sign-in").click();
+              }
+            });
+        });
         function replaceEmail() {
             var usersRef = firebase.database().ref('Users');
-            var login_id = document.getElementById('username').value;
+            var login_id = document.getElementById('username').value.toLowerCase();
             usersRef.on('value', function (snapshot) {
                 snapshot.forEach(function (childSnapshot) {
                     var userName = childSnapshot.key;
@@ -54,7 +61,7 @@
 
         function handleLogin() {
             document.getElementById("error_alert").style.display = "none";
-            var email = document.getElementById('username').value;
+            var email = document.getElementById('username').value.toLowerCase();
             var password = document.getElementById('password').value;
             if (email.length < 1) {
                 document.getElementById("error_alert").style.display = "block";

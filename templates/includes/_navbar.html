@@ -14,31 +14,32 @@
         ] -%}
         {% set active_page = active_page|default('index') -%}
 
-        <ul id="navigation" class="navbar-nav ml-auto">
-        {% if session.logged_in %}
-            {% for href, id, caption in navigation_bar %}
-                <li class="nav-item">
-                    <a href="{{ href|e }}" id="{{ id|e }}"
-                        {% if id == active_page %} class = "nav-link active"
-                        {% else %} class = "nav-link"
-                        {% endif %}>
-                        {{ caption|e }}</a>
-                </li>
-            {% endfor %}
-        {% else %}
-           {% for href, id, caption in [('/', 'index', 'Home'), ('/faq', 'faq', 'FAQ')] %}
-                <li class="nav-item">
-                    <a href="{{ href|e }}" id="{{ id|e }}"
-                        {% if id == active_page %} class = "nav-link active"
-                        {% else %} class = "nav-link"
-                        {% endif %}>
-                        {{ caption|e }}
-                    </a>
-                </li>
-            {% endfor %}
-        {% endif %}
+        <ul id="navigation" class="navbar-nav mr-auto">
+            {% if session.logged_in %}
+                {% for href, id, caption in navigation_bar %}
+                    <li class="nav-item">
+                        <a href="{{ href|e }}" id="{{ id|e }}"
+                            {% if id == active_page %} class = "nav-link active"
+                            {% else %} class = "nav-link"
+                            {% endif %}>
+                            {{ caption|e }}</a>
+                    </li>
+                {% endfor %}
+            {% else %}
+               {% for href, id, caption in [('/', 'index', 'Home'), ('/faq', 'faq', 'FAQ')] %}
+                    <li class="nav-item">
+                        <a href="{{ href|e }}" id="{{ id|e }}"
+                            {% if id == active_page %} class = "nav-link active"
+                            {% else %} class = "nav-link"
+                            {% endif %}>
+                            {{ caption|e }}
+                        </a>
+                    </li>
+                {% endfor %}
+            {% endif %}
+        </ul>
         {% if session.logged_in%}
-            <li class="nav-item dropdown" id="account_login">
+            <div class="nav-item dropdown" id="account_login">
                 <a class="dropdown-toggle account-btn" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   {{ session['username'] }}
                 </a>
@@ -47,19 +48,18 @@
                     <a class="dropdown-item" href="/account/detail">Account</a>
                     <a class="dropdown-item" href="/logout" onClick="firebase.auth().signOut()">Log out</a>
                 </div>
-            </li>
+            </div>
         {% else %}
-            <li id="account_login">
-            <div class="row account-btn-row">
-                <div class="col-6 p-0">
-                    <a href="/login" class="account-btn-half left">Log In</a>
-                </div>
-                <div class="col-6 p-0">
-                    <a href="/signup" class="account-btn-half right">Sign Up</a>
+            <div id="account_login">
+                <div class="row account-btn-row">
+                    <div class="col-6 p-0">
+                        <a href="/login" class="account-btn-half left">Log In</a>
+                    </div>
+                    <div class="col-6 p-0">
+                        <a href="/signup" class="account-btn-half right">Sign Up</a>
+                    </div>
                 </div>
             </div>
-            </li>
         {% endif %}
-        </ul>
     </nav>
 </div>
