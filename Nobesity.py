@@ -668,6 +668,15 @@ def record():
         activities = Activity(eachact['Activity'], eachact['Date'], eachact['Duration'])
         activities.set_actID(actID)
         act_list.append(activities)
+    #check if list is empty or not
+    if not act_list:
+        pass
+    else:
+        #if list is not empty, do the sorting by date
+        #act_list.sort(key=xxxxx, reverse=True)
+        act_list.sort(key=lambda activity: activity.get_date(), reverse=True)
+        # for i in act_list:
+        #     print(i.get_date())
     return render_template('track_and_record.html', activity=act_list)
 
 
