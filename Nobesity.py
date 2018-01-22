@@ -505,17 +505,19 @@ class Diet:
 @app.route('/diet')
 def diet():
     Diet_db = root.child('Food').get()
+
     diet_list = []
     for dietID in Diet_db:
         eachdiet = Diet_db[dietID]
+        print(eachdiet)
         food = Diet(eachdiet['Name'], eachdiet['Type'], eachdiet['Calories Value'], eachdiet['Fats Value'],
                     eachdiet['Carbohydrates Value'], eachdiet['Protein Value'])
         food.set_dietID(dietID)
         diet_list.append(food)
-        legend = 'Diet'
-        labels = ['Calories Values', 'Fats Value', 'Carbohydrates Value', 'Protein Value']
-        values = [eachdiet['Calories Values'], eachdiet['Fat Values'], eachdiet['Carbohydrates Value'], eachdiet['Protein Value']]
-    return render_template('diet.html', diet=diet_list, leg = legend, label = labels, value = values)
+    legend = 'Diet'
+    labels = ['Calories Values', 'Fats Value', 'Carbohydrates Value', 'Protein Value']
+    values = [80, 60, 90]
+    return render_template('diet.html', diet=diet_list, leg=legend, label=labels, value=values)
 
 
 class Food(Form):

@@ -2,18 +2,24 @@
 {% set active_page = "diet" %}
 {% block body %}
     <script>
-    var pieData={
-        label:[Calories , Fats, Protein, Carbohydrates]
-        dataset:[{fillColor: "rgba(151,187,205,0.2)",strokeColor: "rgba(151,187,205,1)", pointColor: "rgba(151,187,205,1)"}]
-        value:[{% for eachdiet in value %}
-            {{ eachdiet.get_calories()}},{{ eachdiet.get_fats()}},{{ eachdiet.get_proteins()}},{{ eachdiet.get_carbohydrates}}
+    var myDoughnutChart = new Chart({
+        type: 'doughnut',
+        data: {datasets: [{
+        data: [10, 20, 30]
+            }],
 
-    }
+            // These labels appear in the legend and in the tooltips when hovering different arcs
+            labels: [
+                'Red',
+                'Yellow',
+                'Blue'
+            ]},
+            options: {}
+        });
     </script>
     <div class = 'view_diet'>
     <h1>Simple Line Chart</h1>
     <canvas id ="dietChart" width="600" height="400"></canvas>
-    <p id =
     <h1>View Diet</h1>
     <div class ="newdiet"> <a href="/new_diet"><img src="../static/images/NewFile_icon.png" width="60" height="60"/></a></div>
      {% for eachdiet in diet %}
