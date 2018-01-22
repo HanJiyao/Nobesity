@@ -512,8 +512,10 @@ def diet():
                     eachdiet['Carbohydrates Value'], eachdiet['Protein Value'])
         food.set_dietID(dietID)
         diet_list.append(food)
-
-    return render_template('diet.html', diet=diet_list)
+        legend = 'Diet'
+        labels = ['Calories Values', 'Fats Value', 'Carbohydrates Value', 'Protein Value']
+        values = [eachdiet['Calories Values'], eachdiet['Fat Values'], eachdiet['Carbohydrates Value'], eachdiet['Protein Value']]
+    return render_template('diet.html', diet=diet_list, leg = legend, label = labels, value = values)
 
 
 class Food(Form):
