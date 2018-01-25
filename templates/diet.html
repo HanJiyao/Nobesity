@@ -1,28 +1,22 @@
 {% extends 'layout.html' %}
 {% set active_page = "diet" %}
 {% block body %}
-    <script>
-    var myDoughnutChart = new Chart({
-        type: 'doughnut',
-        data: {datasets: [{
-        data: [10, 20, 30]
-            }],
-
-            // These labels appear in the legend and in the tooltips when hovering different arcs
-            labels: [
-                'Red',
-                'Yellow',
-                'Blue'
-            ]},
-            options: {}
-        });
-    </script>
     <div class = 'view_diet'>
-    <h1>Simple Line Chart</h1>
-    <canvas id ="dietChart" width="600" height="400"></canvas>
     <h1>View Diet</h1>
     <div class ="newdiet"> <a href="/new_diet"><img src="../static/images/NewFile_icon.png" width="60" height="60"/></a></div>
      {% for eachdiet in diet %}
+         <div id = "pie_chart"></div>
+         <script>
+             var data = [{
+                 value:[{{ eachdiet.get_calories()}},{{ eachdiet.get_fats()}},{{ eachdiet.get_carbohydrates()}},
+                 {{ eachdiet.get_protein()}}],
+                 label:["Calories Values", "Fats Value", "Carbohydrates Value", "Protein Value"],
+                 type: "pie"
+             }];
+             Plotly.newPlot("piet_chart", data)
+         </script>
+
+         </div>
         <div class="card">
             <div class="card-header">
                 {% if eachdiet.get_type()=="Fruits"%}
@@ -46,11 +40,11 @@
                     </div>
                 </div>
                 <div class ='row'>
-                    <div class ='col-6'>
-                        Protein:{{ eachdiet.get_protein() }}
+                      <div class ='col-6'>
+                        Carbohydrates:{{ eachdiet.get_carbohydrates() }}
                     </div>
                     <div class ='col-6'>
-                        Carbohydrates:{{ eachdiet.get_carbohydrates() }}
+                        Protein:{{ eachdiet.get_protein() }}
                     </div>
                 </div>
             </div>
