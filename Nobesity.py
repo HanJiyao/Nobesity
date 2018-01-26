@@ -584,9 +584,10 @@ def update_diet(id):
         fats = update_form.fats.data
         carbohydrates = update_form.carbohydrates.data
         protein = update_form.proteins.data
-        diet_date = root.child(url+ 'Diet Date').get()
+        diet_date = root.child(url + '/Diet Date').get()
         food_diet = Diet(name, food_type, calories, fats, carbohydrates, protein, diet_date)
         Diet_db = root.child('Food/' + username + '/' + id)
+        print(protein, diet_date, )
         Diet_db.set({'Name': food_diet.get_name(),
                      'Type': food_diet.get_type(),
                      'Calories Value': food_diet.get_calories(),
@@ -683,6 +684,7 @@ def input_activity():
 
 @app.route('/record')
 def record():
+    username = session["username"]
     Act_db = root.child('Activities').get()
     act_list = []
     for actID in Act_db:
