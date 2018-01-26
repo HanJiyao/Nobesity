@@ -1,6 +1,6 @@
 @charset "utf-8";
 html, body{
-    background: #f2f2f2;
+    background: #f9f9f9;
 	height: 100%;
 }
 .jumbotron {
@@ -115,9 +115,9 @@ html, body{
 	z-index: 9999;
 }
 .footer {
-	color: #e0e0e0;
+	color: #424242;
 	padding: 1rem;
-	background-color: #222222;
+	background: #f9f9f9;
 	text-align: center;
 	position: absolute;
 	bottom: 0;
@@ -169,22 +169,23 @@ html, body{
 .toolbar{
 	height: 100%;
 	position: fixed;
-	top: 60px;
+	top: 0;
 	left: 0;
 	overflow-x: hidden;
 	transition: 0.3s;
 	width: 0;
-	background: white;
+	background: #263238;
+	z-index: 2000;
 }
 .toolbar a {
     padding: 0.5rem 2rem;
     text-decoration: none;
     font-size: 1.2rem;
-    color: #888888;
+    color: #e0e0e0;
     display: block;
 }
 .toolbar a:hover {
-    color: black;
+    color: #fefefe;
 }
 #toggle{
 	cursor:pointer;

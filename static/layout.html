@@ -76,13 +76,11 @@
 			document.getElementById("toolbar").style.width = "200px";
 			$("#toolbar").addClass("expened");
 			document.getElementsByClassName("master-wrapper")[0].style.marginLeft = "200px";
-			$(".navbar").style("margin-left:-200px");
 		}
 		function closeTool() {
 			document.getElementById("toolbar").style.width = "0";
 			document.getElementsByClassName("master-wrapper")[0].style.marginLeft = "0";
-			$("#toolbar").removeClass("expened")
-			$(".navbar").style("margin-left:0");
+			$("#toolbar").removeClass("expened");
 		}
 		function controlToolbar(){
 			if ($("#toolbar").attr("class")=="toolbar"){

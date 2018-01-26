@@ -669,12 +669,13 @@ class Activity:
 @app.route('/input_activity', methods=['GET', 'POST'])
 def input_activity():
     actform = ActivityForm(request.form)
+    username=session["username"]
     if request.method == 'POST' and actform.validate():
         activity = actform.activity.data
         date = str(actform.date.data)
         duration = int(actform.duration.data)
         latest_activity = Activity(activity, date, duration)
-        latest_activity.db = root.child('Activities')
+        latest_activity.db = root.child('Activities/'+username)
         latest_activity.db.push({'Activity': latest_activity.get_activity(), 'Date': latest_activity.get_date(), 'Duration': latest_activity.get_duration()})
         flash('New activity updated successfully', 'success')
         return redirect(url_for('record'))
@@ -685,29 +686,30 @@ def input_activity():
 @app.route('/record')
 def record():
     username = session["username"]
-    Act_db = root.child('Activities').get()
+    Act_db = root.child('Activities/'+username).get()
     act_list = []
-    for actID in Act_db:
-        eachact = Act_db[actID]
-        activities = Activity(eachact['Activity'], eachact['Date'], eachact['Duration'])
-        activities.set_actID(actID)
-        act_list.append(activities)
-    #check if list is empty or not
-    if not act_list:
-        pass
-    else:
-        #if list is not empty, do the sorting by date
-        #act_list.sort(key=xxxxx, reverse=True)
-        act_list.sort(key=lambda activity: activity.get_date(), reverse=True)
-        # for i in act_list:
-        #     print(i.get_date())
-
+    try:
+        for actID in Act_db:
+            eachact = Act_db[actID]
+            activities = Activity(eachact['Activity'], eachact['Date'], eachact['Duration'])
+            activities.set_actID(actID)
+            act_list.append(activities)
+        #check if list is empty or not
+        if not act_list:
+            pass
+        else:
+            #if list is not empty, do the sorting by date
+            #act_list.sort(key=xxxxx, reverse=True)
+            act_list.sort(key=lambda activity: activity.get_date(), reverse=True)
+            # for i in act_list:
+            #     print(i.get_date())
+    except TypeError:
+        return redirect(url_for('input_activity'))
     today_date = datetime.datetime.now().strftime("%A, %d %B %Y")
     return render_template('track_and_record.html', activity=act_list, date=today_date)
 
 
 @app.route('/rewards')
-
 def rewards():
     return render_template('rewards.html')
 
@@ -720,7 +722,7 @@ def quiz():
         username=session["username"]
         userscore = Leaderboard(username,score)
         userscore.db = root.child('Leaderboard')#map current userscore to firebase
-        userscore.db.child(username).set({"Score":userscore.get_score()})#push means to update score
+        userscore.db.child(username).set({"Score": userscore.get_score()})#push means to update score
         flash('New score inserted successfully', 'success')
 
         return redirect(url_for('leaderboards'))
@@ -759,7 +761,6 @@ class Leaderboard:
         self.__rank=rank
     def get_rank(self):
         return self.__rank
-
 
 
 class leaderboardform(Form):
