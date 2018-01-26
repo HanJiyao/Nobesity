@@ -699,9 +699,9 @@ def record():
         act_list.sort(key=lambda activity: activity.get_date(), reverse=True)
         # for i in act_list:
         #     print(i.get_date())
-    datetime_today = datetime.datetime.now().strftime("%A, %d %B %Y")
 
-    return render_template('track_and_record.html', activity=act_list, date=datetime_today)
+    today_date = datetime.datetime.now().strftime("%A, %d %B %Y")
+    return render_template('track_and_record.html', activity=act_list, date=today_date)
 
 
 @app.route('/rewards')
