@@ -16,13 +16,14 @@ html, body{
 .master-wrapper{
 	min-height: 100%;
   	position: relative;
+	transition: 0.3s;
 }
 .nav-wrapper{
 	background: white;
 	box-shadow:#e0e0e0 0 3px 20px;
 	font-size:15px;
 	text-align: center;
-	position: fixed;
+	position: absolute;
     top: 0;
     z-index: 1000;
     width: 100%;
@@ -43,6 +44,7 @@ html, body{
 }
 .navbar{
     height:60px;
+	transition: 0.3s;
 }
 .navbar-light .nav-link{
 	text-align: center;
@@ -122,10 +124,6 @@ html, body{
 	height: 100px;
 	width: 100%
 }
-.layout-wrapper{
-	max-width: 1000px;
-	margin:auto;
-}
 .alert-danger{
 	background: #F44336;
 	color: white;
@@ -167,4 +165,27 @@ html, body{
 }
 #quickstart-account-details{
 	color:white;
+}
+.toolbar{
+	height: 100%;
+	position: fixed;
+	top: 60px;
+	left: 0;
+	overflow-x: hidden;
+	transition: 0.3s;
+	width: 0;
+	background: white;
+}
+.toolbar a {
+    padding: 0.5rem 2rem;
+    text-decoration: none;
+    font-size: 1.2rem;
+    color: #888888;
+    display: block;
+}
+.toolbar a:hover {
+    color: black;
+}
+#toggle{
+	cursor:pointer;
 }

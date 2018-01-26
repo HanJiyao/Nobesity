@@ -5,17 +5,20 @@
     <title>Nobesity SG</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" >
     <link rel="stylesheet" href="../static/css/layout.css">
 </head>
 <body>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
-    <div class="nav-wrapper">
+    <div class="master-wrapper">
+        <div class="nav-wrapper">
         <nav class="navbar navbar-expand navbar-light">
+           <span id="toggle" onclick="controlToolbar()"><i class="material-icons">menu</i></span>
             <a class="navbar-brand" href="/">NObesity</a>
             <div class="navbar-collapse">
-                <ul class="navbar-nav ml-auto">
+                <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
                         <a class="nav-link active" href="/">Home</a>
                     </li>
@@ -37,25 +40,57 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/faq">FAQ</a>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a class="dropdown-toggle account-btn" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          UserName
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" href="/profile">Profile</a>
-                            <a class="dropdown-item" href="/account/info">Account</a>
-                            <a class="dropdown-item" href="/logout">Log out</a>
-                        </div>
-                    </li>
                 </ul>
+                <div class="nav-item dropdown" id="account_login">
+					<a class="dropdown-toggle account-btn" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					han
+					</a>
+					<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+						<a class="dropdown-item" href="/profile">Profile</a>
+						<a class="dropdown-item" href="/account/detail">Account</a>
+						<a class="dropdown-item" href="/logout" onClick="firebase.auth().signOut()">Log out</a>
+					</div>
+				</div>
             </div>
         </nav>
     </div>
-    <div class="wrapper"></div>
+    <div class="container-wrapper"></div>
+    
 	<footer class="footer">
 		<div class="container-fluid text-center">
 			<span> © 2017 NYP SIT Nobesity Singapore</span>
 		</div>
 	</footer>
+	</div>
+	<nav>
+		
+		<div id="toolbar" class="toolbar">
+			<a href="#">About</a>
+			<a href="#">Services</a>
+			<a href="#">Clients</a>
+			<a href="#">Contact</a>
+		</div>
+    </nav>
+	<script>
+		function openTool() {
+			document.getElementById("toolbar").style.width = "200px";
+			$("#toolbar").addClass("expened");
+			document.getElementsByClassName("master-wrapper")[0].style.marginLeft = "200px";
+			$(".navbar").style("margin-left:-200px");
+		}
+		function closeTool() {
+			document.getElementById("toolbar").style.width = "0";
+			document.getElementsByClassName("master-wrapper")[0].style.marginLeft = "0";
+			$("#toolbar").removeClass("expened")
+			$(".navbar").style("margin-left:0");
+		}
+		function controlToolbar(){
+			if ($("#toolbar").attr("class")=="toolbar"){
+				openTool()
+			} else{
+				closeTool()
+			}
+		}
+	</script>
 </body>
 </html>
