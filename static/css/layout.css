@@ -21,10 +21,10 @@ html, body{
 .nav-wrapper{
 	background: white;
 	box-shadow:#e0e0e0 0 3px 20px;
-	font-size:15px;
 	text-align: center;
-	position: absolute;
+	position: fixed;
     top: 0;
+	left: 0;
     z-index: 1000;
     width: 100%;
 }
@@ -40,11 +40,25 @@ html, body{
 	border-bottom:#03A9F4 medium solid !important;
 }
 .navbar-brand {
-	float:left;
+	width: 250px;
+	height: 60px;
+	position: fixed;
+	top:0;
+	left:0;
+}
+.navbar-brand img{
+	vertical-align: -10px;
+}
+.navbar-brand i {
+	font-size: 25px;
+	padding-right: 20px;
+	color: #9E9E9E;
 }
 .navbar{
     height:60px;
 	transition: 0.3s;
+	margin-left:250px;
+	padding-left: 0;
 }
 .navbar-light .nav-link{
 	text-align: center;
@@ -169,23 +183,57 @@ html, body{
 .toolbar{
 	height: 100%;
 	position: fixed;
-	top: 0;
+	top: 60px;
 	left: 0;
 	overflow-x: hidden;
 	transition: 0.3s;
 	width: 0;
 	background: #263238;
-	z-index: 2000;
 }
-.toolbar a {
-    padding: 0.5rem 2rem;
+.toolbar ul {
+	border-bottom: #9E9E9E solid 1px;
+}
+.toolbar div > a {
+    padding: 1.2rem 0.8rem;
     text-decoration: none;
-    font-size: 1.2rem;
     color: #e0e0e0;
     display: block;
+	transition: 0.3s;
 }
-.toolbar a:hover {
-    color: #fefefe;
+.toolbar div > a i{
+	font-size: 1.2rem;
+	vertical-align: -0.25rem;
+    margin: auto 2rem;
+}
+.toolbar div > a:hover {
+    color: white;
+	background: #37474F;
+}
+ul.sub-links {
+	max-height: 0;
+	overflow: hidden;
+	list-style: none;
+	color: #b3bcc5;
+	font-weight: 100;
+	line-height: 24px;
+	margin: 0;
+	transition: 0.3s;
+	padding: 0 3.3rem;
+}
+ul.sub-links.selected {
+	max-height: 200px;
+	padding: 0 3.3rem 1.6rem;
+}
+.sub-links a {
+	text-decoration: none;
+	color: #b3bcc5;
+	display: block;
+	text-align: left;
+	padding-top: 0.5rem;
+	transition: 0.3s;
+}
+.sub-links a:hover{
+	color: white;
 }
 #toggle{
 	cursor:pointer;
