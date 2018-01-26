@@ -518,7 +518,7 @@ def diet():
         for dietID in Diet_db:
             eachdiet = Diet_db[dietID]
             food = Diet(eachdiet['Name'], eachdiet['Type'], eachdiet['Calories Value'], eachdiet['Fats Value'],
-                    eachdiet['Carbohydrates Value'], eachdiet['Protein Value'],eachdiet['Diet Date'])
+                    eachdiet['Carbohydrates Value'], eachdiet['Protein Value'], eachdiet['Diet Date'])
             total_calories += food.get_calories()
             total_fats += food.get_fats()
             total_carbohydrates += food.get_carbohydrates()
@@ -596,7 +596,7 @@ def update_diet(id):
     else:
         eachdiet = root.child(url).get()
         food = Diet(eachdiet['Name'], eachdiet['Type'], eachdiet['Calories Value'], eachdiet['Fats Value'],
-                    eachdiet['Carbohydrates Value'], eachdiet['Protein Value'])
+                    eachdiet['Carbohydrates Value'], eachdiet['Protein Value'], eachdiet['Diet Date'])
         food.set_dietID(id)
         update_form.diet_name.data = food.get_name()
         update_form.diet_type.data = food.get_type()
@@ -710,9 +710,8 @@ def quiz():
         score = new_form.score.data
         username=session["username"]
         userscore = Leaderboard(username,score)
-        print(username, score)
         userscore.db = root.child('Leaderboard')#map current userscore to firebase
-        userscore.db.set({username:{"Score":userscore.get_score()}})#push means to update score
+        userscore.db.child(username).set({"Score":userscore.get_score()})#push means to update score
         flash('New score inserted successfully', 'success')
 
         return redirect(url_for('leaderboards'))
