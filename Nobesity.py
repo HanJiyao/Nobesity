@@ -514,9 +514,10 @@ def diet():
     total_fats = 0
     total_carbohydrates = 0
     total_protein = 0
+    username = session["username"]
     try:
-        for dietID in Diet_db:
-            eachdiet = Diet_db[dietID]
+        for dietID in Diet_db[username]:
+            eachdiet = Diet_db[username][dietID]
             food = Diet(eachdiet['Name'], eachdiet['Type'], eachdiet['Calories Value'], eachdiet['Fats Value'],
                     eachdiet['Carbohydrates Value'], eachdiet['Protein Value'], eachdiet['Diet Date'])
             total_calories += food.get_calories()
@@ -526,7 +527,7 @@ def diet():
             food.set_dietID(dietID)
             diet_list.append(food)
     except TypeError:
-        return  redirect(url_for('new_diet'))
+        return redirect(url_for('new_diet'))
 
     return render_template('diet.html', diet=diet_list, total_calories=total_calories,total_fats=total_fats,
                            total_carbohydrates=total_carbohydrates, total_protein=total_protein)
@@ -545,6 +546,7 @@ class Food(Form):
 @app.route('/new_diet', methods=['GET', 'POST'])
 def new_diet():
     new_form = Food(request.form)
+    username = session["username"]
     if request.method == 'POST' and new_form.validate():
         name = new_form.diet_name.data
         type = new_form.diet_type.data
@@ -555,7 +557,7 @@ def new_diet():
         diet_date = '{:%d/%m/%Y}'.format(datetime.date.today())
         food_diet = Diet(name, type, calories, fats, carbohydrates, protein,diet_date)
         food_diet.db = root.child('Food')
-        food_diet.db.push({'Name': food_diet.get_name(),
+        food_diet.db.child(username).push({'Name': food_diet.get_name(),
                            'Type': food_diet.get_type(),
                            'Calories Value': food_diet.get_calories(),
                            'Fats Value': food_diet.get_fats(),
@@ -572,7 +574,8 @@ def new_diet():
 
 @app.route('/update_diet/<string:id>', methods=['GET', 'POST'])
 def update_diet(id):
-    url = 'Food/' + id
+    username = session["username"]
+    url = 'Food/' + username + '/' + id
     update_form = Food(request.form)
     if request.method == 'POST' and update_form.validate():
         name = update_form.diet_name.data
@@ -583,13 +586,14 @@ def update_diet(id):
         protein = update_form.proteins.data
         diet_date = root.child(url+ 'Diet Date').get()
         food_diet = Diet(name, food_type, calories, fats, carbohydrates, protein, diet_date)
-        Diet_db = root.child('Food/' + id)
+        Diet_db = root.child('Food/' + username + '/' + id)
         Diet_db.set({'Name': food_diet.get_name(),
                      'Type': food_diet.get_type(),
                      'Calories Value': food_diet.get_calories(),
                      'Fats Value': food_diet.get_fats(),
                      'Carbohydrates Value': food_diet.get_carbohydrates(),
-                     'Protein Value': food_diet.get_protein()})
+                     'Protein Value': food_diet.get_protein(),
+                     'Diet Date': diet_date})
         flash('Diet updated successfully', 'success')
 
         return redirect(url_for('diet'))
@@ -610,7 +614,8 @@ def update_diet(id):
 
 @app.route('/delete_diet/<string:id>', methods=['POST'])
 def delete_diet(id):
-    Diet_db = root.child('Food/' + id)
+    username = session["username"]
+    Diet_db = root.child('Food/' + username + '/' + id)
     Diet_db.delete()
     flash('Diet deleted', 'Success')
 
@@ -694,7 +699,9 @@ def record():
         act_list.sort(key=lambda activity: activity.get_date(), reverse=True)
         # for i in act_list:
         #     print(i.get_date())
-    return render_template('track_and_record.html', activity=act_list)
+    datetime_today = datetime.datetime.now().strftime("%A, %d %B %Y")
+
+    return render_template('track_and_record.html', activity=act_list, date=datetime_today)
 
 
 @app.route('/rewards')
