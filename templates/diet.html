@@ -2,10 +2,13 @@
 {% set active_page = "diet" %}
 {% block body %}
     <div class = 'view_diet'>
-    <h1>View Diet</h1>
-    <div class ="newdiet"> <a href="/new_diet"><img src="../static/images/NewFile_icon.png" width="60" height="60"/></a>
-        <h3>New Diet</h3></div>
-        <h3> Total Calories: {{ total_calories }}</h3>
+    <h1 id="diet_title">View Diet</h1>
+        <div class ="newdiet">
+            <a href="/new_diet"  class="btn btn-primary btn-sm"><i class="material-icons">add_circle</i>
+                <span>New Diet</span>
+            </a>
+        </div>
+        <p id="calories_details"> Total Calories: {{ total_calories }}</p>
         <canvas id = "Canvas"></canvas>
          <script>
             var ctx = document.getElementById("Canvas").getContext("2d");

@@ -6,4 +6,12 @@
     height: 50px;
     width: 50px;
 }
-
+#calories_details{
+    font-size: 30px;
+}
+#diet_title{
+    font-size: 80px;
+}
+.newdiet{
+    font-size: 50px ;
+}
