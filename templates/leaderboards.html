@@ -3,6 +3,7 @@
     <div class="jumbotron text-center">
         <table class="table table-hover">
   <thead>
+  <h align="center">Quiz Leaderboard</h>
     <tr>
 		<th>Rank:</th>
         <th>Username</th>
@@ -10,21 +11,18 @@
 	</tr>
   </thead>
   <tbody>
-	<tr>
-		<td>1</td>
-        <td>cheee2000</td>
-        <td>3</td>
-	</tr>
-    <tr>
-		<td>2</td>
-        <td>tom876</td>
-        <td>2</td>
-	</tr>
-	<tr>
-		<td>3</td>
-		<td>DreamX</td>
-		<td>1</td>
-	</tr>
+
+    {% for eachscore in leaderboards_list%}
+
+        <tr>
+            <td>{{eachscore.get_rank()}}</td>
+            <td>{{eachscore.get_username()}}</td>
+            <td>{{eachscore.get_score()}}</td>
+
+        </tr>
+
+    {% endfor %}
+
   </tbody>
 </table>
     </div>

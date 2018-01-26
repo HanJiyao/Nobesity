@@ -697,15 +697,22 @@ def record():
     return render_template('track_and_record.html', activity=act_list)
 
 
-@app.route('/quiz', methods=['GET', 'POST'])
+@app.route('/rewards')
+
+def rewards():
+    return render_template('rewards.html')
+
+
+@app.route('/quiz', methods=['GET','POST'])
 def quiz():
     new_form = leaderboardform(request.form)
     if request.method == 'POST' and new_form.validate():
         score = new_form.score.data
-        username = session["username"]
-        userscore = leaderboard(username, score)
-        userscore.db = root.child('Leaderboard')
-        userscore.db.push({"username": userscore.get_username(), "Score": userscore.get_score()})
+        username=session["username"]
+        userscore = Leaderboard(username,score)
+        print(username, score)
+        userscore.db = root.child('Leaderboard')#map current userscore to firebase
+        userscore.db.set({username:{"Score":userscore.get_score()}})#push means to update score
         flash('New score inserted successfully', 'success')
 
         return redirect(url_for('leaderboards'))
@@ -714,34 +721,41 @@ def quiz():
 
 @app.route('/leaderboards')
 def leaderboards():
-    return render_template('leaderboards.html')
+    leaderboard_db = root.child('Leaderboard').get()
+    leaderboards_list = []  # create a list to store all the quiz results
+
+    for eachscore in leaderboard_db:
+        leaderboard=Leaderboard(eachscore,leaderboard_db[eachscore]["Score"])
+        leaderboards_list.append(leaderboard)
+    leaderboards_list.sort(key=lambda score: leaderboard.get_score(), reverse=True)
+    for eachscore in leaderboards_list:
+        rank=leaderboards_list.index(eachscore)+1
+        eachscore.set_rank(rank)
+    return render_template('leaderboards.html',leaderboards_list=leaderboards_list)
 
 
-class leaderboard:
-    def __init__(self, username, score):
-        self.__username = username
-        self.__score = score
-
-    def set_score(self, score):
-        self.__score = score
-
-    def set_username(self, username):
-        self.__username = username
-
+class Leaderboard:
+    def __init__(self,username,score,rank=0):
+        self.__username=username
+        self.__score=score
+        self.__rank=rank
+    def set_score(self,score):
+        self.__score=score
+    def set_username(self,username):
+        self.__username=username
     def get_score(self):
         return self.__score
-
     def get_username(self):
         return self.__username
+    def set_rank(self,rank):
+        self.__rank=rank
+    def get_rank(self):
+        return self.__rank
+
 
 
 class leaderboardform(Form):
-    score = StringField("Score")
-
-
-@app.route('/rewards')
-def rewards():
-    return render_template('rewards.html')
+    score=StringField("Score")
 
 
 if __name__ == '__main__':
