@@ -3,20 +3,23 @@
 {% block body %}
     <div class = 'view_diet'>
     <h1>View Diet</h1>
-    <div class ="newdiet"> <a href="/new_diet"><img src="../static/images/NewFile_icon.png" width="60" height="60"/></a></div>
-     {% for eachdiet in diet %}
-         <div id = "pie_chart"></div>
+    <div class ="newdiet"> <a href="/new_diet"><img src="../static/images/NewFile_icon.png" width="60" height="60"/></a>
+        <h3>New Diet</h3></div>
+        <h3> Total Calories: {{ total_calories }}</h3>
+        <canvas id = "Canvas"></canvas>
          <script>
-             var data = [{
-                 value:[{{ eachdiet.get_calories()}},{{ eachdiet.get_fats()}},{{ eachdiet.get_carbohydrates()}},
-                 {{ eachdiet.get_protein()}}],
-                 label:["Calories Values", "Fats Value", "Carbohydrates Value", "Protein Value"],
-                 type: "pie"
-             }];
-             Plotly.newPlot("piet_chart", data)
+            var ctx = document.getElementById("Canvas").getContext("2d");
+            var myData = {
+                datasets: [{
+                    data: [{{ total_fats }}, {{ total_carbohydrates }}, {{ total_protein}}],
+                    backgroundColor: ["#0074D9", "#FF4136", "#2ECC40"]
+                }],
+                    labels:['Fats Percentage','Carbohydrates percentage', 'Protein Percentage']
+            };
+            var options  =  Chart.defaults.pie;
+         var myPieChart = new Chart(ctx,{type: 'pie', data: myData, options: options});
          </script>
-
-         </div>
+    {% for eachdiet in diet %}
         <div class="card">
             <div class="card-header">
                 {% if eachdiet.get_type()=="Fruits"%}
@@ -50,13 +53,14 @@
             </div>
             <div class ='row'>
                 <div class='col-1'>
-                    <div class="updatediet"><a href ="/update_diet/{{eachdiet.get_dietID()}}" class="btn btn-warning btn-sm">
+                    <div class="updatediet"><a href ="/update_diet/{{eachdiet.get_dietID()}}" class="btn btn-warning btn-sm"
+                                               id="update_button">
                         <i class="material-icons">mode_edit</i></a></div>
                 </div>
                 <div class='col-1'>
                    <div class="deletediet">
                     <form action="{{ url_for("delete_diet", id=eachdiet.get_dietID())}}" method="POST">
-                    <input type ="submit" value= 'X' class ="btn btn-danger btn-sm"
+                    <input type ="submit" value= 'X' class ="btn btn-danger btn-sm" id = "delete_button"
                        onclick= "return confirm('Are you sure you want to delete? Data would not be recovered.')">
                     </form>
                    </div>

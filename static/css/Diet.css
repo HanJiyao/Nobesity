@@ -1,3 +1,9 @@
 .deletediet,.updatediet{
     border: none !important;
 }
+#update_button,#delete_button {
+    font-size: 24px;
+    height: 50px;
+    width: 50px;
+}
+

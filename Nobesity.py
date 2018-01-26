@@ -505,18 +505,24 @@ class Diet:
 @app.route('/diet')
 def diet():
     Diet_db = root.child('Food').get()
-
     diet_list = []
+    total_calories = 0
+    total_fats = 0
+    total_carbohydrates = 0
+    total_protein = 0
     for dietID in Diet_db:
         eachdiet = Diet_db[dietID]
         food = Diet(eachdiet['Name'], eachdiet['Type'], eachdiet['Calories Value'], eachdiet['Fats Value'],
                     eachdiet['Carbohydrates Value'], eachdiet['Protein Value'])
+        total_calories += food.get_calories()
+        total_fats += food.get_fats()
+        total_carbohydrates += food.get_carbohydrates()
+        total_protein += food.get_protein()
         food.set_dietID(dietID)
         diet_list.append(food)
-    legend = 'Diet'
-    labels = ['Calories Values', 'Fats Value', 'Carbohydrates Value', 'Protein Value']
-    values = [eachdiet['Calories Value'],eachdiet['Fats Value'], eachdiet['Carbohydrates Value'], eachdiet['Protein Value']]
-    return render_template('diet.html', diet=diet_list, leg=legend, label=labels, value=values)
+    return render_template('diet.html', diet=diet_list, total_calories=total_calories,total_fats=total_fats,
+                           total_carbohydrates=total_carbohydrates, total_protein=total_protein)
+
 
 class Food(Form):
     diet_name = StringField('Name', [validators.length(min=1, max=150), validators.DataRequired()])
