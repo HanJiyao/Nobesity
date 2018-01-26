@@ -17,7 +17,7 @@
                     data: [{{ total_fats }}, {{ total_carbohydrates }}, {{ total_protein}}],
                     backgroundColor: ["#0074D9", "#FF4136", "#2ECC40"]
                 }],
-                    labels:['Fats Percentage','Carbohydrates percentage', 'Protein Percentage']
+                    labels:['Fats','Carbohydrates', 'Protein']
             };
             var options  =  Chart.defaults.pie;
          var myPieChart = new Chart(ctx,{type: 'pie', data: myData, options: options});
@@ -33,7 +33,9 @@
                     <img src="../static/images/Drink_icon.png" width="50" height="50">
                 {% endif %}
                 {{ eachdiet.get_type()}}
+                <span class="ml-5">Diet Date: {{eachdiet.get_dietDate()}}</span>
             </div>
+
             <div class="card-body">
                 <h5 class="card-title">{{eachdiet.get_name()}}</h5>
                 <div class="card-text">

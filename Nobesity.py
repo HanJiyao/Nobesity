@@ -450,7 +450,7 @@ def plans():
 
 
 class Diet:
-    def __init__(self, name, type, calories, fats, carbohydrates, protein):
+    def __init__(self, name, type, calories, fats, carbohydrates, protein, diet_date):
         self.dietID = ''
         self.name = name
         self.type = type
@@ -458,6 +458,7 @@ class Diet:
         self.fats = fats
         self.carbohydrates = carbohydrates
         self.protein = protein
+        self.diet_date = diet_date
 
     def get_dietID(self):
         return self.dietID
@@ -479,6 +480,9 @@ class Diet:
 
     def get_protein(self):
         return self.protein
+
+    def get_dietDate(self):
+        return self.diet_date
 
     def set_dietID(self, dietID):
         self.dietID = dietID
@@ -510,16 +514,20 @@ def diet():
     total_fats = 0
     total_carbohydrates = 0
     total_protein = 0
-    for dietID in Diet_db:
-        eachdiet = Diet_db[dietID]
-        food = Diet(eachdiet['Name'], eachdiet['Type'], eachdiet['Calories Value'], eachdiet['Fats Value'],
-                    eachdiet['Carbohydrates Value'], eachdiet['Protein Value'])
-        total_calories += food.get_calories()
-        total_fats += food.get_fats()
-        total_carbohydrates += food.get_carbohydrates()
-        total_protein += food.get_protein()
-        food.set_dietID(dietID)
-        diet_list.append(food)
+    try:
+        for dietID in Diet_db:
+            eachdiet = Diet_db[dietID]
+            food = Diet(eachdiet['Name'], eachdiet['Type'], eachdiet['Calories Value'], eachdiet['Fats Value'],
+                    eachdiet['Carbohydrates Value'], eachdiet['Protein Value'],eachdiet['Diet Date'])
+            total_calories += food.get_calories()
+            total_fats += food.get_fats()
+            total_carbohydrates += food.get_carbohydrates()
+            total_protein += food.get_protein()
+            food.set_dietID(dietID)
+            diet_list.append(food)
+    except TypeError:
+        return  redirect(url_for('new_diet'))
+
     return render_template('diet.html', diet=diet_list, total_calories=total_calories,total_fats=total_fats,
                            total_carbohydrates=total_carbohydrates, total_protein=total_protein)
 
@@ -544,14 +552,16 @@ def new_diet():
         fats = new_form.fats.data
         carbohydrates = new_form.carbohydrates.data
         protein = new_form.proteins.data
-        food_diet = Diet(name, type, calories, fats, carbohydrates, protein)
+        diet_date = '{:%d/%m/%Y}'.format(datetime.date.today())
+        food_diet = Diet(name, type, calories, fats, carbohydrates, protein,diet_date)
         food_diet.db = root.child('Food')
         food_diet.db.push({'Name': food_diet.get_name(),
                            'Type': food_diet.get_type(),
                            'Calories Value': food_diet.get_calories(),
                            'Fats Value': food_diet.get_fats(),
                            'Carbohydrates Value': food_diet.get_carbohydrates(),
-                           'Protein Value': food_diet.get_protein()
+                           'Protein Value': food_diet.get_protein(),
+                           'Diet Date': food_diet.get_dietDate(),
                            })
         flash('New Diet inserted successfully', 'success')
 
@@ -562,6 +572,7 @@ def new_diet():
 
 @app.route('/update_diet/<string:id>', methods=['GET', 'POST'])
 def update_diet(id):
+    url = 'Food/' + id
     update_form = Food(request.form)
     if request.method == 'POST' and update_form.validate():
         name = update_form.diet_name.data
@@ -570,7 +581,8 @@ def update_diet(id):
         fats = update_form.fats.data
         carbohydrates = update_form.carbohydrates.data
         protein = update_form.proteins.data
-        food_diet = Diet(name, food_type, calories, fats, carbohydrates, protein)
+        diet_date = root.child(url+ 'Diet Date').get()
+        food_diet = Diet(name, food_type, calories, fats, carbohydrates, protein, diet_date)
         Diet_db = root.child('Food/' + id)
         Diet_db.set({'Name': food_diet.get_name(),
                      'Type': food_diet.get_type(),
@@ -582,7 +594,6 @@ def update_diet(id):
 
         return redirect(url_for('diet'))
     else:
-        url = 'Food/' + id
         eachdiet = root.child(url).get()
         food = Diet(eachdiet['Name'], eachdiet['Type'], eachdiet['Calories Value'], eachdiet['Fats Value'],
                     eachdiet['Carbohydrates Value'], eachdiet['Protein Value'])
