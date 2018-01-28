@@ -28,11 +28,6 @@ html, body{
     z-index: 1000;
     width: 100%;
 }
-.navbar-toggler{
-	position:absolute;
-	top:15px;
-	right:20px;
-}
 .nav-link.dropdown-toggle{
 	width: auto;
 }
@@ -45,20 +40,18 @@ html, body{
 	position: fixed;
 	top:0;
 	left:0;
+	z-index: 3000;
+	text-align: right;
 }
 .navbar-brand img{
 	vertical-align: -10px;
-}
-.navbar-brand i {
-	font-size: 25px;
-	padding-right: 20px;
-	color: #9E9E9E;
 }
 .navbar{
     height:60px;
 	transition: 0.3s;
 	margin-left:250px;
 	padding-left: 0;
+	padding-right: 30px;
 }
 .navbar-light .nav-link{
 	text-align: center;
@@ -77,10 +70,11 @@ html, body{
 	margin-left: 2rem;
 }
 .account-btn {
-	font-size: 1rem;
+	font-size: 1.2rem;
 	background: #03A9F4;
-	border-radius: 3px;
 	border: #03A9F4 solid 1px;
+	border-bottom-right-radius: 3px;
+	border-top-right-radius: 3px;
 	transition: background 0.3s, color 0.3s;
 	display: block;
 	text-decoration: none;
@@ -88,18 +82,23 @@ html, body{
 	padding: 10px;
 	width: 160px;
 	box-shadow:#e0e0e0 3px 3px 10px;
+	height: 50px;
+    position: fixed;
+    top: 5px;
+    right: 30px;
+	z-index: 3001;
 }
 .account-btn-half {
 	font-size: 1rem;
 	background: #03A9F4;
-	border-radius: 3px;
 	border: #03A9F4 solid 1px;
+	border-radius: 3px;
 	transition: background 0.3s, color 0.3s;
 	display: block;
 	text-decoration: none;
 	color: white !important;
 	padding: 10px;
-	width: 80px;
+	width: 105px;
 	box-shadow:#e0e0e0 3px 3px 10px;
 }
 .account-btn-half.left{
@@ -127,6 +126,9 @@ html, body{
 .dropdown-menu{
 	box-shadow:#e0e0e0 3px 3px 10px;
 	z-index: 9999;
+	top: 29px;
+    left: -210px;
+    width: 210px;
 }
 .footer {
 	color: #424242;
@@ -180,7 +182,7 @@ html, body{
 #quickstart-account-details{
 	color:white;
 }
-.toolbar{
+.sidenav{
 	height: 100%;
 	position: fixed;
 	top: 60px;
@@ -188,53 +190,92 @@ html, body{
 	overflow-x: hidden;
 	transition: 0.3s;
 	width: 0;
-	background: #263238;
+	background: #f0f0f0;
+	text-align: left;
 }
-.toolbar ul {
-	border-bottom: #9E9E9E solid 1px;
+.sidenav ul {
+	border-bottom: #e0e0e0 solid 1px;
 }
-.toolbar div > a {
+.sidenav div > a {
     padding: 1.2rem 0.8rem;
     text-decoration: none;
-    color: #e0e0e0;
+    color: #616161 !important;
     display: block;
 	transition: 0.3s;
-}
-.toolbar div > a i{
 	font-size: 1.2rem;
-	vertical-align: -0.25rem;
+	font-weight: 600;
+	cursor: pointer;
+}
+.sidenav div > a i{
+	font-size: 1.6rem;
+    vertical-align: -6px;
     margin: auto 2rem;
 }
-.toolbar div > a:hover {
-    color: white;
-	background: #37474F;
+.sidenav div > a:hover {
+	background: #e0e0e0;
 }
 ul.sub-links {
 	max-height: 0;
 	overflow: hidden;
 	list-style: none;
-	color: #b3bcc5;
-	font-weight: 100;
+	font-weight: 300;
 	line-height: 24px;
 	margin: 0;
 	transition: 0.3s;
-	padding: 0 3.3rem;
+	padding: 0;
 }
 ul.sub-links.selected {
 	max-height: 200px;
-	padding: 0 3.3rem 1.6rem;
+	padding:0 0 1.5rem 0;
 }
 .sub-links a {
 	text-decoration: none;
-	color: #b3bcc5;
+	color: #616161;
 	display: block;
 	text-align: left;
-	padding-top: 0.5rem;
+	padding: 0.5rem 3.3rem;
 	transition: 0.3s;
 }
 .sub-links a:hover{
-	color: white;
+	color: #03A9F4;
+	background: #e0e0e0;
 }
 #toggle{
 	cursor:pointer;
+	font-size: 25px;
+	padding: 0.9rem 2rem;
+	color: #9E9E9E;
+	position: fixed;
+	z-index: 3001;
+	top: 0;
+	left:0;
+	height: 60px;
+	transition: 0.3s;
+}
+#toggle:hover{
+	color: #222222;
+}
+.navPhoto-wrapper{
+	position: fixed;
+	top: 5px;
+	right: 190px;
+	z-index: 3000;
+	box-shadow:#e0e0e0 3px 3px 10px;
+}
+.navPhoto{
+	position: relative;
+    width: 50px;
+    height: 50px;
+	overflow: hidden;
+	border-bottom-left-radius: 3px;
+	border-top-left-radius: 3px;
+}
+#navPhoto{
+	height: 50px;
+	position: absolute;
+    top: -9999px;
+    bottom: -9999px;
+    left: -9999px;
+    right: -9999px;
+    margin: auto;
 }

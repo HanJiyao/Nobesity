@@ -103,4 +103,35 @@
 .gender-text{
 	padding: 10px 0;
 }
-
+input[type="file"] {
+    display: none;
+}
+.file-wrapper{
+	background: #03A9F4;
+	color:white;
+	cursor: pointer;
+	text-align: center;
+}
+#uploader{
+	float: right;
+}
+.photoPreview{
+	padding: 0;
+	border: none;
+	height: 200px;
+	width: 200px;
+	margin:0 auto 2rem;
+	border-radius: 100%;
+	text-align: center;
+	overflow: hidden;
+	position: relative;
+}
+.photoPreview img{
+	height: 200px;
+	position: absolute;
+    top: -9999px;
+    bottom: -9999px;
+    left: -9999px;
+    right: -9999px;
+    margin: auto;
+}

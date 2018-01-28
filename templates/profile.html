@@ -19,14 +19,21 @@
             } else if (grade == 'E') {
                 e.addClass('active');
             }
-        })
+        });
+        if (document.getElementById('username') != null) {
+            var username = document.getElementById('username').innerText;
+            firebase.database().ref('/Users/' + username + '/photoURL').once('value').then(function (snapshot) {
+                var photoURL = (snapshot.val());
+                document.getElementById('profilePhoto').src = photoURL
+            });
+        }
     </script>
 <div class="container text-center profile">
     <div class="user_profile">
         <h3 id="user_name" class="text-center">{{ session['username'] }}</h3>
         <div class="header-desc">Health Report</div>
-        <div id="profile_image">
-            <img src="../static/images/health_profile.png" alt="Profile Image">
+        <div class="profilePhoto">
+            <img id="profilePhoto" src="../static/images/default_photo.png" alt="Profile Image">
         </div>
     </div>
     <div class="health_point card">
