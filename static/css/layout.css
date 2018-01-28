@@ -170,7 +170,7 @@ html, body{
 	background: #222222;
 	color:white;
 }
-#console .container{
+#console div{
 	max-width: 1000px;
 	margin: auto;
 }

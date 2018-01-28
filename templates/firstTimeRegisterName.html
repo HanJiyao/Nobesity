@@ -12,12 +12,15 @@
     {% endmacro %}
     <div class="account-box">
         <form method="post" action="" class="main-form" >
-            <div class="box-header">Start Account Setup</div>
+            <div class="box-header">Account Setup</div>
             <div class="box-text">How Should We Call You?</div>
             <div class="form-group account-content">
-                <div id="uploader"></div>
-                <button id="fileButton"></button>
-                <div class="overly"></div>
+                <div class="form-group">
+                    <div class="form-control mt-3 mb-3">
+                        <input type="file"  id="file" name="files[]" multiple /><span id="uploader"></span>
+                    </div>
+                    <div class="alert alert-danger mt-1 mb-1 col-12" id="imgError" hidden>The File APIs are not fully supported in this browser.</div>
+                </div>
                 <div class="form-group">
                     {{ render_field(name_form.display_name, class_="form-control mt-3 mb-3 ml-auto", placeholder="Display Name") }}
                     <small class="form-control-description text-muted">This is how your name will appear to others. </small>
@@ -27,57 +30,78 @@
 		</form>
     </div>
     <script>
-    function updateProfile() {
-        var displayName = document.getElementById('display_name').value;
-        user.updateProfile({
-            displayName: displayName
-        })
-    }
-    // File or Blob named mountains.jpg
-    var file =
+        var user = firebase.auth().currentUser;
+        //Get Elements
+        var uploader = document.getElementById('uploader');
+        var fileButton = document.getElementById('file');
 
-    // Create the file metadata
-    var metadata = {
-      contentType: 'image/jpeg'
-    };
-
-    // Upload file and metadata to the object 'images/mountains.jpg'
-    var uploadTask = storageRef.child('images/' + file.name).put(file, metadata);
-
-    // Listen for state changes, errors, and completion of the upload.
-    uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
-      function(snapshot) {
-        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-        var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log('Upload is ' + progress + '% done');
-        switch (snapshot.state) {
-          case firebase.storage.TaskState.PAUSED: // or 'paused'
-            console.log('Upload is paused');
-            break;
-          case firebase.storage.TaskState.RUNNING: // or 'running'
-            console.log('Upload is running');
-            break;
+        if (window.File && window.FileReader && window.FileList && window.Blob) {
+        // Great success! All the File APIs are supported.
+        } else {
+          $('#imgError').hidden = false
         }
-      }, function(error) {
-
-      // A full list of error codes is available at
-      // https://firebase.google.com/docs/storage/web/handle-errors
-      switch (error.code) {
-        case 'storage/unauthorized':
-          // User doesn't have permission to access the object
-          break;
-
-        case 'storage/canceled':
-          // User canceled the upload
-          break;
-
-        case 'storage/unknown':
-          // Unknown error occurred, inspect error.serverResponse
-          break;
-      }
-    }, function() {
-      // Upload completed successfully, now we can get the download URL
-      var downloadURL = uploadTask.snapshot.downloadURL;
-    });
+        //Upload Profile Picture
+        //Altered code from: Firebase Youtube Channel.
+        //Listen for file
+        fileButton.addEventListener('change', function (e) {
+            var fileName = document.getElementById('fileName').innerText;
+            var file = e.target.files[0];
+            //Create a Storage Ref
+            var storageRef = firebase.storage().ref(firebase.auth().currentUser.email + '/profilePicture/' + file.name);
+            //Upload file
+            var task = storageRef.put(file);
+            //Update Progress Bar
+            if (fileName != ""){
+                firebase.storage().ref(firebase.auth().currentUser.email + '/profilePicture/' + fileName).delete();
+                console.log(firebase.storage().ref(firebase.auth().currentUser.email + '/profilePicture/' + fileName));
+                task.on('state_changed',
+                    function progress(snapshot) {
+                        var percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        uploader.innerText = (Math.round(percentage)).toString() + ' %';
+                    },
+                    function error(error) {
+                        document.getElementById('imgError').hidden = false;
+                        document.getElementById('imgError').innerHTML = error
+                    },
+                    function complete() {
+                        document.getElementById('uploader').innerHTML = "<i class='material-icons'>done</i>";
+                        storageRef.getDownloadURL().then(function (url) {
+                            document.getElementById('fileName').innerText = file.name;
+                            document.getElementById('photoURL').innerText = url;
+                        }).catch(function (error) {
+                            document.getElementById('imgError').hidden = false;
+                            document.getElementById('imgError').innerHTML = error
+                        });
+                    }
+                );
+            } else {
+                task.on('state_changed',
+                    function progress(snapshot) {
+                        var percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        uploader.innerText = (Math.round(percentage)).toString() + ' %';
+                    },
+                    function error(error) {
+                        document.getElementById('imgError').hidden = false;
+                        document.getElementById('imgError').innerHTML = error
+                    },
+                    function complete() {
+                        document.getElementById('uploader').innerHTML = "<i class='material-icons'>done</i>";
+                        storageRef.getDownloadURL().then(function (url) {
+                            document.getElementById('fileName').innerText = file.name;
+                            document.getElementById('photoURL').innerText = url;
+                        }).catch(function (error) {
+                            document.getElementById('imgError').hidden = false;
+                            document.getElementById('imgError').innerHTML = error
+                        });
+                    }
+                );
+            }
+        });
+        function updateProfile() {
+            var displayName = document.getElementById('display_name').value;
+            user.updateProfile({
+                displayName: displayName
+            })
+        }
     </script>
 {% endblock %}

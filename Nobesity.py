@@ -128,11 +128,11 @@ class HealthDetailSetup:
         self.__bmi = round(float(current_weight) / (height ** 2), 1)
         if gender == 'male':
             gender_index = 1
-            self.__suggest_bfp = '21 - 30%'
+            self.__suggest_bfp = '< 25%'
             self.__suggest_cal = math.ceil(9.99 * current_weight + 6.25 * height * 100 - 4.92 * self.__age + 5)
         else:
             gender_index = 0
-            self.__suggest_bfp = '14 - 25%'
+            self.__suggest_bfp = '< 32%'
             self.__suggest_cal = math.ceil(9.99 * current_weight + 6.25 * height * 100 - 4.92 * self.__age - 161)
         if self.__age < 18:
             self.__bfp = round(self.__bmi * 1.51 - 0.70 * self.__age - 3.6 * gender_index + 1.4, 1)
@@ -154,25 +154,55 @@ class HealthDetailSetup:
         self.__suggest_hr_min = math.ceil(0.5 * self.__hr_hrr)
         self.__suggest_hr_max = math.ceil(0.85 * self.__hr_hrr)
         self.__suggest_hr = str(self.__suggest_hr_min) + ' - ' + str(self.__suggest_hr_max)
-        self.__diet_grade = 10
-        self.__quiz_grade = 5
-        self.__activity_grade = 10
-        self.__plan_grade = 15
+        self.__plan_grade = 30
         self.__bmi_grade = 0
-        if 18.5 < self.__bmi < 22.9:
+        if 18.5 > self.__bmi:
+            self.__bmi_grade = 20 - (18.5 - self.__bmi) * 1.6
+        elif 22.9 < self.__bmi:
+            self.__bmi_grade = 20 - (self.__bmi - 22.9) * 1.6
+        else:
             self.__bmi_grade = 20
+        if self.__bmi_grade < 0:
+            self.__bmi_grade = 0
         self.__bfp_grade = 0
         if gender == 'male':
-            if self.__bfp < 30:
+            if self.__bfp > 25:
+                self.__bfp_grade = 20 - (self.__bfp - 25) * 2
+            else:
                 self.__bfp_grade = 20
         if gender == 'female':
-            if self.__bfp < 25:
+            if self.__bfp > 32:
+                self.__bfp_grade = 20 - (self.__bfp - 30) * 2
+            else:
                 self.__bfp_grade = 20
+        if self.__bfp_grade < 0:
+            self.__bfp_grade = 0
+        self.__sys_grade = 0
+        self.__dias_grade = 0
+        self.__pulse_grade = 0
         self.__bp_grade = 0
-        if 90 < self.__current_systolic < 120 and 60 < self.__current_diastolic < 80:
-            self.__bp_grade = 20
-        self.__grade = (self.__diet_grade + self.__quiz_grade + self.__activity_grade + self.__plan_grade +
-                        self.__bmi_grade + self.__bfp_grade + self.__bp_grade)
+        if self.__current_systolic < 90:
+            self.__sys_grade = 12 - (90 - self.__current_systolic) * 0.5
+        elif self.__current_systolic > 120:
+            self.__sys_grade = 12 - (self.__current_systolic - 120) * 0.5
+        else:
+            self.__sys_grade = 8
+        if self.__sys_grade < 0:
+            self.__sys_grade = 0
+        if self.__current_diastolic < 60:
+            self.__dias_grade = 12 - (60 - self.__current_diastolic) * 0.5
+        elif self.__current_diastolic > 80:
+            self.__dias_grade = 12 - (self.__current_diastolic - 80) * 0.5
+        else:
+            self.__dias_grade = 8
+        if self.__dias_grade < 0:
+            self.__dias_grade = 0
+        if self.__current_pulse > 75:
+            self.__pulse_grade = 6 - (self.__current_pulse - 75) * 0.3
+        if self.__pulse_grade < 0:
+            self.__pulse_grade = 0
+        self.__bp_grade = self.__sys_grade + self.__dias_grade + self.__pulse_grade
+        self.__grade = int(round(self.__plan_grade + self.__bmi_grade + self.__bfp_grade + self.__bp_grade))
         if 80 <= self.__grade <= 100:
             self.__grade_display = 'A'
         elif 60 <= self.__grade < 80:
@@ -255,7 +285,7 @@ def register_name():
     name_form = NameForm(request.form)
     if request.method == 'POST' and name_form.validate():
         root.child('Users/'+session['username']).update({
-            'display_name': name_form.display_name.data
+            'displayName': name_form.display_name.data
         })
         return redirect(url_for('register_gender'))
     return render_template('firstTimeRegisterName.html', name_form=name_form)
@@ -391,7 +421,6 @@ def health_detail():
             'gender': user_info.get_gender(),
             'birthday': user_info.get_birth(),
             'height': user_info.get_height(),
-
         })
         for i in user_info.get_weight_dict():
             uid_db.child('Weight/' + session['username']).update({
@@ -419,15 +448,15 @@ def health_detail():
         weight_date_list = []
         for date in weight_dict:
             weight_date_list.append(date)
-        setup_detail_form.initial_weight.data = float(user_info.get_weight_dict()[weight_date_list[0]])
+        setup_detail_form.initial_weight.data = float(user_info.get_weight_dict()[weight_date_list[-1]])
         setup_detail_form.height.data = float(user_info.get_height())
         bp_dict = user_info.get_bp_dict()
         bp_time_list = []
         for time in bp_dict:
             bp_time_list.append(time)
-        setup_detail_form.initial_systol.data = int(user_info.get_bp_dict()[bp_time_list[0]]['systolic'])
-        setup_detail_form.initial_diastol.data = int(user_info.get_bp_dict()[bp_time_list[0]]['diastolic'])
-        setup_detail_form.initial_pulse.data = int(user_info.get_bp_dict()[bp_time_list[0]]['pulse'])
+        setup_detail_form.initial_systol.data = int(user_info.get_bp_dict()[bp_time_list[-1]]['systolic'])
+        setup_detail_form.initial_diastol.data = int(user_info.get_bp_dict()[bp_time_list[-1]]['diastolic'])
+        setup_detail_form.initial_pulse.data = int(user_info.get_bp_dict()[bp_time_list[-1]]['pulse'])
 
     return render_template('healthDetail.html', setup_detail_form=setup_detail_form)
 
@@ -526,7 +555,7 @@ def diet():
             total_protein += food.get_protein()
             food.set_dietID(dietID)
             diet_list.append(food)
-    except TypeError:
+    except TypeError or KeyError:
         return redirect(url_for('new_diet'))
 
     return render_template('diet.html', diet=diet_list, total_calories=total_calories,total_fats=total_fats,
@@ -703,7 +732,7 @@ def record():
             act_list.sort(key=lambda activity: activity.get_date(), reverse=True)
             # for i in act_list:
             #     print(i.get_date())
-    except TypeError:
+    except TypeError or KeyError:
         return redirect(url_for('input_activity'))
     today_date = datetime.datetime.now().strftime("%A, %d %B %Y")
     return render_template('track_and_record.html', activity=act_list, date=today_date)

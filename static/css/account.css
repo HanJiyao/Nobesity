@@ -23,6 +23,9 @@
     background: #03A9F4;
     color:white;
 }
+#gender_female, #gender_male{
+	cursor: pointer;
+}
 .account-detail{
 	padding: 25px 0 10px;
 	margin: 0;
