@@ -1,0 +1,66 @@
+{% extends 'layout.html' %}
+{% block body %}
+    <form method="post" class="mx-auto account-box p-5">
+      <div class="form-group form-row account-detail pt-4 pb-4">
+        <div class="col-1"><i class="material-icons">account_box</i></div>
+        <div class="col-4"> Username :</div>
+          <div class="col-7 pt-2">
+              han
+          </div>
+      </div>
+      <div class="form-group form-row account-detail pt-4 pb-4 email-wrapper">
+            <div class="col-1"><i class="material-icons">email</i></div>
+            <div class="col-4"> Email :</div>
+            <div class="col-5 pt-2">
+                hanjiyao0@gmail.com
+            </div>
+            <div class="col-1"><i class="material-icons email-verified" >verified_user</i></div>
+            <div class="col-1"><i class="material-icons" id="editEmail">mode_edit</i></div>
+      </div>
+      <div class="form-group form-row account-detail pt-4 pb-4">
+        <div class="col-1"><i class="material-icons">vpn_key</i></div>
+        <div class="col-4"> Password :</div>
+          <div class="col-7">
+            <a class="form-control email-verify-btn" id="reset_password" onclick="sendEmailVerification();resendCount()">Reset Password by Email</a>
+            <a class="form-control email-verify-btn" id="reset_status" style="display:none; background: #e9ecef; color:#222222">Resend</a>
+          </div>
+      </div>
+      <div class="form-group form-row account-detail pt-4 pb-4">
+          <a id="deleteAccount"><i class="material-icons">delete_forever</i>Delete Account</a>
+      </div>
+    </form>
+    <script>
+    function sendEmailVerification() {
+      // [START sendemailverification]
+    var auth = firebase.auth();
+    var emailAddress = firebase.auth().currentUser.email;
+
+    auth.sendPasswordResetEmail(emailAddress).then(function() {
+        // Email Verification sent!
+        // [START_EXCLUDE]
+        document.getElementById("reset_password").style.display = "none";
+        document.getElementById("reset_status").style.display = "block";
+      });
+      // [END sendemailverification]
+    }
+
+    function resendCount() {
+        var countdownElement = document.getElementById('reset_status'),
+            sendButton = document.getElementById('reset_password'),
+            seconds = 30,
+            second = 0,
+            interval;
+        sendButton.style.display = 'none';
+        countdownElement.style.display = 'block';
+        interval = setInterval(function() {
+            countdownElement.firstChild.data = 'Resend in ' + (seconds - second) + 's';
+            if (second >= seconds) {
+                countdownElement.style.display = 'none';
+                sendButton.style.display = 'block';
+                clearInterval(interval);
+            }
+            second++;
+        }, 1000);
+    }
+    </script>
+{% endblock %}
