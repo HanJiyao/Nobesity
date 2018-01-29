@@ -8,10 +8,25 @@
 }
 #calories_details{
     font-size: 30px;
+    font-family: "Arial Black";
 }
 #diet_title{
     font-size: 80px;
+    font-family: Arial;
 }
 .newdiet{
     font-size: 50px ;
+    font-family: Arial;
+}
+#diet_details{
+    font-size: 3.5rem;
+    text-align: center;
+    font-family: Arial;
+}
+#diet_content{
+    font-size: 1.5rem ;
+    font-family: Arial;
+}
+.row{
+    text-align: center;
 }

@@ -16,9 +16,13 @@
             <div class="box-text">How Should We Call You?</div>
             <div class="form-group account-content">
                 <div class="form-group">
-                    <div class="form-control mt-3 mb-3">
-                        <input type="file"  id="file" name="files[]" multiple /><span id="uploader"></span>
+                    <div class="photoPreview">
+                        <img id="photoPreview" src="../static/images/default_photo.png">
                     </div>
+                    <label class="file-wrapper form-control mt-3 mb-3">
+                        <input type="file"  id="file" name="files[]" multiple /><span id="uploader"></span>
+                        Choose Profile Image
+                    </label>
                     <div class="alert alert-danger mt-1 mb-1 col-12" id="imgError" hidden>The File APIs are not fully supported in this browser.</div>
                 </div>
                 <div class="form-group">
@@ -53,7 +57,6 @@
             //Update Progress Bar
             if (fileName != ""){
                 firebase.storage().ref(firebase.auth().currentUser.email + '/profilePicture/' + fileName).delete();
-                console.log(firebase.storage().ref(firebase.auth().currentUser.email + '/profilePicture/' + fileName));
                 task.on('state_changed',
                     function progress(snapshot) {
                         var percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
@@ -89,6 +92,7 @@
                         storageRef.getDownloadURL().then(function (url) {
                             document.getElementById('fileName').innerText = file.name;
                             document.getElementById('photoURL').innerText = url;
+                            document.getElementById('photoPreview').src = url;
                         }).catch(function (error) {
                             document.getElementById('imgError').hidden = false;
                             document.getElementById('imgError').innerHTML = error
@@ -99,9 +103,13 @@
         });
         function updateProfile() {
             var displayName = document.getElementById('display_name').value;
-            user.updateProfile({
-                displayName: displayName
-            })
+            var photoURL = document.getElementById('photoURL').innerText;
+            firebase.auth().currentUser.updateProfile({
+                displayName : displayName,
+                photoURL: photoURL
+            });
+            var username = document.getElementById('username').innerText;
+            firebase.database().ref().child('Users/'+ username + '/').update({'photoURL':photoURL})
         }
     </script>
 {% endblock %}

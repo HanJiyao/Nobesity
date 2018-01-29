@@ -82,7 +82,7 @@
 	font-size: 20px;
 	color: grey;
 }
-#profile_image{
+.profilePhoto{
 	height: 150px;
 	width: 150px;
 	overflow: hidden;
@@ -94,9 +94,15 @@
 	border: medium white solid;
 	box-shadow: 0 5px 25px #e0e0e0;
 }
-#profile_image img{
+#profilePhoto{
 	height: 150px;
 	width: auto;
+	position: absolute;
+    top: -9999px;
+    bottom: -9999px;
+    left: -9999px;
+    right: -9999px;
+    margin: auto;
 }
 .health_point{
 	position: relative;

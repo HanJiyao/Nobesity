@@ -1,8 +1,9 @@
+<div id="toggle" onclick="controlsidenav()"><i class="material-icons">menu</i></div>
+<a class="navbar-brand" href="/">
+    <img src="../static/images/brand.png" width="150" height="50" class="mr-0" alt="">
+</a>
 <div class="nav-wrapper">
     <nav class="navbar navbar-expand navbar-light">
-        <a class="navbar-brand" href="/">
-            <img src="/static/images/brand.png" width="150" height="50" class="d-inline-block align-middle" alt="">
-        </a>
         {% set navigation_bar = [
             ('/', 'index', 'Home'),
             ('/plan', 'plan', 'Plan'),
@@ -13,7 +14,6 @@
             ('/faq', 'faq', 'FAQ')
         ] -%}
         {% set active_page = active_page|default('index') -%}
-
         <ul id="navigation" class="navbar-nav mr-auto">
             {% if session.logged_in %}
                 {% for href, id, caption in navigation_bar %}
@@ -39,9 +39,14 @@
             {% endif %}
         </ul>
         {% if session.logged_in%}
+            <div class ="navPhoto-wrapper">
+                <div class="navPhoto">
+                    <img id="navPhoto" src="../static/images/default_photo.png">
+                </div>
+            </div>
             <div class="nav-item dropdown" id="account_login">
                 <a class="dropdown-toggle account-btn" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  {{ session['username'] }}
+                    <span id="username">{{session['username']}}</span>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                     <a class="dropdown-item" href="/profile">Profile</a>
@@ -63,3 +68,87 @@
         {% endif %}
     </nav>
 </div>
+<nav class="sidenav-wrapper">
+    <div id="sidenav" class="sidenav">
+        <div style="border-top: #e0e0e0 solid 1px;">
+            <a>
+                <i class="material-icons">account_circle</i>Account
+            </a>
+        </div>
+        <ul class="sub-links">
+            <li><a href="#">Sign In & Security</a></li>
+            <li><a href="#">Personal Info</a></li>
+            <li><a href="#">Health Detail</a></li>
+            <li><a href="#">Health Profile</a></li>
+        </ul>
+        <div>
+            <a>
+                <i class="material-icons">event_available</i>Plans
+            </a>
+        </div>
+        <ul class="sub-links">
+            <li><a href="#">Daily Progress</a></li>
+            <li><a href="#">Customization</a></li>
+        </ul>
+        <div>
+            <a>
+                <i class="material-icons">accessibility</i>Track
+            </a>
+        </div>
+        <ul class="sub-links">
+            <li><a href="#">Weight</a></li>
+            <li><a href="#">Blood Pressure</a></li>
+            <li><a href="#">Diet</a></li>
+            <li><a href="#">Activity</a></li>
+        </ul>
+        <div>
+            <a>
+                <i class="material-icons">help_outline</i></i>Quiz
+            </a>
+        </div>
+        <ul class="sub-links">
+            <li><a href="#">Take Quiz</a></li>
+            <li><a href="#">Leaderboards</a></li>
+            <li><a href="#">Rewards</a></li>
+        </ul>
+    </div>
+    <script>
+
+        function openTool() {
+            document.getElementById("sidenav").style.width = "250px";
+            $("#sidenav").addClass("expened");
+            document.getElementsByClassName("master-wrapper")[0].style.marginLeft = "250px";
+        }
+        function closeTool() {
+            document.getElementById("sidenav").style.width = "0";
+            document.getElementsByClassName("master-wrapper")[0].style.marginLeft = "0";
+            $("#sidenav").removeClass("expened");
+        }
+        function controlsidenav(){
+            if ($("#sidenav").attr("class")=="sidenav"){
+                openTool()
+            } else{
+                closeTool()
+            }
+        }
+        $(function () {
+            var links = $('.sidenav > div');
+            links.on('click', function () {
+                if ($(this).next().attr('class')=='sub-links selected'){
+                    $(this).next().removeClass('selected');
+                } else {
+                    $(this).next().addClass('selected');
+                }
+            });
+        });
+        if (document.getElementById('username') != null) {
+            var username = document.getElementById('username').innerText;
+            firebase.database().ref('/Users/' + username + '/photoURL').once('value').then(function (snapshot) {
+                var photoURL = (snapshot.val());
+                if (photoURL != null){
+                    document.getElementById('navPhoto').src = photoURL
+                }
+            });
+        }
+    </script>
+</nav>

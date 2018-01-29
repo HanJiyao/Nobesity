@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, flash, redirect, url_for, session
-from wtforms import Form, StringField, TextAreaField, RadioField, SelectField, PasswordField, DecimalField, \
+from wtforms import Form, StringField, TextAreaField, RadioField, SelectField, PasswordField, DecimalField,\
     IntegerField, DateField, validators, ValidationError
 import firebase_admin
 from firebase_admin import credentials, db
@@ -555,7 +555,9 @@ def diet():
             total_protein += food.get_protein()
             food.set_dietID(dietID)
             diet_list.append(food)
-    except TypeError or KeyError:
+    except TypeError :
+        return redirect(url_for('new_diet'))
+    except KeyError:
         return redirect(url_for('new_diet'))
 
     return render_template('diet.html', diet=diet_list, total_calories=total_calories,total_fats=total_fats,
@@ -616,7 +618,6 @@ def update_diet(id):
         diet_date = root.child(url + '/Diet Date').get()
         food_diet = Diet(name, food_type, calories, fats, carbohydrates, protein, diet_date)
         Diet_db = root.child('Food/' + username + '/' + id)
-        print(protein, diet_date, )
         Diet_db.set({'Name': food_diet.get_name(),
                      'Type': food_diet.get_type(),
                      'Calories Value': food_diet.get_calories(),
@@ -717,25 +718,31 @@ def record():
     username = session["username"]
     Act_db = root.child('Activities/'+username).get()
     act_list = []
+    act_list_today = []
+    message_today = 'You have not recorded any activities today! Get moving!'
     try:
         for actID in Act_db:
             eachact = Act_db[actID]
             activities = Activity(eachact['Activity'], eachact['Date'], eachact['Duration'])
+            # total_duration += activities.get_duration()
             activities.set_actID(actID)
             act_list.append(activities)
-        #check if list is empty or not
-        if not act_list:
-            pass
-        else:
             #if list is not empty, do the sorting by date
             #act_list.sort(key=xxxxx, reverse=True)
             act_list.sort(key=lambda activity: activity.get_date(), reverse=True)
-            # for i in act_list:
-            #     print(i.get_date())
-    except TypeError or KeyError:
+            if eachact['Date'] == str(datetime.date.today()):
+                activities = Activity(eachact['Activity'], eachact['Date'], eachact['Duration'])
+                # total_duration += activities.get_duration()
+                activities.set_actID(actID)
+                act_list_today.append(activities)
+                message_today = ''
+
+    except TypeError:
+        return redirect(url_for('input_activity'))
+    except KeyError:
         return redirect(url_for('input_activity'))
     today_date = datetime.datetime.now().strftime("%A, %d %B %Y")
-    return render_template('track_and_record.html', activity=act_list, date=today_date)
+    return render_template('track_and_record.html', activity=act_list, activity_today = act_list_today, date=today_date, display_msg_today=message_today)
 
 
 @app.route('/rewards')
