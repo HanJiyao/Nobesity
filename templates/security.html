@@ -12,14 +12,15 @@
         <div class="col-1"><i class="material-icons">email</i></div>
         <div class="col-4"> Email :</div>
         <div class="col-5">
-            <span class="pt-2" id="email_display">email</span>
+            <div class="mt-2" id="email_display">email</div>
             <input class="form-control" id="new_email" style="display: none">
         </div>
         <div class="col-1"><i class="material-icons email-verified" id="verified">verified_user</i></div>
         <div class="col-1">
             <i class="material-icons" id="editEmail" onclick="editEmail()">mode_edit</i>
-            <i class="material-icons" id="toVerify" style="display: none" onclick="toVerify()">done</i>
+            <a id="toVerify" style="display: none" onclick="toVerify()"><i class="material-icons">done</i></a>
         </div>
+          <div class="form-control alert alert-danger col-12 mt-3 mb-0" id="error_alert" style="display: none"></div>
       </div>
       <div class="form-group form-row account-detail pt-4 pb-4">
         <div class="col-1"><i class="material-icons">vpn_key</i></div>
@@ -30,7 +31,7 @@
           </div>
       </div>
       <div class="form-group form-row account-detail pt-4 pb-4">
-          <a id="deleteAccount"><i class="material-icons">delete_forever</i>Delete Account</a>
+          <a id="deleteAccount" href="/delete"><i class="material-icons">delete_forever</i>Delete Account</a>
       </div>
     </form>
     <script>
@@ -43,7 +44,6 @@
         }
      });
     function editEmail() {
-
         document.getElementById('editEmail').style.display = 'none';
         document.getElementById('toVerify').style.display='block';
         document.getElementById('email_display').style.display='none';
@@ -51,7 +51,16 @@
         document.getElementById("verified").style.color = '#424242';
     }
     function toVerify() {
-
+        var user = firebase.auth().currentUser;
+        var email = document.getElementById("new_email").value;
+        user.updateEmail(email).then(function() {
+          // Update successful.
+            window.location.href="/setup/email";
+        }).catch(function(error) {
+          // An error happened.
+            document.getElementById('error_alert').style.display="block";
+            document.getElementById('error_alert').innerText = error
+        });
     }
     function sendResetPasswordEmail() {
       // [START sendResetPasswordEmail]

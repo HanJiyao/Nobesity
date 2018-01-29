@@ -28,10 +28,12 @@
 	text-align: center;
 	border:#03A9F4 solid 1px;
 	transition: 0.3s;
+	text-decoration: none;
 }
 .submit-btn:hover{
 	color:#03A9F4;
 	background: white;
+	text-decoration: none;
 }
 .psw{
 	text-align: center;
@@ -137,6 +139,7 @@ input[type="file"] {
 	text-align: center;
 	overflow: hidden;
 	position: relative;
+	box-shadow: #e0e0e0 3px 3px 10px;
 }
 .photoPreview img{
 	height: 200px;
@@ -146,4 +149,12 @@ input[type="file"] {
     left: -9999px;
     right: -9999px;
     margin: auto;
+}
+.psw a{
+	text-decoration: none;
+	color: #424242;
+	transition: 0.3s;
+}
+.psw a:hover{
+	color:#03A9F4;
 }

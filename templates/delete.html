@@ -1,0 +1,40 @@
+{% extends 'layout.html' %}
+{% block body %}
+    <div class="account-box p-5">
+        <form id="delete_form" method="POST">
+            <div class="box-header">Confirm Delete</div>
+            <div class="box-text">You're trying to delete your Nobesity Account, which provides access to various Nobesity services. You'll no longer be able to use any of those services, and your account and data will be lost.</div>
+            <div class="form-group account-content">
+                <div class="form-group text-center">
+                    <img src="../static/images/last_img.jpg" alt="Bye" width="200">
+                    <div class="form-control alert alert-danger col-12 mt-3" id="error_alert" style="display: none"></div>
+                </div>
+            </div>
+          <div class="form-group form-row save-cancel-btn">
+            <a href="/account/security" class="col-5 btn btn-outline-secondary form-control">Cancel</a>
+            <button type="submit" class="col-5 ml-auto btn btn-outline-danger form-control" id="delete_account" onclick="deleteAccount()">Delete</button>
+          </div>
+        </form>
+    </div>
+    <script>
+    function deleteAccount() {
+        firebase.storage().ref('{{session['username']}}' + '/profilePicture/' + '{{fileName}}').delete().then(function() {
+            firebase.auth().currentUser.delete().then(function() {
+                deleteRedirect()
+            // User deleted.
+            }).catch(function(error) {
+            // An error happened.
+                document.getElementById('error_alert').style.display='block';
+                document.getElementById('error_alert').innerText = error
+            });
+        })
+    }
+    function deleteRedirect() {
+            firebase.auth().onAuthStateChanged(function (user) {
+                if (user) {
+                    document.getElementById("delete_form").submit()
+                }
+            })
+        }
+    </script>
+{% endblock %}

@@ -77,13 +77,21 @@
 #deleteAccount:hover{
 	color:#F44336
 }
+#email_display{
+	text-align: center;
+	border: none;
+	box-shadow: none;
+}
 .email-verified{
 	color: #64DD17;
 }
-#editEmail{
+#editEmail, #toVerify{
 	cursor: pointer;
 	transition: 0.3s;
 }
-#editEmail:hover{
+#editEmail:hover, #toVerify:hover{
 	color: #03A9F4;
+}
+#delete_account:hover{
+	background: #F44336;
 }

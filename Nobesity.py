@@ -461,14 +461,45 @@ def health_detail():
     return render_template('healthDetail.html', setup_detail_form=setup_detail_form)
 
 
+@app.route('/account/info', methods=['GET', 'POST'])
+def personal_info():
+    name_form = NameForm(request.form)
+    fileName = root.child('Users/'+ session['username']+'/photoName').get()
+    photoURL = root.child('Users/'+ session['username']+'/photoURL').get()
+    if request.method == 'POST' and name_form.validate():
+        root.child('Users/' + session['username']).update({
+            'displayName': name_form.display_name.data
+        })
+        flash('Personal information updated successful', 'success')
+    return render_template('personalInfo.html', name_form=name_form, photoURL=photoURL, fileName=fileName)
+
+
 @app.route('/account/security')
 def security():
     return render_template('security.html')
 
 
-@app.route('/account/email')
-def edit_email():
-    return render_template('editEmail.html')
+@app.route('/password')
+def password_reset():
+    return render_template('passwordReset.html')
+
+
+@app.route('/delete', methods=['GET', 'POST'])
+def delete():
+    file_name = root.child('Users/'+session['username']+'/photoName').get()
+    if request.method == 'POST':
+        root.child('Activities/' + session['username']).delete()
+        root.child('BloodPressure/' + session['username']).delete()
+        root.child('Food/' + session['username']).delete()
+        root.child('HealthDetail/' + session['username']).delete()
+        root.child('Leaderboard/' + session['username']).delete()
+        root.child('Rewards/' + session['username']).delete()
+        root.child('Users/' + session['username']).delete()
+        root.child('Weight/' + session['username']).delete()
+        session.pop('username', None)
+        session.pop('logged_in', None)
+        return redirect(url_for('index'))
+    return render_template('delete.html', fileName=file_name)
 
 
 @app.route('/profile')

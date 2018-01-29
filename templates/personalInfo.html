@@ -10,39 +10,54 @@
         {% endfor %}
       {% endif %}
     {% endmacro %}
-    <div class="account-box">
-        <form method="post" action="" class="main-form" >
-            <div class="box-header">Account Setup</div>
-            <div class="box-text">How Should We Call You?</div>
-            <div class="form-group account-content">
-                <div class="form-group">
-                    <div class="photoPreview">
-                        <img id="photoPreview" src="../static/images/default_photo.png">
-                    </div>
-                    <label class="file-wrapper form-control mt-3 mb-3">
-                        <input type="file"  id="file" name="files[]" multiple /><span id="uploader"></span>
-                        Choose Profile Image
-                    </label>
-                    <div class="alert alert-danger mt-1 mb-1 col-12" id="imgError" hidden>The File APIs are not fully supported in this browser.</div>
-                </div>
-                <div class="form-group">
-                    {{ render_field(name_form.display_name, class_="form-control mt-3 mb-3 ml-auto", placeholder="Display Name") }}
-                    <small class="form-control-description text-muted">This is how your name will appear to others. </small>
-                </div>
-			<button type="submit" class="form-control submit-btn" style="margin-top: 30px;margin-bottom: 0;" onclick="updateProfile()">Next</button>
-			</div>
-		</form>
-    </div>
+    <form method="post" class="mx-auto account-box p-5">
+        <div class="form-group form-row account-detail pt-4 pb-4">
+        <div class="form-group m-auto">
+            <div class="photoPreview">
+                <img id="photoPreview" src="../static/images/default_photo.png">
+            </div>
+            <label class="file-wrapper form-control mt-3 mb-3 submit-btn">
+                <input type="file"  id="file" name="files[]" multiple /><span id="uploader"></span>
+                Choose Profile Image
+            </label>
+            <div class="alert alert-danger mt-1 mb-1 col-12" id="imgError" hidden>The File APIs are not fully supported in this browser.</div>
+        </div>
+      </div>
+      <div class="form-group form-row account-detail pt-4 pb-4">
+        <div class="col-1"><i class="material-icons">share</i></div>
+        <div class="col-4"> Display Name :</div>
+          <div class="col-7">
+            {{ render_field(name_form.display_name, class_="form-control", placeholder="Display Name") }}
+          </div>
+      </div>
+      <div class="form-group form-row save-cancel-btn">
+        <a href="/account/info" class="col-5 btn btn-outline-secondary form-control" id="reset_info">Cancel</a>
+        <button type="submit" class="col-5 ml-auto btn btn-outline-primary form-control" id="update_info" value="update_info">Update</button>
+      </div>
+    </form>
     <script>
         var user = firebase.auth().currentUser;
         //Get Elements
         var uploader = document.getElementById('uploader');
         var fileButton = document.getElementById('file');
 
+        $( document ).ready(function() {
+            document.getElementById('photoURL').innerText = '{{ photoURL }}';
+            document.getElementById('fileName').innerText = '{{ fileName }}';
+            if (document.getElementById('username') != null) {
+                var username = document.getElementById('username').innerText;
+                firebase.database().ref('/Users/' + username + '/photoURL').once('value').then(function (snapshot) {
+                    var photoURL = (snapshot.val());
+                    if (photoURL != null){
+                        document.getElementById('photoPreview').src = photoURL
+                    }
+                });
+            }
+        });
         if (window.File && window.FileReader && window.FileList && window.Blob) {
         // Great success! All the File APIs are supported.
         } else {
-          $('#imgError').hidden = false
+           $('#imgError').hidden = false
         }
         //Upload Profile Picture
         //Altered code from: Firebase Youtube Channel.
@@ -51,12 +66,12 @@
             var fileName = document.getElementById('fileName').innerText;
             var file = e.target.files[0];
             //Create a Storage Ref
-            var storageRef = firebase.storage().ref('{{session['username']}}' + '/profilePicture/' + file.name);
+            var storageRef = firebase.storage().ref(firebase.auth().currentUser.email + '/profilePicture/' + file.name);
             //Upload file
             var task = storageRef.put(file);
             //Update Progress Bar
             if (fileName != ""){
-                firebase.storage().ref(firebase.auth().currentUser.email + '/profilePicture/' + fileName).delete();
+                firebase.storage().ref('{{session['username']}}' + '/profilePicture/' + fileName).delete();
                 task.on('state_changed',
                     function progress(snapshot) {
                         var percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
