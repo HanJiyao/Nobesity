@@ -461,6 +461,16 @@ def health_detail():
     return render_template('healthDetail.html', setup_detail_form=setup_detail_form)
 
 
+@app.route('/account/security')
+def security():
+    return render_template('security.html')
+
+
+@app.route('/account/email')
+def edit_email():
+    return render_template('editEmail.html')
+
+
 @app.route('/profile')
 def profile():
     uid_db = root

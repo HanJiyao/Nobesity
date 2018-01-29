@@ -9,11 +9,17 @@
 	padding:50px;
 }
 .email-verify-btn{
+	border:#03A9F4 solid 1px;
 	text-align: center;
 	background: #03A9F4;
 	color: white !important;
 	cursor: pointer;
 	font-size: 0.8rem;
+	transition: 0.3s;
+}
+.email-verify-btn:hover{
+	background: white;
+	color:#03A9F4!important;
 }
 .submit-btn{
     display: block;

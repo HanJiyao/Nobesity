@@ -16,8 +16,8 @@
     transition: color 0.5s, background-color 0.5s, border 0.5s;
 }
 .gender-radio:hover{
-    color:#03A9FA;
-    border:#03A9FA solid 1px;
+    color:#03A9F4;
+    border:#03A9F4 solid 1px;
 }
 .gender-radio.active{
     background: #03A9F4;
@@ -62,4 +62,28 @@
 }
 .save-cancel-btn{
 	margin: 0;
+}
+#deleteAccount{
+	background: white;
+	margin:auto;
+	color:#9E9E9E;
+	transition:0.3s;
+	cursor: pointer;
+}
+#deleteAccount i{
+	margin-right: 20px;
+	vertical-align: -5px;
+}
+#deleteAccount:hover{
+	color:#F44336
+}
+.email-verified{
+	color: #64DD17;
+}
+#editEmail{
+	cursor: pointer;
+	transition: 0.3s;
+}
+#editEmail:hover{
+	color: #03A9F4;
 }

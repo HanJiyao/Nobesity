@@ -35,27 +35,29 @@
       <div class="form-group form-row account-detail pt-4 pb-4">
         <div class="col-1"><i class="material-icons">account_box</i></div>
         <div class="col-4"> Username :</div>
-          <div class="col-7">
-              <input class="form-control">
+          <div class="col-7 pt-2">
+              han
           </div>
       </div>
-      <div class="form-group form-row account-detail pt-4 pb-4">
+      <div class="form-group form-row account-detail pt-4 pb-4 email-wrapper">
             <div class="col-1"><i class="material-icons">email</i></div>
             <div class="col-4"> Email :</div>
-            <div class="col-6">
-                <input class="form-control">
+            <div class="col-5 pt-2">
+                hanjiyao0@gmail.com
             </div>
-            <div class="col-1"><i class="material-icons">verified_user</i></div>
+            <div class="col-1"><i class="material-icons email-verified" >verified_user</i></div>
+            <div class="col-1"><i class="material-icons" id="editEmail">mode_edit</i></div>
       </div>
       <div class="form-group form-row account-detail pt-4 pb-4">
         <div class="col-1"><i class="material-icons">vpn_key</i></div>
         <div class="col-4"> Password :</div>
           <div class="col-7">
-            <input class="form-control"></input>
+            <button class="form-control email-verify-btn" id="reset_password">Reset Password by Email</button>
+            <button class="form-control email-verify-btn" id="reset_status">Resend</button>
           </div>
       </div>
       <div class="form-group form-row account-detail pt-4 pb-4">
-        <button><i class="material-icons">delete_forever</i>Delete Account</button>
+          <a id="deleteAccount"><i class="material-icons">delete_forever</i>Delete Account</a>
       </div>
     </form>
 </body>
