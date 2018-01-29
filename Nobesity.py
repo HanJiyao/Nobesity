@@ -732,6 +732,8 @@ def record():
     act_list_today = []
     total_calories_burnt = 0
     total_calories = 0
+    total_calories_in = 0
+    total_calories_out = 0
     message_today = 'You have not recorded any activities today! Get moving!'
     Diet_db = root.child('Food/' + username).get()
     try:
@@ -758,7 +760,10 @@ def record():
             food = Diet(eachdiet['Name'], eachdiet['Type'], eachdiet['Calories Value'], eachdiet['Fats Value'],
                         eachdiet['Carbohydrates Value'], eachdiet['Protein Value'], eachdiet['Diet Date'])
             if eachdiet['Diet Date'] == str(datetime.date.today()):
-
+                for eachdiet in food:
+                    total_calories_in += food.get_calories()
+                for eachact in activities:
+                    total_calories_out += activities.get_calories()
 
     except TypeError:
         return redirect(url_for('input_activity'))
