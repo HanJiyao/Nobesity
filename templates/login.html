@@ -89,7 +89,11 @@
                     document.getElementById("error_alert").innerText = "The password is invalid";
                 } else if (errorCode === 'auth/invalid-email'){
                     document.getElementById("error_alert").style.display = "block";
-                    document.getElementById("error_alert").innerText = "Invalid Username or Email";
+                    document.getElementById("error_alert").style.background = "#03a9f4";
+                    document.getElementById("error_alert").innerText = "Login using Username...";
+                    setTimeout(function(){
+                        document.getElementById("error_alert").style.background = "#F44336";
+                        document.getElementById("error_alert").innerText = "Invalid username"; }, 5000);
                 } else {
                     document.getElementById("error_alert").style.display = "block";
                     document.getElementById("error_alert").innerText = errorMessage;

@@ -26,6 +26,12 @@
 	background: #03A9F4;
 	color: white;
 	text-align: center;
+	border:#03A9F4 solid 1px;
+	transition: 0.3s;
+}
+.submit-btn:hover{
+	color:#03A9F4;
+	background: white;
 }
 .psw{
 	text-align: center;

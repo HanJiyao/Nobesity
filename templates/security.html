@@ -9,19 +9,23 @@
           </div>
       </div>
       <div class="form-group form-row account-detail pt-4 pb-4 email-wrapper">
-            <div class="col-1"><i class="material-icons">email</i></div>
-            <div class="col-4"> Email :</div>
-            <div class="col-5 pt-2">
-                hanjiyao0@gmail.com
-            </div>
-            <div class="col-1"><i class="material-icons email-verified" >verified_user</i></div>
-            <div class="col-1"><i class="material-icons" id="editEmail">mode_edit</i></div>
+        <div class="col-1"><i class="material-icons">email</i></div>
+        <div class="col-4"> Email :</div>
+        <div class="col-5">
+            <span class="pt-2" id="email_display">email</span>
+            <input class="form-control" id="new_email" style="display: none">
+        </div>
+        <div class="col-1"><i class="material-icons email-verified" id="verified">verified_user</i></div>
+        <div class="col-1">
+            <i class="material-icons" id="editEmail" onclick="editEmail()">mode_edit</i>
+            <i class="material-icons" id="toVerify" style="display: none" onclick="toVerify()">done</i>
+        </div>
       </div>
       <div class="form-group form-row account-detail pt-4 pb-4">
         <div class="col-1"><i class="material-icons">vpn_key</i></div>
         <div class="col-4"> Password :</div>
           <div class="col-7">
-            <a class="form-control email-verify-btn" id="reset_password" onclick="sendEmailVerification();resendCount()">Reset Password by Email</a>
+            <a class="form-control email-verify-btn" id="reset_password" onclick="sendResetPasswordEmail();resendCount()">Reset Password by Email</a>
             <a class="form-control email-verify-btn" id="reset_status" style="display:none; background: #e9ecef; color:#222222">Resend</a>
           </div>
       </div>
@@ -30,20 +34,36 @@
       </div>
     </form>
     <script>
-    function sendEmailVerification() {
-      // [START sendemailverification]
-    var auth = firebase.auth();
-    var emailAddress = firebase.auth().currentUser.email;
+     firebase.auth().onAuthStateChanged(function(user) {
+        document.getElementById("email_display").innerText = firebase.auth().currentUser.email;
+        if (firebase.auth().currentUser.emailVerified == false) {
+            document.getElementById("verified").style.color = '#424242';
+        } else {
+            document.getElementById("verified").style.color = '#64DD17';
+        }
+     });
+    function editEmail() {
 
-    auth.sendPasswordResetEmail(emailAddress).then(function() {
-        // Email Verification sent!
-        // [START_EXCLUDE]
-        document.getElementById("reset_password").style.display = "none";
-        document.getElementById("reset_status").style.display = "block";
-      });
-      // [END sendemailverification]
+        document.getElementById('editEmail').style.display = 'none';
+        document.getElementById('toVerify').style.display='block';
+        document.getElementById('email_display').style.display='none';
+        document.getElementById('new_email').style.display='block';
+        document.getElementById("verified").style.color = '#424242';
     }
+    function toVerify() {
 
+    }
+    function sendResetPasswordEmail() {
+      // [START sendResetPasswordEmail]
+        var auth = firebase.auth();
+        var emailAddress = firebase.auth().currentUser.email;
+        auth.sendPasswordResetEmail(emailAddress).then(function() {
+            // [START_EXCLUDE]
+            document.getElementById("reset_password").style.display = "none";
+            document.getElementById("reset_status").style.display = "block";
+          });
+          // [END sendResetPasswordEmail]
+    }
     function resendCount() {
         var countdownElement = document.getElementById('reset_status'),
             sendButton = document.getElementById('reset_password'),
