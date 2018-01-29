@@ -13,7 +13,6 @@ div.image-container {
 
 div.image-container img {
 	height: 330px;
-	width: 95%;
 }
 
 div.record-wrapper {
@@ -21,13 +20,13 @@ div.record-wrapper {
 }
 
 section#overview {
-	width: 50%;
+	width: 75%;
 	margin-left: auto;
 	margin-right: auto;
 }
 
 section#activities {
-	width: 50%;
+	width: 75%;
 	margin-left: auto;
 	margin-right: auto;
 }
