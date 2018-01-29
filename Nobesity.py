@@ -730,6 +730,7 @@ def record():
     Act_db = root.child('Activities/' + username).get()
     act_list = []
     act_list_today = []
+    total_calories_burnt = 0
     message_today = 'You have not recorded any activities today! Get moving!'
     try:
         for actID in Act_db:
@@ -763,13 +764,11 @@ def record():
 
 @app.route('/rewards')
 def rewards():
-    healthpoints_db=root.child("rewards").get()
-    healthpointslist=[]
-    for eachhealthpoints in healthpoints_db:
-        healthpoints=Rewards(eachhealthpoints,healthpoints_db[eachhealthpoints]["Healthpoints"])
-        healthpointslist.append(healthpoints)
-    
-    return render_template('rewards.html')
+    healthpoint_db = root.child("Rewards").get()
+    healthpoint = Rewards(healthpoint_db[session['username']]["HealthPoint"])
+
+    return render_template('rewards.html', healthpoint=healthpoint )
+
 
 class Rewards:
     healthpoints=0
@@ -785,10 +784,12 @@ class Rewards:
         self.__healthpoints=self.__healthpoints-healthpoints
     def check_healthpoints(self,healthpoints):
         if self.__healthpoints < healthpoints:
-            flash('Not enough healthpoints', 'failure')
+            return False
         else:
             self.__healthpoints = self.__healthpoints - healthpoints
-            flash("Item successfully redeemed.You have {} healthpoints left".format(self.get_healthpoints()),"Success")
+            return True
+
+
 @app.route('/quiz', methods=['GET','POST'])
 def quiz():
     new_form = leaderboardform(request.form)
