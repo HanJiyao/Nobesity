@@ -33,26 +33,38 @@
                     <img src="../static/images/Drink_icon.png" width="50" height="50">
                 {% endif %}
                 {{ eachdiet.get_type()}}
-                <span class="ml-5">Diet Date: {{eachdiet.get_dietDate()}}</span>
+                <span class="ml-5">Diet taken on: {{eachdiet.get_dietDate()}}</span>
             </div>
 
             <div class="card-body">
                 <h5 class="card-title">{{eachdiet.get_name()}}</h5>
                 <div class="card-text">
                 <div class ='row'>
-                    <div class ='col-6'>
-                        Calories:{{ eachdiet.get_calories() }}
+                    <div class ='col-3'>
+                        <span id =diet_details>{{ eachdiet.get_calories() }}</span>
                     </div>
-                    <div class ='col-6'>
-                        Fats:{{ eachdiet.get_fats() }}
+                    <div class='col-3'>
+                        <span id =diet_details>{{ eachdiet.get_fats() }}</span>
+                    </div>
+                    <div class='col-3'>
+                        <span id = diet_details>{{ eachdiet.get_carbohydrates() }}</span>
+                    </div>
+                    <div class='col-3'>
+                        <span id ='diet_details'>{{ eachdiet.get_protein() }}</span>
                     </div>
                 </div>
                 <div class ='row'>
-                      <div class ='col-6'>
-                        Carbohydrates:{{ eachdiet.get_carbohydrates() }}
+                    <div class ='col-3'>
+                        <span id =diet_content>Calories</span>
                     </div>
-                    <div class ='col-6'>
-                        Protein:{{ eachdiet.get_protein() }}
+                    <div class='col-3'>
+                        <span id =diet_content>Fats</span>
+                    </div>
+                    <div class='col-3'>
+                        <span id = diet_content>Carbohydrates</span>
+                    </div>
+                    <div class='col-3'>
+                        <span id ='diet_content'>Protein</span>
                     </div>
                 </div>
             </div>
