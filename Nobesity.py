@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, flash, redirect, url_for, session
-from wtforms import Form, StringField, TextAreaField, RadioField, SelectField, PasswordField, DecimalField, \
+from wtforms import Form, StringField, TextAreaField, RadioField, SelectField, PasswordField, DecimalField,\
     IntegerField, DateField, validators, ValidationError
 import firebase_admin
 from firebase_admin import credentials, db
