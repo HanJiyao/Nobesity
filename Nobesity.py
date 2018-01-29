@@ -61,7 +61,7 @@ def login():
     if request.method == 'POST' and login_form.validate():
         login_id = request.form.to_dict()['username'].lower()
         for i in uid_db:
-            if uid_db[i]['email'] == login_id or login_id == i:
+            if root.child('Users/'+i+'/email').get() == login_id or login_id == i:
                 session['username'] = i
                 session['logged_in'] = True
                 flash('Welcome Back, ' + session['username'], 'primary')
