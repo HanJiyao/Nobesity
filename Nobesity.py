@@ -717,7 +717,7 @@ def input_activity():
         latest_activity.db = root.child('Activities/' + username)
         latest_activity.db.push({'Activity': latest_activity.get_activity(), 'Date': latest_activity.get_date(),
                                  'Duration': latest_activity.get_duration(),
-                                 'Calories': latest_activity.get_calories()})
+                                 'Calories Burnt': latest_activity.get_calories()})
         flash('New activity updated successfully', 'success')
         return redirect(url_for('record'))
 

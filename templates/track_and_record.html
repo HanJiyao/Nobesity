@@ -19,8 +19,6 @@
                 <button class="btn btn-submit btn-lg" id="activityButton">
                     <a href="/input_activity">Add An Activity</a>
                 </button>
-                <!--<button class="btn btn-primary btn-lg" id="activityButton" data-toggle="modal" data-target="#addModal">Add activity</button>-->
-                <!--<button class="btn btn-primary btn-lg" id="weightButton" data-toggle="modal" data-target="#logModal">Log your weight</button>-->
             </section>
 {#            <section id="calendar-container"></section>#}
             <section id="overview">
@@ -36,6 +34,7 @@
                             <th>Name Of Activity</th>
                             <th>Date Of Activity</th>
                             <th>Duration Of Activity (in minutes)</th>
+                            <th>Calories Burnt</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -45,6 +44,7 @@
                                 <td>{{eachact.get_activity()}}</td>
                                 <td>{{eachact.get_date()}}</td>
                                 <td>{{eachact.get_duration()}}</td>
+                                <td>{{eachact.get_calories()}}</td>
 
                             </tr>
                             {% endfor %}
@@ -87,6 +87,7 @@
                             <th>Name Of Activity</th>
                             <th>Date Of Activity</th>
                             <th>Duration Of Activity (in minutes)</th>
+                            <th>Calories Burnt</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -96,6 +97,7 @@
                                 <td>{{eachact.get_activity()}}</td>
                                 <td>{{eachact.get_date()}}</td>
                                 <td>{{eachact.get_duration()}}</td>
+                                <td>{{eachact.get_calories()}}</td>
 
                             </tr>
                             {% endfor %}
@@ -104,16 +106,16 @@
                 </div>
             </section>
             <!--BOTTOM SECTION showing the user's weight over a period of time can be shown using a line graph-->
-            <p id="activity_details"> Testing Duration: {{total_duration}}</p>
+            <p id="activity_details"> Testing Calories: {{total_calories_burnt}}</p>
             <canvas id = "Canvas"></canvas>
             <script>
                 var ctx = document.getElementById("Canvas").getContext("2d");
                 var actData = {
                     datasets: [{
-                            data: [{{ total_duration }}],
+                            data: [{{ total_calories_burnt }}],
                             backgroundColor: ["#1b9393"]
                     }],
-                    labels:['Duration']
+                    labels:['Calories Burnt']
                 };
                 var options  =  Chart.defaults.pie;
                 var actPieChart = new Chart(ctx,{type: 'pie', data: actData, options: options});
