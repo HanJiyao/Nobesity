@@ -662,14 +662,16 @@ class ActivityForm(Form):
     activity = StringField('Name Of Activity', [validators.Length(min=1, max=20), validators.DataRequired()])
     date = DateField('Date Of Activity', format='%Y/%m/%d')
     duration = IntegerField('Duration Of Activity')
+    calories = IntegerField('Calories Burnt')
 
 
 class Activity:
-    def __init__(self, activity, date, duration):
+    def __init__(self, activity, date, duration, calories):
         self.__actID = ''
         self.__activity = activity
         self.__date = date
         self.__duration = duration
+        self.__calories = calories
 
     def get_activity(self):
         return self.__activity
@@ -683,6 +685,9 @@ class Activity:
     def get_duration(self):
         return self.__duration
 
+    def get_calories(self):
+        return self.__calories
+
     def set_activity(self, activity):
         self.__activity = activity
 
@@ -695,18 +700,24 @@ class Activity:
     def set_duration(self, duration):
         self.__duration = duration
 
+    def set_calories(self, calories):
+        self.__calories = calories
+
 
 @app.route('/input_activity', methods=['GET', 'POST'])
 def input_activity():
     actform = ActivityForm(request.form)
-    username=session["username"]
+    username = session["username"]
     if request.method == 'POST' and actform.validate():
         activity = actform.activity.data
         date = str(actform.date.data)
         duration = int(actform.duration.data)
-        latest_activity = Activity(activity, date, duration)
-        latest_activity.db = root.child('Activities/'+username)
-        latest_activity.db.push({'Activity': latest_activity.get_activity(), 'Date': latest_activity.get_date(), 'Duration': latest_activity.get_duration()})
+        calories = int(actform.calories.data)
+        latest_activity = Activity(activity, date, duration, calories)
+        latest_activity.db = root.child('Activities/' + username)
+        latest_activity.db.push({'Activity': latest_activity.get_activity(), 'Date': latest_activity.get_date(),
+                                 'Duration': latest_activity.get_duration(),
+                                 'Calories': latest_activity.get_calories()})
         flash('New activity updated successfully', 'success')
         return redirect(url_for('record'))
 
@@ -716,33 +727,38 @@ def input_activity():
 @app.route('/record')
 def record():
     username = session["username"]
-    Act_db = root.child('Activities/'+username).get()
+    Act_db = root.child('Activities/' + username).get()
     act_list = []
     act_list_today = []
     message_today = 'You have not recorded any activities today! Get moving!'
     try:
         for actID in Act_db:
             eachact = Act_db[actID]
-            activities = Activity(eachact['Activity'], eachact['Date'], eachact['Duration'])
-            # total_duration += activities.get_duration()
+            activities = Activity(eachact['Activity'], eachact['Date'], eachact['Duration'], eachact['Calories Burnt'])
+            total_calories_burnt += activities.get_calories()
             activities.set_actID(actID)
             act_list.append(activities)
-            #if list is not empty, do the sorting by date
-            #act_list.sort(key=xxxxx, reverse=True)
+            # if list is not empty, do the sorting by date
+            # act_list.sort(key=xxxxx, reverse=True)
             act_list.sort(key=lambda activity: activity.get_date(), reverse=True)
+
+            # check if the date of activity matches today's date
             if eachact['Date'] == str(datetime.date.today()):
-                activities = Activity(eachact['Activity'], eachact['Date'], eachact['Duration'])
-                # total_duration += activities.get_duration()
+                activities = Activity(eachact['Activity'], eachact['Date'], eachact['Duration'],
+                                      eachact['Calories Burnt'])
                 activities.set_actID(actID)
                 act_list_today.append(activities)
                 message_today = ''
+                # no message if there is an activity done today
 
     except TypeError:
         return redirect(url_for('input_activity'))
     except KeyError:
         return redirect(url_for('input_activity'))
+
     today_date = datetime.datetime.now().strftime("%A, %d %B %Y")
-    return render_template('track_and_record.html', activity=act_list, activity_today = act_list_today, date=today_date, display_msg_today=message_today)
+    return render_template('track_and_record.html', activity=act_list, activity_today=act_list_today, date=today_date,
+                           display_msg_today=message_today)
 
 
 @app.route('/rewards')
