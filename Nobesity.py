@@ -740,9 +740,32 @@ def record():
 
 @app.route('/rewards')
 def rewards():
+    healthpoints_db=root.child("rewards").get()
+    healthpointslist=[]
+    for eachhealthpoints in healthpoints_db:
+        healthpoints=Rewards(eachhealthpoints,healthpoints_db[eachhealthpoints]["Healthpoints"])
+        healthpointslist.append(healthpoints)
+    
     return render_template('rewards.html')
 
-
+class Rewards:
+    healthpoints=0
+    def __init__(self,healthpoints):
+        self.__healthpoints=healthpoints
+    def get_healthpoints(self):
+        return self.__healthpoints
+    def set_healthpoints(self,healthpoints):
+        self.__healthpoints=healthpoints
+    def add_healthpoints(self,healthpoints):
+        self.__healthpoints=self.__healthpoints+healthpoints
+    def minus_healthpoints(self,healthpoints):
+        self.__healthpoints=self.__healthpoints-healthpoints
+    def check_healthpoints(self,healthpoints):
+        if self.__healthpoints < healthpoints:
+            flash('Not enough healthpoints', 'failure')
+        else:
+            self.__healthpoints = self.__healthpoints - healthpoints
+            flash("Item successfully redeemed.You have {} healthpoints left".format(self.get_healthpoints()),"Success")
 @app.route('/quiz', methods=['GET','POST'])
 def quiz():
     new_form = leaderboardform(request.form)
@@ -794,7 +817,6 @@ class Leaderboard:
 
 class leaderboardform(Form):
     score=StringField("Score")
-
 
 if __name__ == '__main__':
     app.run()
