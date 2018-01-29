@@ -555,7 +555,9 @@ def diet():
             total_protein += food.get_protein()
             food.set_dietID(dietID)
             diet_list.append(food)
-    except TypeError or KeyError:
+    except TypeError :
+        return redirect(url_for('new_diet'))
+    except KeyError:
         return redirect(url_for('new_diet'))
 
     return render_template('diet.html', diet=diet_list, total_calories=total_calories,total_fats=total_fats,
@@ -616,7 +618,6 @@ def update_diet(id):
         diet_date = root.child(url + '/Diet Date').get()
         food_diet = Diet(name, food_type, calories, fats, carbohydrates, protein, diet_date)
         Diet_db = root.child('Food/' + username + '/' + id)
-        print(protein, diet_date, )
         Diet_db.set({'Name': food_diet.get_name(),
                      'Type': food_diet.get_type(),
                      'Calories Value': food_diet.get_calories(),
@@ -739,7 +740,9 @@ def record():
             else:
                 # return message into the top section
                 pass
-    except TypeError or KeyError:
+    except TypeError:
+        return redirect(url_for('input_activity'))
+    except KeyError:
         return redirect(url_for('input_activity'))
     today_date = datetime.datetime.now().strftime("%A, %d %B %Y")
     return render_template('track_and_record.html', activity=act_list, date=today_date, display_msg=message)
