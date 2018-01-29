@@ -192,6 +192,7 @@ html, body{
 	width: 0;
 	background: #f0f0f0;
 	text-align: left;
+	padding-top: 50px;
 }
 .sidenav ul {
 	border-bottom: #e0e0e0 solid 1px;

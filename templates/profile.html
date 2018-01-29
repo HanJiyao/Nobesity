@@ -24,7 +24,9 @@
             var username = document.getElementById('username').innerText;
             firebase.database().ref('/Users/' + username + '/photoURL').once('value').then(function (snapshot) {
                 var photoURL = (snapshot.val());
-                document.getElementById('profilePhoto').src = photoURL
+                if (photoURL != null){
+                    document.getElementById('profilePhoto').src = photoURL
+                }
             });
         }
     </script>

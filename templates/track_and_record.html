@@ -29,7 +29,27 @@
                     <span>{{date}}</span>
                 </div>
                 <div id="bottom" class="overview">
-                    <span>{{display_msg}}</span>
+                    <span>{{display_msg_today}}</span>
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>Name Of Activity</th>
+                            <th>Date Of Activity</th>
+                            <th>Duration Of Activity (in minutes)</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {% for eachact in activity_today %}
+                            <tr>
+
+                                <td>{{eachact.get_activity()}}</td>
+                                <td>{{eachact.get_date()}}</td>
+                                <td>{{eachact.get_duration()}}</td>
+
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
 {#                    <ul><li>#}
 {#                        <div class="info">#}
 {#                            <span>30</span>#}
@@ -61,7 +81,6 @@
                     <span>Recent activities</span>
                 </div>
                 <div id="bottom" class="overview">
-                    <span>{{display_msg}}</span>
                     <table class="table table-bordered">
                         <thead>
                         <tr>

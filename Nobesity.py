@@ -718,7 +718,8 @@ def record():
     username = session["username"]
     Act_db = root.child('Activities/'+username).get()
     act_list = []
-    message = 'You have not recorded any activities yet! Get moving!'
+    act_list_today = []
+    message_today = 'You have not recorded any activities today! Get moving!'
     try:
         for actID in Act_db:
             eachact = Act_db[actID]
@@ -726,26 +727,22 @@ def record():
             # total_duration += activities.get_duration()
             activities.set_actID(actID)
             act_list.append(activities)
-        #check if list is empty or not
-        if not act_list:
-            return message
-        else:
             #if list is not empty, do the sorting by date
             #act_list.sort(key=xxxxx, reverse=True)
             act_list.sort(key=lambda activity: activity.get_date(), reverse=True)
+            if eachact['Date'] == str(datetime.date.today()):
+                activities = Activity(eachact['Activity'], eachact['Date'], eachact['Duration'])
+                # total_duration += activities.get_duration()
+                activities.set_actID(actID)
+                act_list_today.append(activities)
+                message_today = ''
 
-            if eachact['Date'] == datetime.datetime.now():
-                #output activity with today's date into the top section
-                pass
-            else:
-                # return message into the top section
-                pass
     except TypeError:
         return redirect(url_for('input_activity'))
     except KeyError:
         return redirect(url_for('input_activity'))
     today_date = datetime.datetime.now().strftime("%A, %d %B %Y")
-    return render_template('track_and_record.html', activity=act_list, date=today_date, display_msg=message)
+    return render_template('track_and_record.html', activity=act_list, activity_today = act_list_today, date=today_date, display_msg_today=message_today)
 
 
 @app.route('/rewards')
