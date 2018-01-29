@@ -595,7 +595,7 @@ def new_diet():
         fats = new_form.fats.data
         carbohydrates = new_form.carbohydrates.data
         protein = new_form.proteins.data
-        diet_date = '{:%Y/%m/%d}'.format(datetime.date.today())
+        diet_date = '{:%Y-%m-%d}'.format(datetime.date.today())
         food_diet = Diet(name, type, calories, fats, carbohydrates, protein,diet_date)
         food_diet.db = root.child('Food')
         food_diet.db.child(username).push({'Name': food_diet.get_name(),
@@ -740,17 +740,19 @@ def record():
     Act_db = root.child('Activities/' + username).get()
     act_list = []
     act_list_today = []
+    diet_today = []
+    diet_list = []
     total_calories_burnt = 0
     total_calories = 0
     total_calories_in = 0
     total_calories_out = 0
     message_today = 'You have not recorded any activities today! Get moving!'
-    Diet_db = root.child('Food/' + username).get()
+    Diet_db = root.child('Food').get()
     try:
         for actID in Act_db:
             eachact = Act_db[actID]
             activities = Activity(eachact['Activity'], eachact['Date'], eachact['Duration'], eachact['Calories Burnt'])
-            total_calories_burnt += activities.get_calories()
+            # total_calories_burnt += activities.get_calories()
             activities.set_actID(actID)
             act_list.append(activities)
             # if list is not empty, do the sorting by date
@@ -759,21 +761,32 @@ def record():
 
             # check if the date of activity matches today's date
             if eachact['Date'] == str(datetime.date.today()):
-                activities = Activity(eachact['Activity'], eachact['Date'], eachact['Duration'],
+                activities_today = Activity(eachact['Activity'], eachact['Date'], eachact['Duration'],
                                       eachact['Calories Burnt'])
-                activities.set_actID(actID)
-                act_list_today.append(activities)
+                activities_today.set_actID(actID)
+                act_list_today.append(activities_today)
                 message_today = ''
                 # no message if there is an activity done today
+                for i in act_list_today:
+                    total_calories_out += activities_today.get_calories()
+                    print(total_calories_out)
+
         for dietID in Diet_db[username]:
             eachdiet = Diet_db[username][dietID]
             food = Diet(eachdiet['Name'], eachdiet['Type'], eachdiet['Calories Value'], eachdiet['Fats Value'],
                         eachdiet['Carbohydrates Value'], eachdiet['Protein Value'], eachdiet['Diet Date'])
+            diet_list.append(food)
+
+            print(eachdiet['Diet Date'])
+            print(str(datetime.date.today()))
+
             if eachdiet['Diet Date'] == str(datetime.date.today()):
-                for eachdiet in food:
-                    total_calories_in += food.get_calories()
-                for eachact in activities:
-                    total_calories_out += activities.get_calories()
+                food_today = Diet(eachdiet['Name'], eachdiet['Type'], eachdiet['Calories Value'], eachdiet['Fats Value'],
+                        eachdiet['Carbohydrates Value'], eachdiet['Protein Value'], eachdiet['Diet Date'])
+                diet_today.append(food_today)
+                for i in diet_today:
+                    total_calories_in += food_today.get_calories()
+                    print(total_calories_in)
 
     except TypeError:
         return redirect(url_for('input_activity'))
@@ -782,7 +795,7 @@ def record():
 
     today_date = datetime.datetime.now().strftime("%A, %d %B %Y")
     return render_template('track_and_record.html', activity=act_list, activity_today=act_list_today, date=today_date,
-                           display_msg_today=message_today)
+                           display_msg_today=message_today, cal_in=total_calories_in, cal_out=total_calories_out)
 
 
 @app.route('/rewards')

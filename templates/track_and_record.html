@@ -106,16 +106,16 @@
                 </div>
             </section>
             <!--BOTTOM SECTION showing the user's weight over a period of time can be shown using a line graph-->
-            <p id="activity_details"> Testing Calories: {{total_calories_burnt}}</p>
+            <p id="activity_details"> Testing Calories: ???</p>
             <canvas id = "Canvas"></canvas>
             <script>
                 var ctx = document.getElementById("Canvas").getContext("2d");
                 var actData = {
                     datasets: [{
-                            data: [{{ total_calories_burnt }}],
-                            backgroundColor: ["#1b9393"]
+                            data: [{{ cal_in }}, {{ cal_out }}],
+                            backgroundColor: ["#1b9393", "#0074D9"]
                     }],
-                    labels:['Calories Burnt']
+                    labels:['Calories In', 'Calories Out']
                 };
                 var options  =  Chart.defaults.pie;
                 var actPieChart = new Chart(ctx,{type: 'pie', data: actData, options: options});
