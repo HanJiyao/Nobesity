@@ -585,7 +585,7 @@ def new_diet():
         fats = new_form.fats.data
         carbohydrates = new_form.carbohydrates.data
         protein = new_form.proteins.data
-        diet_date = '{:%d/%m/%Y}'.format(datetime.date.today())
+        diet_date = '{:%Y/%m/%d}'.format(datetime.date.today())
         food_diet = Diet(name, type, calories, fats, carbohydrates, protein,diet_date)
         food_diet.db = root.child('Food')
         food_diet.db.child(username).push({'Name': food_diet.get_name(),
@@ -731,7 +731,9 @@ def record():
     act_list = []
     act_list_today = []
     total_calories_burnt = 0
+    total_calories = 0
     message_today = 'You have not recorded any activities today! Get moving!'
+    Diet_db = root.child('Food/' + username).get()
     try:
         for actID in Act_db:
             eachact = Act_db[actID]
@@ -751,6 +753,12 @@ def record():
                 act_list_today.append(activities)
                 message_today = ''
                 # no message if there is an activity done today
+        for dietID in Diet_db[username]:
+            eachdiet = Diet_db[username][dietID]
+            food = Diet(eachdiet['Name'], eachdiet['Type'], eachdiet['Calories Value'], eachdiet['Fats Value'],
+                        eachdiet['Carbohydrates Value'], eachdiet['Protein Value'], eachdiet['Diet Date'])
+            if eachdiet['Diet Date'] == str(datetime.date.today()):
+
 
     except TypeError:
         return redirect(url_for('input_activity'))
