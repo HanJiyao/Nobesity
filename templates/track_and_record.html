@@ -106,7 +106,8 @@
                 </div>
             </section>
             <!--BOTTOM SECTION showing the user's weight over a period of time can be shown using a line graph-->
-            <p id="activity_details"> Testing Calories: ???</p>
+            <h2 id="test"> Testing Today Calories In: {{ cal_in }}</h2>
+            <h2 id="test"> Testing Today Calories Out: {{ cal_out }}</h2>
             <canvas id = "Canvas"></canvas>
             <script>
                 var ctx = document.getElementById("Canvas").getContext("2d");
