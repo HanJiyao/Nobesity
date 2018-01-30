@@ -626,7 +626,7 @@ def new_diet():
         fats = new_form.fats.data
         carbohydrates = new_form.carbohydrates.data
         protein = new_form.proteins.data
-        diet_date = '{:%Y-%m-%d}'.format(datetime.date.today())
+        diet_date = '{:%d-%m-%Y}'.format(datetime.date.today())
         food_diet = Diet(name, type, calories, fats, carbohydrates, protein,diet_date)
         food_diet.db = root.child('Food')
         food_diet.db.child(username).push({'Name': food_diet.get_name(),
@@ -759,7 +759,7 @@ def input_activity():
         latest_activity.db.push({'Activity': latest_activity.get_activity(), 'Date': latest_activity.get_date(),
                                  'Duration': latest_activity.get_duration(),
                                  'Calories Burnt': latest_activity.get_calories()})
-        flash('New activity updated successfully', 'success')
+        flash('New activ ity updated successfully', 'success')
         return redirect(url_for('record'))
 
     return render_template('input_activity.html', actform=actform)

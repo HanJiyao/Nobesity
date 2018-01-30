@@ -1,11 +1,7 @@
 .deletediet,.updatediet{
     border: none !important;
 }
-#update_button,#delete_button {
-    font-size: 24px;
-    height: 50px;
-    width: 50px;
-}
+
 #calories_details{
     font-size: 30px;
     font-family: "Arial Black";
@@ -29,4 +25,10 @@
 }
 .row{
     text-align: center;
+}
+
+#update_button,#delete_button {
+    font-size: 24px;
+    height: 50px;
+    width: 50px;
 }
