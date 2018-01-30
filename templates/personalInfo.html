@@ -66,7 +66,7 @@
             var fileName = document.getElementById('fileName').innerText;
             var file = e.target.files[0];
             //Create a Storage Ref
-            var storageRef = firebase.storage().ref(firebase.auth().currentUser.email + '/profilePicture/' + file.name);
+            var storageRef = firebase.storage().ref('{{session['username']}}' + '/profilePicture/' + file.name);
             //Upload file
             var task = storageRef.put(file);
             //Update Progress Bar

@@ -69,6 +69,7 @@
 	color:#9E9E9E;
 	transition:0.3s;
 	cursor: pointer;
+	text-decoration: none;
 }
 #deleteAccount i{
 	margin-right: 20px;

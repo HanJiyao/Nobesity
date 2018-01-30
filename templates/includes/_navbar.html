@@ -40,8 +40,10 @@
         </ul>
         {% if session.logged_in%}
             <div class ="navPhoto-wrapper">
-                <div class="navPhoto">
-                    <img id="navPhoto" src="../static/images/default_photo.png">
+                <div class="navPhoto" >
+                    <a href="/account/info">
+                        <img id="navPhoto" src="../static/images/default_photo.png">
+                    </a>
                 </div>
             </div>
             <div class="nav-item dropdown" id="account_login">

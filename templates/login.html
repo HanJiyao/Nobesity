@@ -30,7 +30,7 @@
                         {{ render_field(form.password, class_="form-control mt-3 mb-3", placeholder="Password") }}
                     </div>
                     <div class="form-row">
-                        <button id="quickstart-sign-in" type="button" class="form-control submit-btn mt-3 mb-3" value="Login" id="login_button" onclick="replaceEmail();loginRedirect1()">LOG IN</button>
+                        <button id="quickstart-sign-in" type="button" class="form-control submit-btn mt-3 mb-3" value="Login" id="login_button" onclick="replaceEmail()">LOG IN</button>
                     </div>
                     <div class="psw"><a href="/password">Forgot password?</a></div>
                 </div>
@@ -79,7 +79,10 @@
             }
             // Sign in with email and pass.
             // [START authwithemail]
-            firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+            firebase.auth().signInWithEmailAndPassword(email, password).then(function() {
+                // create successful.
+                loginRedirect()
+                }).catch(function(error) {
                 // Handle Errors here.
                 var errorCode = error.code;
                 var errorMessage = error.message;
@@ -104,7 +107,7 @@
             // [END authwithemail]
         }
 
-        function loginRedirect1() {
+        function loginRedirect() {
             firebase.auth().onAuthStateChanged(function (user) {
                 if (user) {
                     document.getElementById("login_form").submit()
