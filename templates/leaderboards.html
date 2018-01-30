@@ -12,13 +12,17 @@
 	</tr>
   </thead>
   <tbody>
+    {% if leaderboards_list==[] %}
+    <p>Nobody has Done this quiz yet,Hence there is no Score.Be the first to do it!</p>
+    {% else %}
+    {% endif %}
 
-    {% for eachscore in leaderboards_list%}
+    {% for eachusername in leaderboards_list%}
 
         <tr>
-            <td>{{eachscore.get_rank()}}</td>
-            <td>{{eachscore.get_username()}}</td>
-            <td>{{eachscore.get_score()}}</td>
+            <td>{{eachusername.get_rank()}}</td>
+            <td>{{eachusername.get_username()}}</td>
+            <td>{{eachusername.get_score()}}</td>
 
         </tr>
 

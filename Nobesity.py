@@ -831,41 +831,50 @@ def record():
 
 @app.route('/rewards')
 def rewards():
-    healthpoint_db = root.child("Rewards").get()
-    healthpoint = Rewards(healthpoint_db[session['username']]["HealthPoint"])
+    healthpoints_db = root.child("Rewards").get()
+    healthpoints_list = []
+    for eachhealthpoints in healthpoints_db:
+        healthpoints = Rewards(eachhealthpoints, healthpoints_db[eachhealthpoints]["Healthpoints"])
+        healthpoints_list.append(healthpoints)
 
-    return render_template('rewards.html', healthpoint=healthpoint )
+    return render_template('rewards.html', healthpoints_list=healthpoints_list)
 
 
 class Rewards:
-    healthpoints=0
-    def __init__(self,healthpoints):
-        self.__healthpoints=healthpoints
+    healthpoints = 0
+
+    def __init__(self, healthpoints):
+        self.__healthpoints = healthpoints
+
     def get_healthpoints(self):
         return self.__healthpoints
-    def set_healthpoints(self,healthpoints):
-        self.__healthpoints=healthpoints
-    def add_healthpoints(self,healthpoints):
-        self.__healthpoints=self.__healthpoints+healthpoints
-    def minus_healthpoints(self,healthpoints):
-        self.__healthpoints=self.__healthpoints-healthpoints
-    def check_healthpoints(self,healthpoints):
+
+    def set_healthpoints(self, healthpoints):
+        self.__healthpoints = healthpoints
+
+    def add_healthpoints(self, healthpoints):
+        self.__healthpoints = self.__healthpoints + healthpoints
+
+    def minus_healthpoints(self, healthpoints):
+        self.__healthpoints = self.__healthpoints - healthpoints
+
+    def check_healthpoints(self, healthpoints):
         if self.__healthpoints < healthpoints:
-            return False
+            flash('Not enough healthpoints', 'failure')
         else:
             self.__healthpoints = self.__healthpoints - healthpoints
-            return True
+            flash("Item successfully redeemed.You have {} healthpoints left".format(self.get_healthpoints()), "Success")
 
 
-@app.route('/quiz', methods=['GET','POST'])
+@app.route('/quiz', methods=['GET', 'POST'])
 def quiz():
     new_form = leaderboardform(request.form)
     if request.method == 'POST' and new_form.validate():
         score = new_form.score.data
-        username=session["username"]
-        userscore = Leaderboard(username,score)
-        userscore.db = root.child('Leaderboard')#map current userscore to firebase
-        userscore.db.child(username).set({"Score": userscore.get_score()})#push means to update score
+        username = session["username"]
+        userscore = Leaderboard(username, score)
+        userscore.db = root.child('Leaderboard')  # map current userscore to firebase
+        userscore.db.child(username).set({"Score": userscore.get_score()})  # push means to update score
         flash('New score inserted successfully', 'success')
 
         return redirect(url_for('leaderboards'))
@@ -876,38 +885,46 @@ def quiz():
 def leaderboards():
     leaderboard_db = root.child('Leaderboard').get()
     leaderboards_list = []  # create a list to store all the quiz results
+    if leaderboard_db!=None:
+        for eachusername in leaderboard_db:
+            leaderboard = Leaderboard(eachusername, leaderboard_db[eachusername]["Score"])
+            leaderboards_list.append(leaderboard)
 
-    for eachscore in leaderboard_db:
-        leaderboard=Leaderboard(eachscore,leaderboard_db[eachscore]["Score"])
-        leaderboards_list.append(leaderboard)
-    leaderboards_list.sort(key=lambda score: leaderboard.get_score(), reverse=True)
-    for eachscore in leaderboards_list:
-        rank=leaderboards_list.index(eachscore)+1
-        eachscore.set_rank(rank)
-    return render_template('leaderboards.html',leaderboards_list=leaderboards_list)
+    leaderboards_list.sort(key=lambda leaderboard: leaderboard.get_score(), reverse=True)
+    for eachusername in leaderboards_list:
+        rank = leaderboards_list.index(eachusername) + 1
+        eachusername.set_rank(rank)
+
+    return render_template('leaderboards.html', leaderboards_list=leaderboards_list)
 
 
 class Leaderboard:
-    def __init__(self,username,score,rank=0):
-        self.__username=username
-        self.__score=score
-        self.__rank=rank
-    def set_score(self,score):
-        self.__score=score
-    def set_username(self,username):
-        self.__username=username
+    def __init__(self, username, score, rank=0):
+        self.__username = username
+        self.__score = score
+        self.__rank = rank
+
+    def set_score(self, score):
+        self.__score = score
+
+    def set_username(self, username):
+        self.__username = username
+
     def get_score(self):
         return self.__score
+
     def get_username(self):
         return self.__username
-    def set_rank(self,rank):
-        self.__rank=rank
+
+    def set_rank(self, rank):
+        self.__rank = rank
+
     def get_rank(self):
         return self.__rank
 
 
 class leaderboardform(Form):
-    score=StringField("Score")
+    score = StringField("Score")
 
 if __name__ == '__main__':
     app.run()
