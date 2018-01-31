@@ -5,6 +5,7 @@ import firebase_admin
 from firebase_admin import credentials, db
 import datetime
 import math
+import random
 
 
 cred = credentials.Certificate('./cred/nobesity-it1705-firebase-adminsdk-xo793-bbfa4432da.json')
@@ -833,8 +834,8 @@ def record():
 def rewards():
     healthpoints_db = root.child("Rewards").get()
     healthpoints_list = []
-    for eachhealthpoints in healthpoints_db:
-        healthpoints = Rewards(eachhealthpoints, healthpoints_db[eachhealthpoints]["Healthpoints"])
+    for eachusername in healthpoints_db:
+        healthpoints = Rewards(healthpoints_db[eachusername]["Healthpoints"])
         healthpoints_list.append(healthpoints)
 
     return render_template('rewards.html', healthpoints_list=healthpoints_list)
