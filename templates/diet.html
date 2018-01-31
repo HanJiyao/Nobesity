@@ -13,6 +13,7 @@
          <script>
             var ctx = document.getElementById("Canvas").getContext("2d");
             var myData = {
+                labelText: "[[percents]]%",
                 datasets: [{
                     data: [{{ total_fats }}, {{ total_carbohydrates }}, {{ total_protein}}],
                     backgroundColor: ["#0074D9", "#FF4136", "#2ECC40"]
