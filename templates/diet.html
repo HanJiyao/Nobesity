@@ -9,20 +9,25 @@
             </a>
         </div>
         <p id="calories_details"> Total Calories: {{ total_calories }}</p>
-        <canvas id = "Canvas"></canvas>
+        <canvas id = "doughnut-chart"></canvas>
          <script>
-            var ctx = document.getElementById("Canvas").getContext("2d");
+            var ctx = document.getElementById("doughnut-chart")
             var myData = {
                 datasets: [{
                     data: [{{ total_fats }}, {{ total_carbohydrates }}, {{ total_protein}}],
-                    backgroundColor: ["#0074D9", "#FF4136", "#2ECC40"],
+                    backgroundColor: ["#72B9FF", "#BFDFFF", "#99B2CC"],
                 }],
                     labels:['Fats : {{ fat_percentage }}%','Carbohydrates : {{ carbohydrate_percentage }}%',
                         'Protein: {{ protein_percentage }}%'],
             };
 
-            var options  =  Chart.defaults.pie;
-         var myPieChart = new Chart(ctx,{type: 'pie', data: myData, options: options});
+            var options  = {
+                title:{
+                    display: true,
+                    text:'Diet Details'
+                }
+            }
+         var diet_Chart = new Chart(ctx,{type: 'doughnut', data: myData, options: options});
          </script>
     {% for eachdiet in diet %}
         <div class="card">

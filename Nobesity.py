@@ -596,13 +596,13 @@ def diet():
             total_calories += food.get_calories()
             total_fats += food.get_fats()
             fat_percent = (total_fats / total_calories)*100
-            fat_percentage = '{0:.2f}'.format(fat_percent)
+            fat_percentage = '{0:.0f}'.format(fat_percent)
             total_carbohydrates += food.get_carbohydrates()
             carbohydrate_percent = (total_carbohydrates/total_calories)*100
-            carbohydrate_percentage = '{0:.2f}'.format(carbohydrate_percent)
+            carbohydrate_percentage = '{0:.0f}'.format(carbohydrate_percent)
             total_protein += food.get_protein()
             protein_percent= (total_protein/total_calories)*100
-            protein_percentage = '{0:.2f}'.format(protein_percent)
+            protein_percentage = '{0:.0f}'.format(protein_percent)
             food.set_dietID(dietID)
             diet_list.append(food)
     except TypeError :
