@@ -616,14 +616,13 @@ def diet():
 
 
 class Food(Form):
-    diet_name = StringField('Name', [validators.length(min=1, max=150), validators.DataRequired()])
+    diet_name = StringField('Name', [validators.length(min=1, max=150, message="Invalid Name"), validators.DataRequired()])
     diet_type = SelectField('Type', [validators.DataRequired()], choices=[("", "Select"), ("Foods", "Foods"),
                                                                           ("Drinks", "Drinks"), ("Fruits", "Fruits")])
-    calories = IntegerField('Calories Value')
-    fats = IntegerField('Fats Value')
-    carbohydrates = IntegerField('Carbohydrates Value')
-    proteins = IntegerField('Protein Value')
-
+    calories = IntegerField('Calories Value', [validators.number_range(min =1, max=999, message="Invalid number range"),validators.DataRequired()])
+    fats = IntegerField('Fats Value', [validators.number_range(min =1, max=999, message="Invalid number range"),validators.DataRequired()])
+    carbohydrates = IntegerField('Carbohydrates Value', [validators.number_range(min =1, max=999, message="Invalid number range"),validators.DataRequired()])
+    proteins = IntegerField('Protein Value', [validators.number_range(min =1, max= 999, message="Invalid number range"),validators.DataRequired()])
 
 @app.route('/new_diet', methods=['GET', 'POST'])
 def new_diet():
