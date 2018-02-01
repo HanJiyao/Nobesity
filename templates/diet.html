@@ -12,20 +12,17 @@
             <div class="col-6">
                 <p id="calories_details"> Total Calories: {{ total_calories }}</p>
             </div>
-            <div class="col-6">
-                <p id="entries_details"> Total entries: {{ entries }}</p>
-            </div>
         </div>
         <canvas id = "doughnut-chart"></canvas>
          <script>
-            var ctx = document.getElementById("doughnut-chart")
+            var ctx = document.getElementById("doughnut-chart");
             var myData = {
                 datasets: [{
                     data: [{{ total_fats }}, {{ total_carbohydrates }}, {{ total_protein}}],
-                    backgroundColor: ["#72B9FF", "#BFDFFF", "#99B2CC"],
+                    backgroundColor: ["#72B9FF", "#BFDFFF", "#99B2CC"]
                 }],
                     labels:['Fats : {{ fat_percentage }}%','Carbohydrates : {{ carbohydrate_percentage }}%',
-                        'Protein: {{ protein_percentage }}%'],
+                        'Protein: {{ protein_percentage }}%']
             };
 
             var options  = {
@@ -33,9 +30,10 @@
                     display: true,
                     text:' User Diet Details'
                 }
-            }
+            };
          var diet_Chart = new Chart(ctx,{type: 'doughnut', data: myData, options: options});
          </script>
+
     {% for eachdiet in diet %}
         <div class="card">
             <div class="card-header">
