@@ -580,9 +580,7 @@ class Diet:
 def diet():
     Diet_db = root.child('Food').get()
     diet_list = []
-    carbohydrate_percent = 0
-    fat_percent = 0
-    protein_percent = 0
+    entries = 0
     total_calories = 0
     total_fats = 0
     total_carbohydrates = 0
@@ -594,14 +592,15 @@ def diet():
             food = Diet(eachdiet['Name'], eachdiet['Type'], eachdiet['Calories Value'], eachdiet['Fats Value'],
                     eachdiet['Carbohydrates Value'], eachdiet['Protein Value'], eachdiet['Diet Date'])
             total_calories += food.get_calories()
+            entries+=1
             total_fats += food.get_fats()
-            fat_percent = (total_fats / total_calories)*100
+            fat_percent = (total_fats /total_calories)*300
             fat_percentage = '{0:.0f}'.format(fat_percent)
             total_carbohydrates += food.get_carbohydrates()
-            carbohydrate_percent = (total_carbohydrates/total_calories)*100
+            carbohydrate_percent = (total_carbohydrates/total_calories)*300
             carbohydrate_percentage = '{0:.0f}'.format(carbohydrate_percent)
             total_protein += food.get_protein()
-            protein_percent= (total_protein/total_calories)*100
+            protein_percent= (total_protein/total_calories)*300
             protein_percentage = '{0:.0f}'.format(protein_percent)
             food.set_dietID(dietID)
             diet_list.append(food)
@@ -610,7 +609,7 @@ def diet():
     except KeyError:
         return redirect(url_for('new_diet'))
 
-    return render_template('diet.html', diet=diet_list, total_calories=total_calories,total_fats=total_fats,
+    return render_template('diet.html', diet=diet_list, total_calories=total_calories,entries=entries,total_fats=total_fats,
                            total_carbohydrates=total_carbohydrates, total_protein=total_protein,fat_percentage=fat_percentage,
                            carbohydrate_percentage=carbohydrate_percentage,protein_percentage=protein_percentage)
 
@@ -619,10 +618,10 @@ class Food(Form):
     diet_name = StringField('Name', [validators.length(min=1, max=150, message="Invalid Name"), validators.DataRequired()])
     diet_type = SelectField('Type', [validators.DataRequired()], choices=[("", "Select"), ("Foods", "Foods"),
                                                                           ("Drinks", "Drinks"), ("Fruits", "Fruits")])
-    calories = IntegerField('Calories Value', [validators.number_range(min =1, max=999, message="Invalid number range"),validators.DataRequired()])
-    fats = IntegerField('Fats Value', [validators.number_range(min =1, max=999, message="Invalid number range"),validators.DataRequired()])
-    carbohydrates = IntegerField('Carbohydrates Value', [validators.number_range(min =1, max=999, message="Invalid number range"),validators.DataRequired()])
-    proteins = IntegerField('Protein Value', [validators.number_range(min =1, max= 999, message="Invalid number range"),validators.DataRequired()])
+    calories = IntegerField('Calories Value', [validators.number_range(min =1, max=9999, message="Invalid number range"),validators.DataRequired()])
+    fats = IntegerField('Fats Value', [validators.number_range(min =1, max=9999, message="Invalid number range"),validators.DataRequired()])
+    carbohydrates = IntegerField('Carbohydrates Value', [validators.number_range(min =1, max=9999, message="Invalid number range"),validators.DataRequired()])
+    proteins = IntegerField('Protein Value', [validators.number_range(min =1, max= 9999, message="Invalid number range"),validators.DataRequired()])
 
 @app.route('/new_diet', methods=['GET', 'POST'])
 def new_diet():
