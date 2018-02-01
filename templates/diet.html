@@ -24,8 +24,8 @@
                     data: [{{ total_fats }}, {{ total_carbohydrates }}, {{ total_protein}}],
                     backgroundColor: ["#72B9FF", "#BFDFFF", "#99B2CC"]
                 }],
-                    labels:['Fats : {{ fat_percentage }}%','Carbohydrates : {{ carbohydrate_percentage }}%',
-                        'Protein: {{ protein_percentage }}%']
+                    labels:['Fats : {{ total_fats }}, {{ fat_percentage }}%','Carbohydrates :  {{ total_carbohydrates }}, {{ carbohydrate_percentage }}%'
+                        , 'Protein: {{ total_protein }}, {{ protein_percentage }}%']
             };
 
             var options  = {
