@@ -14,6 +14,14 @@ app = Flask(__name__)
 app.secret_key = 'secret'
 
 
+@app.before_request
+def before_request():
+    if 'logged_in' not in session:
+        if request.endpoint not in ['login', 'signup', 'index', 'faq']:
+            flash('Please Login first to use our Service', 'primary')
+            return redirect(url_for('login'))
+
+
 class RequiredIf(object):
     def __init__(self, *args, **kwargs):
         self.conditions = kwargs
@@ -59,7 +67,7 @@ def login():
     login_form = LoginForm(request.form)
     uid_db = root.child('Users').get()
     if request.method == 'POST' and login_form.validate():
-        login_id = request.form.to_dict()['username'].lower()
+        login_id = login_form.username.data.lower()
         for i in uid_db:
             if root.child('Users/'+i+'/email').get() == login_id or login_id == i:
                 session['username'] = i
@@ -277,7 +285,9 @@ def verify_email():
 
 
 class NameForm(Form):
-    display_name = StringField('Display Name', [validators.length(min=1, max=20), validators.DataRequired()])
+    display_name = StringField('Display Name',
+                               [validators.length(min=1, max=20),
+                                validators.DataRequired(message="Please enter Display Name")])
 
 
 @app.route('/setup/name', methods=['GET', 'POST'])
@@ -307,8 +317,11 @@ def register_gender():
 
 
 class MoreInfoForm(Form):
-    height = DecimalField('Current Height (m)', places=2)
-    initial_weight = DecimalField('Current Weight (kg)', places=1)
+    height = IntegerField('Current Height (cm)',
+                          [validators.NumberRange(min=0, max=300, message="Please Enter Correct Height (cm)")])
+    initial_weight = DecimalField('Current Weight (kg)',
+                                  [validators.NumberRange(min=0, max=200, message="Please Enter Correct Weight (kg)")],
+                                  places=1)
     birth_day = SelectField(
         'Day', choices=[
             ('01', '1'), ('02', '2'), ('03', '3'), ('04', '4'), ('05', '5'), ('06', '6'), ('07', '7'), ('08', '8'),
@@ -324,31 +337,40 @@ class MoreInfoForm(Form):
             ('08', 'Aug'), ('09', 'Sep'), ('10', 'Oct'), ('11', 'Nov'), ('12', 'Dec')
         ]
     )
-    birth_year = IntegerField('Year', [validators.NumberRange(min=1000, max=9999, message="Invalid Year Input")])
+    birth_year = IntegerField('Year', [validators.NumberRange
+                                       (min=1800,
+                                        max=datetime.date.today().year,
+                                        message="Please Enter a correct Year")])
 
 
 @app.route('/setup/detail', methods=['GET', 'POST'])
 def register_info():
-    moreinfo_form = MoreInfoForm(request.form)
+    more_info_form = MoreInfoForm(request.form)
     register_date = '{:%Y%m%d}'.format(datetime.date.today())
-    if request.method == 'POST' and moreinfo_form.validate():
+    if request.method == 'POST' and more_info_form.validate():
         root.child('HealthDetail/'+session['username']).update({
-            'height': str(moreinfo_form.height.data),
-            'birthday': str(moreinfo_form.birth_year.data) +
-            str(moreinfo_form.birth_month.data) +
-            str(moreinfo_form.birth_day.data)
+            'height': str(more_info_form.height.data),
+            'birthday': str(more_info_form.birth_year.data) +
+            str(more_info_form.birth_month.data) +
+            str(more_info_form.birth_day.data)
         })
         root.child('Weight/'+session['username']).update({
-            register_date: str(moreinfo_form.initial_weight.data)
+            register_date: str(more_info_form.initial_weight.data/100)
         }),
         return redirect(url_for('register_bp'))
-    return render_template('firstTimeRegisterInfo.html', moreinfo_form=moreinfo_form)
+    return render_template('firstTimeRegisterInfo.html', moreinfo_form=more_info_form)
 
 
 class BpInfoForm(Form):
-    systol = IntegerField('Systolic Pressure')
-    diastol = IntegerField('Diastolic Pressure')
-    pulse = IntegerField('Pulse Rate')
+    systole = IntegerField('Systole', [validators.DataRequired('Please Enter Systolic Pressure'),
+                                       validators.NumberRange
+                                       (min=0, max=300, message="Please Enter A valid BP < 300")])
+    diastole = IntegerField('Diastole', [validators.DataRequired('Please Enter Diastolic Pressure'),
+                                         validators.NumberRange
+                                         (min=0, max=250, message="Please Enter A valid BP < 250")])
+    pulse = IntegerField('Pulse', [validators.DataRequired('Please Enter the Pulse Rate'),
+                                   validators.NumberRange
+                                   (min=0, max=300, message="Please Enter A valid Pulse < 300")])
 
 
 @app.route('/setup/bp', methods=['GET', 'POST'])
@@ -358,8 +380,8 @@ def register_bp():
     if request.method == 'POST' and bp_info_form.validate():
         root.child('BloodPressure/'+session['username']).update({
             register_time: {
-                'systolic': str(bp_info_form.systol.data),
-                'diastolic': str(bp_info_form.diastol.data),
+                'systolic': str(bp_info_form.systole.data),
+                'diastolic': str(bp_info_form.diastole.data),
                 'pulse': str(bp_info_form.pulse.data)
             }
         })
@@ -386,11 +408,20 @@ class UserHealthDetailForm(Form):
             ('08', 'Aug'), ('09', 'Sep'), ('10', 'Oct'), ('11', 'Nov'), ('12', 'Dec')
         ]
     )
-    birth_year = IntegerField('Year', [validators.NumberRange(min=1000, max=9999, message="Invalid Year Input")])
-    height = DecimalField('Current Height (m)', [validators.DataRequired()], places=2)
-    initial_systol = IntegerField('Systol')
-    initial_diastol = IntegerField('Diastol')
-    initial_pulse = IntegerField('Pulse')
+    birth_year = IntegerField('Year',
+                              [validators.NumberRange(min=1800, max=datetime.date.today().year,
+                                                      message="Please Enter a correct Year")])
+    height = IntegerField('Current Height (cm)',
+                          [validators.NumberRange(min=0, max=300, message="Please Enter Correct Height (cm)")])
+    initial_systole = IntegerField('Systole', [validators.DataRequired('Please Enter Systolic Pressure'),
+                                             validators.NumberRange(min=0, max=300,
+                                                                    message="Please Enter A valid BP < 300")])
+    initial_diastole = IntegerField('Diastole', [validators.DataRequired('Please Enter Diastolic Pressure'),
+                                               validators.NumberRange(min=0, max=250,
+                                                                      message="Please Enter A valid BP < 250")])
+    initial_pulse = IntegerField('Pulse', [validators.DataRequired('Please Enter the Pulse Rate'),
+                                           validators.NumberRange(min=0, max=300,
+                                                                  message="Please Enter A valid Pulse < 300")])
 
 
 @app.route('/account/detail', methods=['GET', 'POST'])
@@ -405,12 +436,12 @@ def health_detail():
             setup_detail_form.birth_year.data) + setup_detail_form.birth_month.data + setup_detail_form.birth_day.data
         height = str(setup_detail_form.height.data)
         weight_dict = {
-            setup_date: str(setup_detail_form.initial_weight.data)
+            setup_date: str(setup_detail_form.initial_weight.data/100)
         }
         bp_dict = {
             setup_time: {
-                'systolic': str(setup_detail_form.initial_systol.data),
-                'diastolic': str(setup_detail_form.initial_diastol.data),
+                'systolic': str(setup_detail_form.initial_systole.data),
+                'diastolic': str(setup_detail_form.initial_diastole.data),
                 'pulse': str(setup_detail_form.initial_pulse.data)
             }
         }
@@ -454,8 +485,8 @@ def health_detail():
         bp_time_list = []
         for time in bp_dict:
             bp_time_list.append(time)
-        setup_detail_form.initial_systol.data = int(user_info.get_bp_dict()[bp_time_list[-1]]['systolic'])
-        setup_detail_form.initial_diastol.data = int(user_info.get_bp_dict()[bp_time_list[-1]]['diastolic'])
+        setup_detail_form.initial_systole.data = int(user_info.get_bp_dict()[bp_time_list[-1]]['systolic'])
+        setup_detail_form.initial_diastole.data = int(user_info.get_bp_dict()[bp_time_list[-1]]['diastolic'])
         setup_detail_form.initial_pulse.data = int(user_info.get_bp_dict()[bp_time_list[-1]]['pulse'])
 
     return render_template('healthDetail.html', setup_detail_form=setup_detail_form)
@@ -464,14 +495,16 @@ def health_detail():
 @app.route('/account/info', methods=['GET', 'POST'])
 def personal_info():
     name_form = NameForm(request.form)
-    fileName = root.child('Users/'+ session['username']+'/photoName').get()
-    photoURL = root.child('Users/'+ session['username']+'/photoURL').get()
+    file_name = root.child('Users/' + session['username']+'/photoName').get()
+    photo_url = root.child('Users/' + session['username']+'/photoURL').get()
     if request.method == 'POST' and name_form.validate():
         root.child('Users/' + session['username']).update({
             'displayName': name_form.display_name.data
         })
         flash('Personal information updated successful', 'success')
-    return render_template('personalInfo.html', name_form=name_form, photoURL=photoURL, fileName=fileName)
+    else:
+        name_form.display_name.data = root.child('Users/' + session['username']+'/displayName').get()
+    return render_template('personalInfo.html', name_form=name_form, photoURL=photo_url, fileName=file_name)
 
 
 @app.route('/account/security')

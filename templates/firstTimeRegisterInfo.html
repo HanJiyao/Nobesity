@@ -9,26 +9,30 @@
             <div class="box-text">This will help us tailor your health journey</div>
             <div class="form-group account-content">
               <div class="form-group">
-				<label for="inputHeight">Height (m)</label>
+				<label for="inputHeight">Height (cm)</label>
 				{{ render_field(moreinfo_form.height, class_="form-control", placeholder="Enter Height") }}
 			  </div>
                 {% if moreinfo_form['height'].errors %}
-                    {% for error in moreinfo_form['height'].errors %}
                     <div class="form-group">
-                        <div class="alert alert-danger mt-1 mb-1 col-12">{{ moreinfo_form['height'].label }} : {{ error }}</div>
+                        <div class="alert alert-danger mt-1 mb-1 col-12">
+                            {% for error in moreinfo_form['height'].errors %}
+                                <div>{{ error }}</div>
+                            {% endfor %}
+                        </div>
                     </div>
-                    {% endfor %}
                   {% endif %}
 			  <div class="form-group">
 				<label for="weight">Weight (kg)</label>
 				{{ render_field(moreinfo_form.initial_weight, class_="form-control", placeholder="Enter Current Weight") }}
 			  </div>
                   {% if moreinfo_form['initial_weight'].errors %}
-                    {% for error in moreinfo_form['initial_weight'].errors %}
-                    <div class="form-group">
-                        <div class="alert alert-danger mt-1 mb-1 col-12">{{ moreinfo_form['initial_weight'].label }} : {{ error }}</div>
-                    </div>
-                    {% endfor %}
+                      <div class="form-group">
+                          <div class="alert alert-danger mt-1 mb-1 col-12">
+                            {% for error in moreinfo_form['initial_weight'].errors %}
+                                <div>{{ error }}</div>
+                            {% endfor %}
+                          </div>
+                      </div>
                   {% endif %}
           	  <div class="form-group">
 				<label for="weight">Birthday</label>
@@ -48,7 +52,7 @@
                       <div class="form-group">
                         <div class="alert alert-danger mt-1 mb-1 pt-0 pb-0 col-12">
                         {% for error in moreinfo_form['birth_day'].errors %}
-                            </div>{{ moreinfo_form['birth_day'].label }} : {{ error }}</div>
+                            </div>{{ error }}</div>
                         {% endfor %}
                       </div>
                   {% endif %}
@@ -56,7 +60,7 @@
                       <div class="form-group">
                         <div class="alert alert-danger mt-1 mb-1 pt-0 pb-0 col-12">
                             {% for error in moreinfo_form['birth_month'].errors %}
-                                <div>{{ moreinfo_form['birth_month'].label }} : {{ error }}</div>
+                                <div>{{ error }}</div>
                             {% endfor %}
                         </div>
                   {% endif %}
@@ -64,7 +68,7 @@
                       <div class="form-group">
                         <div class="alert alert-danger mt-1 mb-1 col-12">
                             {% for error in moreinfo_form['birth_year'].errors %}
-                                <div>{{ moreinfo_form['birth_year'].label }} : {{ error }}</div>
+                                <div>{{ error }}</div>
                             {% endfor %}
                         </div>
                   {% endif %}
