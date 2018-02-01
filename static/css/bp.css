@@ -1,0 +1,69 @@
+.row {
+    height: 100%;
+}
+.bp-container .col-10 .col-2.text-left{
+    padding:10px 0  0;
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+.bp-container .col-1{
+    padding: 0;
+}
+.bp-container{
+    position: relative;
+}
+.bp-unit{
+    color:#757575;
+    padding-top: 3px;
+    font-size: 0.9rem;
+}
+#time{
+    padding-left: 20px;
+    font-size: 1.1rem;
+    color: #616161;
+}
+
+#bp_indicator{
+    position: absolute;
+    left: 0;
+    height: 100%;
+    width: 5px;
+    background: #64DD17;
+}
+.blood_pressure .card-body{
+    border-bottom: #eeeeee 1px solid;
+}
+#bp_date{
+    height: 50px;
+    width: 100%;
+    background: #FAFAFA;
+    padding: 10px 20px;
+    text-align: left;
+    font-size: 1.2rem;
+    font-weight: 500;
+    border-bottom: #eeeeee 1px solid
+
+}
+#bpEdit{
+    opacity: 0;
+    transition: 0.3s;
+}
+.col-1.bp-edit{
+    padding-top: 20px;
+    position: relative;
+    left: -20px;
+    transition: 0.3s;
+    cursor: pointer;
+}
+.col-1.bp-edit i{
+    padding: 5px;
+    font-size: 2rem;
+    color: #616161;
+    transition: 0.3s
+}
+.bp-edit-btn:hover{
+    color: #03A9F4 !important;
+}
+.bp-delete-btn:hover{
+    color: #F44336 !important;
+}

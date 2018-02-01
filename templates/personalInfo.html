@@ -10,7 +10,7 @@
         {% endfor %}
       {% endif %}
     {% endmacro %}
-    <form method="post" class="mx-auto account-box p-5">
+    <form method="post" class="mx-auto account-box p-5" id="info_form">
         <div class="form-group form-row account-detail pt-4 pb-4">
         <div class="form-group m-auto">
             <div class="photoPreview">
@@ -27,23 +27,30 @@
         <div class="col-1"><i class="material-icons">share</i></div>
         <div class="col-4"> Display Name :</div>
           <div class="col-7">
-            {{ render_field(name_form.display_name, class_="form-control", placeholder="Display Name") }}
+            {{ render_field(name_form.display_name, class_="form-control", placeholder="Display Name", onblur="checkDisplayName()") }}
           </div>
       </div>
+            <div class="alert alert-danger col-12 m-auto" id="error_alert" hidden>
+                Please Enter your Display Name
+            </div>
       <div class="form-group form-row save-cancel-btn">
         <a href="/account/info" class="col-5 btn btn-outline-secondary form-control" id="reset_info">Cancel</a>
-        <button type="submit" class="col-5 ml-auto btn btn-outline-primary form-control" id="update_info" value="update_info">Update</button>
+        <button class="col-5 ml-auto btn btn-outline-primary form-control" id="update_info" value="update_info" onclick="updateProfile()">Update</button>
       </div>
     </form>
     <script>
+        function checkDisplayName(){
+            document.getElementById("error_alert").hidden = document.getElementById("display_name").value != "";
+            document.getElementById("update_info").disabled = document.getElementById("display_name").value == ""
+        }
         var user = firebase.auth().currentUser;
         //Get Elements
         var uploader = document.getElementById('uploader');
         var fileButton = document.getElementById('file');
 
         $( document ).ready(function() {
-            document.getElementById('photoURL').innerText = '{{ photoURL }}';
-            document.getElementById('fileName').innerText = '{{ fileName }}';
+            document.getElementById('photoURL').innerText = "{{photoURL|safe}}";
+            document.getElementById('fileName').innerText = '{{fileName}}';
             if (document.getElementById('username') != null) {
                 var username = document.getElementById('username').innerText;
                 firebase.database().ref('/Users/' + username + '/photoURL').once('value').then(function (snapshot) {
@@ -70,7 +77,7 @@
             //Upload file
             var task = storageRef.put(file);
             //Update Progress Bar
-            if (fileName != ""){
+            if (fileName.innerText != "" || fileName.innerText != "{{fileName}}"){
                 firebase.storage().ref('{{session['username']}}' + '/profilePicture/' + fileName).delete();
                 task.on('state_changed',
                     function progress(snapshot) {
@@ -125,12 +132,13 @@
             var photoName = document.getElementById('fileName').innerText;
             firebase.auth().currentUser.updateProfile({
                 displayName : displayName,
-                photoURL: photoURL
+                photoURL : photoURL
             });
-            var username = document.getElementById('username').innerText;
+            var username = "{{session['username']}}";
             firebase.database().ref().child('Users/'+ username + '/').update({
-                'photoURL':photoURL,
-                'photoName': photoName
+                'displayName' : displayName,
+                'photoName' : photoName,
+                'photoURL' : photoURL
             })
         }
     </script>
