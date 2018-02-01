@@ -93,6 +93,13 @@
     </div>
 </div>
 <script>
+firebase.auth().onAuthStateChanged(function (user) {
+      if (user) {
+          document.getElementById("toggle").hidden=false
+      } else {
+          document.getElementById("toggle").hidden=true
+      }
+  });
 function myFunction() {
   // Declare variables
   var input, filter, div, p, i, j;

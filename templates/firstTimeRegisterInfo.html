@@ -72,6 +72,12 @@
                             {% endfor %}
                         </div>
                   {% endif %}
+                  {% if date_error %}
+                      <div class="form-group">
+                        <div class="alert alert-danger mt-1 mb-1 col-12">
+                            <div>Please Enter a valid Date</div>
+                        </div>
+                  {% endif %}
 				<button type="submit" class="form-control submit-btn" style="margin-top: 30px;     margin-bottom: 0;">Next</button>
            	</div>
         </form>

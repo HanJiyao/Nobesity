@@ -53,6 +53,7 @@
         </form>
     </div>
     <script>
+    document.getElementById("toggle").hidden=true;
         $(document).ready(function () {
             $("#password, #confirm").keyup(checkPasswordMatch);
             $("#username, #password, #email, #confirm").keyup( function(event) {
