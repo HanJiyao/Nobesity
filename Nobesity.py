@@ -353,22 +353,28 @@ def register_info():
         date_error = False
         if request.method == 'POST' and more_info_form.validate():
             root.child('HealthDetail/'+session['username']).update({
-                'height': str(more_info_form.height.data),
+                'height': str(more_info_form.height.data/100),
                 'birthday': str(more_info_form.birth_year.data) +
                 str(more_info_form.birth_month.data) +
                 str(more_info_form.birth_day.data)
             })
             root.child('Weight/'+session['username']).update({
-                register_date: str(more_info_form.initial_weight.data/100)
+                register_date: str(more_info_form.initial_weight.data)
             })
             try:
                 datetime.date(int(more_info_form.birth_year.data),
                               int(more_info_form.birth_month.data),
-                                  int(more_info_form.birth_day.data))
+                              int(more_info_form.birth_day.data))
             except ValueError:
                 date_error = True
-            else:
-                return redirect(url_for('register_bp'))
+            finally:
+                input_date = datetime.date(int(more_info_form.birth_year.data),
+                                           int(more_info_form.birth_month.data),
+                                           int(more_info_form.birth_day.data))
+                if str(datetime.date.today() - input_date)[0] == "-":
+                    date_error = True
+                else:
+                    return redirect(url_for('register_bp'))
     except KeyError:
         flash('Please Login First to use our Services', 'primary')
         return redirect(url_for('login'))
@@ -453,9 +459,9 @@ def health_detail():
             gender = setup_detail_form.gender.data
             birthday = str(
                 setup_detail_form.birth_year.data) + setup_detail_form.birth_month.data + setup_detail_form.birth_day.data
-            height = str(setup_detail_form.height.data)
+            height = str(setup_detail_form.height.data/100)
             weight_dict = {
-                setup_date: str(setup_detail_form.initial_weight.data/100)
+                setup_date: str(setup_detail_form.initial_weight.data)
             }
             bp_dict = {
                 setup_time: {
@@ -499,7 +505,7 @@ def health_detail():
             for date in weight_dict:
                 weight_date_list.append(date)
             setup_detail_form.initial_weight.data = float(user_info.get_weight_dict()[weight_date_list[-1]])
-            setup_detail_form.height.data = float(user_info.get_height())
+            setup_detail_form.height.data = round(user_info.get_height() * 100)
             bp_dict = user_info.get_bp_dict()
             bp_time_list = []
             for time in bp_dict:
@@ -578,6 +584,92 @@ def profile():
         flash('Please Login First to use our Services', 'primary')
         return redirect(url_for('login'))
     return render_template('profile.html', user=user_info)
+
+
+class BloodPressure:
+    def __init__(self, bp_date, bp_time, sys, dias, pulse):
+        self.__bp_date = bp_date
+        self.__bp_time = bp_time
+        self.__sys = int(sys)
+        self.__dias = int(dias)
+        self.__pulse = int(pulse)
+        self.__pulse_p = self.__sys - self.__dias
+        if self.__sys > 160 or self.__dias > 100:
+            self.__bp_indicator = "#FF5722"
+        elif self.__sys > 142 or self.__dias > 95:
+            self.__bp_indicator = "#FF9800"
+        elif self.__sys > 134 or self.__dias > 90:
+            self.__bp_indicator = "#FFC107"
+        elif self.__sys > 128 or self.__dias > 85:
+            self.__bp_indicator = "#FFEB3B"
+        elif self.__sys > 120 or self.__dias > 80:
+            self.__bp_indicator = "#CDDC39"
+        else:
+            self.__bp_indicator = "#8BC34A"
+
+    def get_bp_date(self):
+        return self.__bp_date
+
+    def get_bp_time(self):
+        return self.__bp_time
+
+    def display_bp_date(self):
+        return datetime.date(int(self.__bp_date[0:4]),
+                             int(self.__bp_date[4:6]),
+                             int(self.__bp_date[6:8])).strftime("%A %d. %B %Y")
+
+    def display_bp_time(self):
+        return datetime.time(hour=int(self.__bp_time[0:2]),
+                             minute=int(self.__bp_time[2:4])).isoformat(timespec='minutes')
+
+    def get_sys(self):
+        return self.__sys
+
+    def get_dias(self):
+        return self.__dias
+
+    def get_pulse(self):
+        return self.__pulse
+
+    def get_pulse_p(self):
+        return self.__pulse_p
+
+    def get_bp_indicator(self):
+        return self.__bp_indicator
+
+
+@app.route('/bloodPressure')
+def blood_pressure():
+    # try:
+    uid_db = root
+    user_bp_db = uid_db.child('BloodPressure/' + session['username']).get()
+    bp_dict = {}
+    bp_datetime_list = []
+    bp_date_list = []
+    bp_sys_list = []
+    bp_dias_list = []
+    bp_pulse_list = []
+    for j in user_bp_db:
+        bp_date_list.append(j[0:8])
+    list(set(bp_date_list))
+    for k in bp_date_list:
+        bp_dict.update({k: []})
+
+    for i in user_bp_db:
+        bp = BloodPressure(i[0:8], i[8:12], user_bp_db[i]['systolic'], user_bp_db[i]['diastolic'],
+                           user_bp_db[i]['pulse'])
+        bp_datetime_list.append(bp.get_bp_date()+bp.get_bp_time())
+        bp_sys_list.append(bp.get_sys())
+        bp_dias_list.append(bp.get_dias())
+        bp_pulse_list.append(bp.get_pulse())
+        for k in bp_dict:
+            if bp.get_bp_date() == k:
+                bp_dict[k].append(bp)
+    # except KeyError:
+    #     flash('Please Login First to use our Services', 'primary')
+    #     return redirect(url_for('login'))
+    return render_template('bloodPressure.html', bp_dict=bp_dict, bp_datetime_list=bp_datetime_list,
+                           bp_sys_list=bp_sys_list, bp_dias_list=bp_dias_list, bp_pulse_list=bp_pulse_list)
 
 
 @app.route('/plan')

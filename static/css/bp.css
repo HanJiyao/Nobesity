@@ -57,7 +57,7 @@
 }
 .col-1.bp-edit i{
     padding: 5px;
-    font-size: 2rem;
+    font-size: 1.8rem;
     color: #616161;
     transition: 0.3s
 }
@@ -66,4 +66,34 @@
 }
 .bp-delete-btn:hover{
     color: #F44336 !important;
+}
+.bp-container .row .col-3 div{
+    font-size: 1.1rem;
+    font-weight: 500;
+    padding-top: 15px;
+}
+.bp-container .row .col-3 h1{
+    margin: 0;
+}
+.bp-container .row .col-3 small{
+    color: #757575;
+    font-size: 0.9rem;
+}
+#bpChart{
+    padding: 20px 10px;
+    background: #f9f9f9;
+}
+.bp-card-header{
+    text-align: center;
+}
+.bp-main-title{
+    font-size: 3.3rem;
+    padding: 60px 0 30px;
+}
+#bp_control_view{
+    width: 50%;
+    margin: auto;
+}
+#bp_control_view .submit-btn{
+    padding: 15px;
 }
