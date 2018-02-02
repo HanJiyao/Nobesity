@@ -345,7 +345,6 @@ class MoreInfoForm(Form):
 
 @app.route('/setup/detail', methods=['GET', 'POST'])
 def register_info():
-<<<<<<< HEAD
     more_info_form = MoreInfoForm(request.form)
     register_date = '{:%Y%m%d}'.format(datetime.date.today())
     if request.method == 'POST' and more_info_form.validate():
@@ -360,7 +359,6 @@ def register_info():
         }),
         return redirect(url_for('register_bp'))
     return render_template('firstTimeRegisterInfo.html', moreinfo_form=more_info_form)
-=======
     try:
         more_info_form = MoreInfoForm(request.form)
         register_date = '{:%Y%m%d}'.format(datetime.date.today())
@@ -393,8 +391,6 @@ def register_info():
         flash('Please Login First to use our Services', 'primary')
         return redirect(url_for('login'))
     return render_template('firstTimeRegisterInfo.html', moreinfo_form=more_info_form, date_error=date_error)
->>>>>>> a340184f04e2e5e2105f190c3a2ceb630a21621f
-
 
 class BpInfoForm(Form):
     systole = IntegerField('Systole', [validators.DataRequired('Please Enter Systolic Pressure'),
@@ -461,7 +457,6 @@ class UserHealthDetailForm(Form):
 
 @app.route('/account/detail', methods=['GET', 'POST'])
 def health_detail():
-<<<<<<< HEAD
     setup_date = '{:%Y%m%d}'.format(datetime.date.today())
     setup_time = '{:%Y%m%d%H%M}'.format(datetime.datetime.now())
     setup_detail_form = UserHealthDetailForm(request.form)
@@ -479,7 +474,6 @@ def health_detail():
                 'systolic': str(setup_detail_form.initial_systole.data),
                 'diastolic': str(setup_detail_form.initial_diastole.data),
                 'pulse': str(setup_detail_form.initial_pulse.data)
-=======
     try:
         setup_date = '{:%Y%m%d}'.format(datetime.date.today())
         setup_time = '{:%Y%m%d%H%M}'.format(datetime.datetime.now())
@@ -499,7 +493,6 @@ def health_detail():
                     'diastolic': str(setup_detail_form.initial_diastole.data),
                     'pulse': str(setup_detail_form.initial_pulse.data)
                 }
->>>>>>> a340184f04e2e5e2105f190c3a2ceb630a21621f
             }
         }
         user_info = HealthDetailSetup(
@@ -514,7 +507,6 @@ def health_detail():
             uid_db.child('Weight/' + session['username']).update({
                 i: user_info.get_weight_dict()[i]
             })
-<<<<<<< HEAD
         for i in user_info.get_bp_dict():
             uid_db.child('BloodPressure/' + session['username']).update({
                 i: user_info.get_bp_dict()[i]
@@ -547,7 +539,6 @@ def health_detail():
         setup_detail_form.initial_diastole.data = int(user_info.get_bp_dict()[bp_time_list[-1]]['diastolic'])
         setup_detail_form.initial_pulse.data = int(user_info.get_bp_dict()[bp_time_list[-1]]['pulse'])
 
-=======
             for i in user_info.get_weight_dict():
                 uid_db.child('Weight/' + session['username']).update({
                     i: user_info.get_weight_dict()[i]
@@ -586,7 +577,6 @@ def health_detail():
     except KeyError:
         flash('Please Login First to use our Services', 'primary')
         return redirect(url_for('login'))
->>>>>>> a340184f04e2e5e2105f190c3a2ceb630a21621f
     return render_template('healthDetail.html', setup_detail_form=setup_detail_form)
 
 
