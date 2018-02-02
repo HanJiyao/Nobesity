@@ -10,6 +10,11 @@
     font-size: 80px;
     font-family: Arial;
 }
+
+#diet_image{
+    width: 60px;
+    height: 60px;
+}
 .newdiet{
     font-size: 50px ;
     font-family: Arial;
