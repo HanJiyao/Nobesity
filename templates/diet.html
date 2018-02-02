@@ -8,32 +8,47 @@
                 <span>New Diet</span>
             </a>
         </div>
-        <p id="calories_details"> Total Calories: {{ total_calories }}</p>
-        <canvas id = "Canvas"></canvas>
+        <div class = "row">
+            <div class="col-6">
+                <p id="calories_details"> Total Calories: {{ total_calories }}</p>
+            </div>
+            <div class = "col-6">
+                <p id = "entries_details">Total Entries: {{ entries }}</p>
+            </div>
+        </div>
+        <canvas id = "doughnut-chart"></canvas>
          <script>
-            var ctx = document.getElementById("Canvas").getContext("2d");
+            var ctx = document.getElementById("doughnut-chart");
             var myData = {
                 datasets: [{
                     data: [{{ total_fats }}, {{ total_carbohydrates }}, {{ total_protein}}],
-                    backgroundColor: ["#0074D9", "#FF4136", "#2ECC40"]
+                    backgroundColor: ["#72B9FF", "#BFDFFF", "#99B2CC"]
                 }],
-                    labels:['Fats','Carbohydrates', 'Protein']
+                    labels:['Fats : {{ total_fats }}, {{ fat_percentage }}%','Carbohydrates :  {{ total_carbohydrates }}, {{ carbohydrate_percentage }}%'
+                        , 'Protein: {{ total_protein }}, {{ protein_percentage }}%']
             };
-            var options  =  Chart.defaults.pie;
-         var myPieChart = new Chart(ctx,{type: 'pie', data: myData, options: options});
+
+            var options  = {
+                title:{
+                    display: true,
+                    text:' User Diet Details'
+                }
+            };
+         var diet_Chart = new Chart(ctx,{type: 'doughnut', data: myData, options: options});
          </script>
+<div id="diet_container">
     {% for eachdiet in diet %}
         <div class="card">
             <div class="card-header">
                 {% if eachdiet.get_type()=="Fruits"%}
-                    <img src="../static/images/Fruit_Icon.jpg" width="50" height="50">
+                    <img src="../static/images/Fruit_Icon.jpg" id="diet_image">
                 {% elif eachdiet.get_type()=="Foods"%}
-                    <img src="../static/images/Meal_icon.png" width="50" height="50">
+                    <img src="../static/images/Meal_icon.png" id="diet_image">
                 {% elif eachdiet.get_type()=="Drinks"%}
-                    <img src="../static/images/Drink_icon.png" width="50" height="50">
+                    <img src="../static/images/Drink_icon.png" id="diet_image">
                 {% endif %}
                 {{ eachdiet.get_type()}}
-                <span class="ml-5">Diet taken on: {{eachdiet.get_dietDate()}}</span>
+                <span class="ml-5 Date" id="Date">Diet taken on: {{eachdiet.get_dietDate()}}</span>
             </div>
 
             <div class="card-body">
@@ -69,22 +84,28 @@
                 </div>
             </div>
             <div class ='row'>
-                <div class='col-1'>
+                <div class='col-md-3'></div>
+                <div class='col-md-3'>
                     <div class="updatediet"><a href ="/update_diet/{{eachdiet.get_dietID()}}" class="btn btn-warning btn-sm"
                                                id="update_button">
-                        <i class="material-icons">mode_edit</i></a></div>
+                        <i class="material-icons">mode_edit</i>
+                         <span>Edit Diet</span>
+                    </a></div>
                 </div>
-                <div class='col-1'>
+                <div class='col-md-3'>
                    <div class="deletediet">
                     <form action="{{ url_for("delete_diet", id=eachdiet.get_dietID())}}" method="POST">
-                    <input type ="submit" value= 'X' class ="btn btn-danger btn-sm" id = "delete_button"
+                    <input type ="submit" value= 'Delete' class ="btn btn-danger btn-sm" id = "delete_button"
                        onclick= "return confirm('Are you sure you want to delete? Data would not be recovered.')">
                     </form>
+
                    </div>
                 </div>
+               <div class = 'col-md-3'></div>
             </div>
         </div>
     </div>
     {% endfor %}
+</div>
     </div>
 {% endblock %}

@@ -1,0 +1,99 @@
+.row {
+    height: 100%;
+}
+.bp-container .col-10 .col-2.text-left{
+    padding:10px 0  0;
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+.bp-container .col-1{
+    padding: 0;
+}
+.bp-container{
+    position: relative;
+}
+.bp-unit{
+    color:#757575;
+    padding-top: 3px;
+    font-size: 0.9rem;
+}
+#time{
+    padding-left: 20px;
+    font-size: 1.1rem;
+    color: #616161;
+}
+
+#bp_indicator{
+    position: absolute;
+    left: 0;
+    height: 100%;
+    width: 5px;
+    background: #64DD17;
+}
+.blood_pressure .card-body{
+    border-bottom: #eeeeee 1px solid;
+}
+#bp_date{
+    height: 50px;
+    width: 100%;
+    background: #FAFAFA;
+    padding: 10px 20px;
+    text-align: left;
+    font-size: 1.2rem;
+    font-weight: 500;
+    border-bottom: #eeeeee 1px solid
+
+}
+#bpEdit{
+    opacity: 0;
+    transition: 0.3s;
+}
+.col-1.bp-edit{
+    padding-top: 20px;
+    position: relative;
+    left: -20px;
+    transition: 0.3s;
+    cursor: pointer;
+}
+.col-1.bp-edit i{
+    padding: 5px;
+    font-size: 1.8rem;
+    color: #616161;
+    transition: 0.3s
+}
+.bp-edit-btn:hover{
+    color: #03A9F4 !important;
+}
+.bp-delete-btn:hover{
+    color: #F44336 !important;
+}
+.bp-container .row .col-3 div{
+    font-size: 1.1rem;
+    font-weight: 500;
+    padding-top: 15px;
+}
+.bp-container .row .col-3 h1{
+    margin: 0;
+}
+.bp-container .row .col-3 small{
+    color: #757575;
+    font-size: 0.9rem;
+}
+#bpChart{
+    padding: 20px 10px;
+    background: #f9f9f9;
+}
+.bp-card-header{
+    text-align: center;
+}
+.bp-main-title{
+    font-size: 3.3rem;
+    padding: 60px 0 30px;
+}
+#bp_control_view{
+    width: 50%;
+    margin: auto;
+}
+#bp_control_view .submit-btn{
+    padding: 15px;
+}

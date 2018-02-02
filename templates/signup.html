@@ -44,7 +44,7 @@
                             </div>
                         </div>
                         <div class="form-row">
-                            <button id="quickstart-sign-in" type="button" class="form-control submit-btn mt-3 mb-3" value="Register" onclick="handleSignUp();signupRedirect()" disabled>SIGN UP</button>
+                            <button id="quickstart-sign-in" type="button" class="form-control submit-btn mt-3 mb-3" value="Register" onclick="handleSignUp();signupRedirect()">SIGN UP</button>
                         </div>
                     </div>
                 </div>
@@ -53,6 +53,7 @@
         </form>
     </div>
     <script>
+    document.getElementById("toggle").hidden=true;
         $(document).ready(function () {
             $("#password, #confirm").keyup(checkPasswordMatch);
             $("#username, #password, #email, #confirm").keyup( function(event) {
@@ -67,64 +68,64 @@
             var error_alert = $("#error_alert");
             if (password != confirmPassword) {
                 error_alert.css('display', 'block');
-                $("#quickstart-sign-in").attr("disabled", "disabled");
                 error_alert.html("Passwords must match");
             } else{
-                $("#quickstart-sign-in").removeAttr("disabled");
                 error_alert.css('display', 'none');
             }
         }
         /**
         * Handles the sign up button press.
         */
-        //check on username database
+        //check on username database used in onblur
         function checkIfUserExits() {
             var userName = document.getElementById('username').value.toLowerCase();
             if (userName != "") {
                 var query = firebase.database().ref("Users");
-                query.child(userName).once('value', function (snapshot) {
-                    var exists = (snapshot.val() !== null);
-                    if (exists) {
-                        document.getElementById("error_alert").style.display = "block";
-                        document.getElementById("error_alert").innerText = "That username is taken. Try another";
-                        $("#quickstart-sign-in").attr("disabled", "disabled");
-                    } else {
-                        document.getElementById("error_alert").style.display = "none";
-                        $("#quickstart-sign-in").removeAttr("disabled");
-                    }
-                });
+                try{
+                    query.child(userName).once('value', function (snapshot) {
+                        var exists = (snapshot.val() !== null);
+                        if (exists) {
+                            document.getElementById("error_alert").style.display = "block";
+                            document.getElementById("error_alert").innerText = "That username is taken. Try another";
+                        } else {
+                            document.getElementById("error_alert").style.display = "none";
+                        }
+                    })
+                } catch(error) {
+                    document.getElementById("error_alert").style.display = "block";
+                    document.getElementById("error_alert").innerText = "Your username should not contain ., #, $, [, or ]";
+                }
             }
         }
 
         function handleSignUp() {
             // check username again
             var userName = document.getElementById('username').value.toLowerCase();
+            var username = document.getElementById('username').value;
+            var email = document.getElementById('email').value;
+            var password = document.getElementById('password').value;
+            if (username.length < 1) {
+                document.getElementById("error_alert").style.display = "block";
+                document.getElementById("error_alert").innerText = "Please enter Username.";
+                return;
+            }
+            if (email.length < 1) {
+                document.getElementById("error_alert").style.display = "block";
+                document.getElementById("error_alert").innerText = "Please enter Email.";
+                return;
+            }
+            if (password.length < 1) {
+                document.getElementById("error_alert").style.display = "block";
+                document.getElementById("error_alert").innerText = "Please enter Password.";
+                return;
+            }
             var query = firebase.database().ref("Users");
             query.child(userName).once('value', function(snapshot) {
                 var exists = (snapshot.val() !== null);
                 if (exists) {
                     document.getElementById("error_alert").style.display = "block";
                     document.getElementById("error_alert").innerText = "That username is taken. Try another";
-                    $("#quickstart-sign-in").attr("disabled", "disabled");
                 } else {
-                    var username = document.getElementById('username').value;
-                    var email = document.getElementById('email').value;
-                    var password = document.getElementById('password').value;
-                    if (username.length < 1) {
-                        document.getElementById("error_alert").style.display = "block";
-                        document.getElementById("error_alert").innerText = "Please enter Username.";
-                        return;
-                    }
-                    if (email.length < 1) {
-                        document.getElementById("error_alert").style.display = "block";
-                        document.getElementById("error_alert").innerText = "Please enter Email.";
-                        return;
-                    }
-                    if (password.length < 1) {
-                        document.getElementById("error_alert").style.display = "block";
-                        document.getElementById("error_alert").innerText = "Please enter Password.";
-                        return;
-                    }
                     // Sign in with email and pass.
                     // [START createwithemail]
                     firebase.auth().createUserWithEmailAndPassword(email, password).then(function() {
