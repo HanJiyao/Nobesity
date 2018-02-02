@@ -14,6 +14,7 @@
 #diet_image{
     width: 60px;
     height: 60px;
+    margin-left: 20px;
 }
 .newdiet{
     font-size: 50px ;
@@ -32,8 +33,22 @@
     text-align: center;
 }
 
-#update_button,#delete_button {
+#update_button{
     font-size: 24px;
+    margin-top: 30px;
+    width: 140px;
     height: 50px;
-    width: 50px;
+}
+
+#delete_button {
+    font-size: 24px;
+    margin-top: 30px;
+    background-color: red;
+    width: 140px;
+    height: 50px;
+}
+
+#Date{
+    position: relative;
+    left: 600px;
 }
