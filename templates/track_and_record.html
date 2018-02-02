@@ -125,6 +125,7 @@
                 var actPieChart = new Chart(ctx,{type: 'pie', data: actData, options: options});
             </script>
             <script>
+                Chart.defaults.global.legend.display = false;
                 var ctx = document.getElementById("New").getContext("2d");
                 var calData = {
                     datasets: [{
