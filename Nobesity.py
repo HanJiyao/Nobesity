@@ -802,7 +802,7 @@ def new_diet():
             fats = new_form.fats.data
             carbohydrates = new_form.carbohydrates.data
             protein = new_form.proteins.data
-            diet_date = '{:%d-%m-%Y}'.format(datetime.date.today())
+            diet_date = '{:%Y-%m-%d}'.format(datetime.date.today())
             food_diet = Diet(name, type, calories, fats, carbohydrates, protein,diet_date)
             food_diet.db = root.child('Food')
             food_diet.db.child(username).push({'Name': food_diet.get_name(),
@@ -884,7 +884,7 @@ def faq():
 
 class ActivityForm(Form):
     activity = StringField('Name Of Activity', [validators.Length(min=1, max=20), validators.DataRequired()])
-    date = DateField('Date Of Activity', format='%Y/%m/%d')
+    date = DateField('Date Of Activity', format='%Y-%m-%d')
     duration = IntegerField('Duration Of Activity')
     calories = IntegerField('Calories Burnt')
 
