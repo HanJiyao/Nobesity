@@ -1021,7 +1021,7 @@ def record():
 
 @app.route('/rewards')
 def rewards():
-    healthpoints_db = root.child("Rewards").get()
+    healthpoints_db = root.child("Rewards/"+session['username']).get()
     healthpoints_list = []
     for eachhealthpoints in healthpoints_db:
         healthpoints = Rewards(eachhealthpoints, healthpoints_db[eachhealthpoints]["Healthpoints"])
