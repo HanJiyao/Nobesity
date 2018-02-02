@@ -27,7 +27,7 @@
       };
       firebase.initializeApp(config);
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.js"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.bundle.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
@@ -35,59 +35,75 @@
     <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
 </head>
 <body>
-    {% include 'includes/_message.html' %}
-    <div class="master-wrapper">
-        {% include 'includes/_navbar.html' %}
-        <div class="content-wrapper">
-            {% block body %}{% endblock %}
-        </div>
-        {% include 'includes/_footer.html' %}
-    </div>
-    {% include 'includes/_console.html' %}
-    <script>
-    /**
-     * initApp handles setting up UI event listeners and registering Firebase auth listeners:
-     *  - firebase.auth().onAuthStateChanged: This listener is called when the user is signed in or
-     *    out, and that is where we update the UI.
-     */
-    function initApp() {
-      // Listening for auth state changes.
-      // [START authstatelistener]
-      firebase.auth().onAuthStateChanged(function(user) {
-        // [START_EXCLUDE silent]
-        // [END_EXCLUDE]
-        if (user) {
-          // User is signed in.
-          var displayName = user.displayName;
-          var email = user.email;
-          var emailVerified = user.emailVerified;
-          var photoURL = user.photoURL;
-          var isAnonymous = user.isAnonymous;
-          var uid = user.uid;
-          var providerData = user.providerData;
-          // [START_EXCLUDE]
-          document.getElementById('quickstart-sign-in-status').textContent = 'Signed in';
-          document.getElementById('quickstart-account-details').textContent = JSON.stringify(user, null, '  ');
-          // [END_EXCLUDE]
-        } else {
-          // User is signed out.
-          // [START_EXCLUDE]
-          document.getElementById('quickstart-sign-in-status').textContent = 'Signed out';
-          document.getElementById('quickstart-account-details').textContent = 'null';
-          // [END_EXCLUDE]
-        }
-      });
-      // [END authstatelistener]
-    }
+<canvas id="canvas" width="500" height="250" class="chartjs-render-monitor" style="display: block; width: 500px; height: 250px;"></canvas>
+<button id="randomizeData">Randomize Data</button>
+<script>
+    var lineChartData = {
+        labels: ["January", "February", "March"],
+        datasets: [{
+            label: "My First dataset",
+            borderColor: "#000000",
+            backgroundColor: "#000000",
+            fill: false,
+            data: [
+                1,2,3
+            ],
+            yAxisID: "y-axis-1",
+        }, {
+            label: "My Second dataset",
+            borderColor: "#000000",
+            backgroundColor: "#000000",
+            fill: false,
+            data: [
+                3,2,1
+            ],
+            yAxisID: "y-axis-2"
+        }]
+    };
+
     window.onload = function() {
-        initApp();
-        for (i in document.getElementsByClassName("alert alert-danger col-12 mt-2")) {
-            if (document.getElementsByClassName("alert alert-danger col-12 mt-2")[i].innerText == "Not a valid integer value" ||
-                document.getElementsByClassName("alert alert-danger col-12 mt-2")[i].innerText == "Not a valid decimal value") {
-                document.getElementsByClassName("alert alert-danger col-12 mt-2")[i].innerText = "Please Enter a Number"
+        var ctx = document.getElementById("canvas").getContext("2d");
+        window.myLine = Chart.Line(ctx, {
+            data: lineChartData,
+            options: {
+                responsive: false,
+                hoverMode: 'index',
+                stacked: false,
+                title:{
+                    display: true,
+                    text:'Chart.js Line Chart - Multi Axis'
+                },
+                scales: {
+                    yAxes: [{
+                        type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+                        display: true,
+                        position: "left",
+                        id: "y-axis-1",
+                    }, {
+                        type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+                        display: true,
+                        position: "right",
+                        id: "y-axis-2",
+
+                        // grid line settings
+                        gridLines: {
+                            drawOnChartArea: false, // only want the grid lines for one axis to show up
+                        },
+                    }],
+                }
             }
-        }
-    }
+        });
+    };
+
+    document.getElementById('randomizeData').addEventListener('click', function() {
+        lineChartData.datasets.forEach(function(dataset) {
+            dataset.data = dataset.data.map(function() {
+                return randomScalingFactor();
+            });
+        });
+
+        window.myLine.update();
+    });
     </script>
 </body>
 </html>
