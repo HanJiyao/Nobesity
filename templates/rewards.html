@@ -1,16 +1,23 @@
 {% extends 'layout.html' %}
 {% set active_page = "reward" %}
 {% block body %}
+
 <script>
 // When the user clicks on <div>, open the popup
-function myFunction() {
-    alert("Congratz!You have successfully redeemed this item:)")
-}
-function myFunction4(){
-    alert("Sorry.You do not have enough health points to redeem this item :(")
-}
+
 </script>
     <style>
+
+        .button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
         .text{color:green}
         .rewards{border: 2px solid blue  }
         .img{text-align: center}
@@ -31,27 +38,30 @@ function myFunction4(){
         }
         /* green*/
     </style>
+    <div class="w3-display-topright">Healthpoints:{{ healthpointss.get_healthpoints()}}</div>
     <div class="jumbotron text-center">
+
     <h1 align="center">Rewards</h1>
+
     <section class="container">
 
         <div class="row">
-            <div style="padding-botttom:30px;" overflow: scroll; class="rewards col-sm-4">
-                <p class ="img"><img align="left" src="https://images-na.ssl-images-amazon.com/images/I/51eoH2uBrDL._UX385_.jpg"></p>
-                <p class="text">Health points needed:500</p>
-                <button >Redeem</button>
+            <div style="padding-botttom:30px;" class="rewards col-sm-4">
+                <p class ="img"><img src="https://images-na.ssl-images-amazon.com/images/I/51eoH2uBrDL._UX385_.jpg"></p>
+                <p class="text" align="center">Health points needed:500</p>
+                <input type="checkbox" name="NObesity T-Shirt" value="500"> Redeem<br>
 
             </div>
             <div style="padding-botttom:30px;" class="rewards  col-sm-4">
                 <p class="img"><img src= "http://www.gocontigo.com/media/catalog/product/cache/19/image/425x/040ec09b1e35df139433887a97daa66f/m/o/monaco_cortland_back_2.jpg"></p>
                 <p class="text" align="center">Health points needed:1500</p>
-                <button >Redeem</button>
+                <input type="checkbox" name="Water Bottle" value="1500"> Redeem<br>
             </div>
             <div style="padding-botttom:30px;" class="rewards  col-sm-4">
                 <p class="img"><img src="https://www.runnersworld.com/sites/runnersworld.com/files/styles/listicle_slide_custom_user_phone_1x/public/0117_fea_treadmills_landice_025_2.jpg?itok=YlQeqUGs"></p>
 
                 <p class="text" align="center">Health points needed:10,000</p>
-                <button >Redeem</button>
+                <input type="checkbox" name="Treadmill" value="10000"> Redeem<br>
             </div>
         </div>
         <div class="row">
@@ -59,20 +69,21 @@ function myFunction4(){
                 <p class="img"><img src="http://cdn6.bigcommerce.com/s-2sxhiat0li/products/182/images/588/GL7X_AD__99451.1461966775.500.750.jpg?c=2"></p>
 
                 <p class="text" align="left">Health points needed:2500</p>
-                <button  >Redeem</button>
+                <input type="checkbox" name="Basketball" value="2500"> Redeem<br>
             </div>
             <div style="padding-bottom:30px;" class="rewards  col-sm-4">
                 <p class="img"><img src="https://www.runnersworld.com/sites/runnersworld.com/files/styles/listicle_slide_custom_user_phone_1x/public/reebok_harmony_w_400.jpg?itok=U3lsw4qz"></p>
                 <p class="text" align="center">Health points needed:4000</p>
-                <button >Redeem</button>
+                <input type="checkbox" name="Sports Shoe" value="4000"> Redeem<br>
             </div>
             <div style="padding-bottom:30px;" class="rewards  col-sm-4">
                 <p class="img"><img src="http://wigglybridgedistillery.com/wp-content/uploads/2016/07/nike-dri-fit-featherlight-cap-mens-600x600.jpeg"></p>
                 <p class="text" align="right">Health points needed:4000</p>
-                <button>Redeem</button>
-                {{healthpoint.check_healthpoints(4000)}}
+                <input type="checkbox" name="Nike Cap" value="4000"> Redeem<br>
+
             </div>
         </div>
+        <button class="button">Submit</button>
     </section>
 </div>
 
