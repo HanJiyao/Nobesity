@@ -151,13 +151,13 @@
               </div>
           </div>
       <div class="form-row col-12 mt-3 mx-auto">
-          {% if setup_detail_form['initial_systol'].errors %}
-            {% for error in setup_detail_form['initial_systol'].errors %}
+          {% if setup_detail_form['initial_systole'].errors %}
+            {% for error in setup_detail_form['initial_systole'].errors %}
             <div class="alert alert-danger col-12 pt-0 pd-0">{{ setup_detail_form['initial_systol'].label }} : {{ error }}</div>
             {% endfor %}
           {% endif %}
-          {% if setup_detail_form['initial_diastol'].errors %}
-            {% for error in setup_detail_form['initial_diastol'].errors %}
+          {% if setup_detail_form['initial_diastole'].errors %}
+            {% for error in setup_detail_form['initial_diastole'].errors %}
             <div class="alert alert-danger col-12 pt-0 pd-0">{{ setup_detail_form['initial_diastol'].label }} : {{ error }}</div>
             {% endfor %}
           {% endif %}

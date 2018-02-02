@@ -36,7 +36,7 @@
 #bp_date{
     height: 50px;
     width: 100%;
-    background: #FAFAFA;
+    background: #eeeeee;
     padding: 10px 20px;
     text-align: left;
     font-size: 1.2rem;
@@ -80,20 +80,56 @@
     font-size: 0.9rem;
 }
 #bpChart{
-    padding: 20px 10px;
-    background: #f9f9f9;
+    padding: 0;
+    margin: 30px 0;
 }
 .bp-card-header{
-    text-align: center;
+    text-align: left;
+    background: #03A9F4;
 }
 .bp-main-title{
-    font-size: 3.3rem;
-    padding: 60px 0 30px;
+    font-size: 2.5rem;
+    padding: 30px 120px;
+    background: #EEEEEE;
 }
 #bp_control_view{
     width: 50%;
-    margin: auto;
+    margin-left: 0;
+    cursor: pointer;
 }
 #bp_control_view .submit-btn{
     padding: 15px;
+}
+#float_add_bp{
+    height: 60px;
+    width: 60px;
+    border-radius: 100%;
+    background: #F44336;
+    box-shadow: 0 5px 25px #e0e0e0;
+    position: absolute;
+    right: 180px;
+    bottom: 320px;
+    cursor: pointer;
+}
+#float_add_bp i {
+    color: white;
+    font-size: 2rem;
+    padding: 15px;
+}
+.submit-btn.active{
+    background: white;
+    color: #03A9F4;
+}
+#chart_control{
+    font-size: 2rem;
+    text-align: center;
+    padding: 30px;
+}
+#chart_control i {
+    font-size: 2rem;
+    color: #9E9E9E;
+    transition: 0.3s;
+}
+#chart_control i:hover{
+    color: #424242;
 }

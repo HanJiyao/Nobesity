@@ -37,61 +37,128 @@
     </div>
     <div class="card">
         <div class="bp-card-header">
-            <div class="bp-main-title">Blood Pressure Graph</div>
             <div class="row" id="bp_control_view">
-                <div class="col-3 submit-btn">All</div>
-                <div class="col-3 submit-btn">Month</div>
-                <div class="col-3 submit-btn">Week</div>
-                <div class="col-3 submit-btn active">Daily</div>
+                <div class="col-3 submit-btn" id="bp_all" onclick="bp_all()">All</div>
+                <div class="col-3 submit-btn" id="bp_month" onclick="bp_month()">Month</div>
+                <div class="col-3 submit-btn" id="bp_week" onclick="bp_week()">Week</div>
+                <div class="col-3 submit-btn active" id="bp_day" onclick="bp_day()">Daily</div>
             </div>
         </div>
-        <canvas id="bpChart" width="900" height="400"></canvas>
+        <canvas id="bpChart"></canvas>
+    <div id="chart_control">
+        <div class="row">
+            <div class="col-3"><i class="material-icons">keyboard_arrow_left</i></div>
+            <div class="col-6 pt-2"><span id="time_start">02 feb</span> - <span id="time_end"></span></div>
+            <div class="col-3"><i class="material-icons">keyboard_arrow_right</i></div>
+        </div>
+    </div>
         <script>
-            new Chart(document.getElementById("bpChart"),
-                {"type":"line",
-                    "data":{"labels":
-                        [{% for i in bp_datetime_list %}
-                            moment('{{ i }}',"YYYY-MM-DD HH:mm"),
-                        {% endfor %}],
-                    "datasets":
-                        [{"label":"Systolic Pressure",
-                        "data":{{ bp_sys_list|safe }},
-                        "fill":false,
-                        "borderColor": "#F44336",
-                        "lineTension":0
-                        }, {"label":"Diastolic Pressure",
-                        "data":{{ bp_dias_list|safe }},
-                        "fill":false,
-                        "borderColor": "#EF5350",
-                        "lineTension":0
-                        }, {"label":"Pulse Rate",
-                        "data":{{ bp_pulse_list|safe }},
-                        "fill":false,
-                        "borderColor": "#673AB7",
-                        "lineTension":0
-                        }]
-                    },
-                    "options":{
-                        scales: {
-                            xAxes: [{
-                                type: 'time',
-                                distribution: 'linear',
-                                time: {
-                                    unit: 'hour',
-                                    displayFormats: {
-                                        hour: 'MMM D'+ ' h:mm a'
-                                    },
-                                     min: moment().hour(-24)
-                                }
-                            }]
+            var year = moment().year();
+            var month = moment().month();
+            var date = moment().date();
+            var week = moment().week();
+                var bpChart = new Chart(document.getElementById("bpChart"), {
+                    "type": "line",
+                        "data": {
+                            "labels":
+                                [{% for i in bp_datetime_list %}
+                                    moment('{{ i }}', "YYYY-MM-DD HH:mm"),
+                                {% endfor %}],
+                            "datasets":
+                                [{
+                                    "label": "Systolic Pressure",
+                                    "data":{{ bp_sys_list|safe }},
+                                    "fill": false,
+                                    "borderColor": "#F44336",
+                                    "lineTension": 0
+                                }, {
+                                    "label": "Diastolic Pressure",
+                                    "data":{{ bp_dias_list|safe }},
+                                    "fill": false,
+                                    "borderColor": "#EF5350",
+                                    "lineTension": 0
+                                }, {
+                                    "label": "Pulse Rate",
+                                    "data":{{ bp_pulse_list|safe }},
+                                    "fill": false,
+                                    "borderColor": "#673AB7",
+                                    "lineTension": 0
+                                }]
+                        },
+                        "options": {
+                            scales: {
+                                xAxes: [{
+                                    type: 'time',
+                                    distribution: 'linear',
+                                    time: {
+                                        unit: 'hour',
+                                        displayFormats: {
+                                            hour: 'h:mm a'
+                                        },
+                                        min: moment().set({
+                                            'year': year,
+                                            'month': month,
+                                            'date': date,
+                                            'hour': 0,
+                                            'minute': 0
+                                        }),
+                                        max: moment().set({
+                                            'year': year,
+                                            'month': month,
+                                            'date': date,
+                                            'hour': 24,
+                                            'minute': 0
+                                        })
+                                    }
+                                }]
+                            }
                         }
-                    }
-                });
+                    });
+            function bp_day(){
+                bpChart.options.scales.xAxes[0].time.min = moment().startOf('day');
+                bpChart.options.scales.xAxes[0].time.max = moment().endOf('day');
+                bpChart.options.scales.xAxes[0].time.unit='hour';
+                bpChart.options.scales.xAxes[0].time.displayFormats={hour: 'h mm A'};
+                bpChart.update();
+                var day = $('#bp_day');
+                day.addClass = "active";
+                day.siblings().removeClass = "active"
+            }
+            function bp_week(){
+                bpChart.options.scales.xAxes[0].time.min = moment().startOf('week');
+                bpChart.options.scales.xAxes[0].time.max = moment().endOf('week');
+                bpChart.options.scales.xAxes[0].time.unit='day';
+                bpChart.options.scales.xAxes[0].time.displayFormats={day: 'MMM DD'};
+                bpChart.update();
+                var week = $('#bp_week');
+                week.addClass = "active";
+                week.siblings().removeClass = "active"
+            }
+            function bp_month(){
+                bpChart.options.scales.xAxes[0].time.min = moment().startOf('month');
+                bpChart.options.scales.xAxes[0].time.max = moment().endOf('month');
+                bpChart.options.scales.xAxes[0].time.unit='day';
+                bpChart.options.scales.xAxes[0].time.displayFormats={day: 'MMM DD'};
+                bpChart.update();
+                var month = $('#bp_month');
+                month.addClass = "active";
+                month.siblings().removeClass = "active"
+            }
+            function bp_all(){
+                bpChart.options.scales.xAxes[0].time.min = '';
+                bpChart.options.scales.xAxes[0].time.max = '';
+                bpChart.options.scales.xAxes[0].time.unit='day';
+                bpChart.options.scales.xAxes[0].time.displayFormats={day: 'MMM DD'};
+                bpChart.update();
+                var all = $('#bp_all');
+                all.addClass = "active";
+                all.siblings().removeClass = "active"
+            }
         </script>
-        <div id="float_add_bp"></div>
+        <div class="bp-main-title"><div id="float_add_bp"><i class="material-icons">add</i></div>Blood Pressure Graph</div>
         <div class="bp-chart-wrapper"></div>
             <div class="current-bp"><div id="bp_day">
-                <div class="card-body" id="bp_container">
+                <div class="card-body p-5" id="bp_container">
                     <div class="bp-container">
                         <div class="row">
                             <div class="col-3">

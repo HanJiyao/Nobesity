@@ -40,7 +40,7 @@ html, body{
 	position: fixed;
 	top:0;
 	left:0;
-	z-index: 3000;
+	z-index: 1020;
 	text-align: right;
 }
 .navbar-brand img{

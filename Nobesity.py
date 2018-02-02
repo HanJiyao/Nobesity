@@ -669,7 +669,8 @@ def blood_pressure():
     #     flash('Please Login First to use our Services', 'primary')
     #     return redirect(url_for('login'))
     return render_template('bloodPressure.html', bp_dict=bp_dict, bp_datetime_list=bp_datetime_list,
-                           bp_sys_list=bp_sys_list, bp_dias_list=bp_dias_list, bp_pulse_list=bp_pulse_list)
+                           bp_date_list=bp_date_list.reverse(), bp_sys_list=bp_sys_list, bp_dias_list=bp_dias_list,
+                           bp_pulse_list=bp_pulse_list)
 
 
 @app.route('/plan')
