@@ -505,7 +505,7 @@ def health_detail():
             for date in weight_dict:
                 weight_date_list.append(date)
             setup_detail_form.initial_weight.data = float(user_info.get_weight_dict()[weight_date_list[-1]])
-            setup_detail_form.height.data = round(user_info.get_height() * 100)
+            setup_detail_form.height.data = round(float(user_info.get_height()) * 100)
             bp_dict = user_info.get_bp_dict()
             bp_time_list = []
             for time in bp_dict:
@@ -802,7 +802,7 @@ def new_diet():
             fats = new_form.fats.data
             carbohydrates = new_form.carbohydrates.data
             protein = new_form.proteins.data
-            diet_date = '{:%Y-%m-%d}'.format(datetime.date.today())
+            diet_date = '{:%d-%m-%Y}'.format(datetime.date.today())
             food_diet = Diet(name, type, calories, fats, carbohydrates, protein,diet_date)
             food_diet.db = root.child('Food')
             food_diet.db.child(username).push({'Name': food_diet.get_name(),
@@ -884,7 +884,7 @@ def faq():
 
 class ActivityForm(Form):
     activity = StringField('Name Of Activity', [validators.Length(min=1, max=20), validators.DataRequired()])
-    date = DateField('Date Of Activity', format='%Y-%m-%d')
+    date = DateField('Date Of Activity', format='%d-%m-%Y')
     duration = IntegerField('Duration Of Activity')
     calories = IntegerField('Calories Burnt')
 
@@ -995,10 +995,10 @@ def record():
                             eachdiet['Carbohydrates Value'], eachdiet['Protein Value'], eachdiet['Diet Date'])
                 diet_list.append(food)
 
-                print(eachdiet['Diet Date'])
+                diet_date = eachdiet['Diet Date'][6:10]+'-'+eachdiet['Diet Date'][3:5]+'-'+eachdiet['Diet Date'][0:2]
                 print(str(datetime.date.today()))
 
-                if eachdiet['Diet Date'] == str(datetime.date.today()):
+                if diet_date == str(datetime.date.today()):
                     food_today = Diet(eachdiet['Name'], eachdiet['Type'], eachdiet['Calories Value'], eachdiet['Fats Value'],
                             eachdiet['Carbohydrates Value'], eachdiet['Protein Value'], eachdiet['Diet Date'])
                     diet_today.append(food_today)
