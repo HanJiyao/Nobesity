@@ -1020,22 +1020,24 @@ def record():
                            display_msg_today=message_today, cal_in=total_calories_in, cal_out=total_calories_out)
 
 
-@app.route('/rewards')
+@app.route('/rewards',methods=['GET',"POST"])
 def rewards():
-    healthpoints_db = root.child("Rewards/"+session['username']).get()
-    healthpoints_list = []
-    for eachhealthpoints in healthpoints_db:
-        healthpoints = Rewards(eachhealthpoints, healthpoints_db[eachhealthpoints]["Healthpoints"])
-        healthpoints_list.append(healthpoints)
+    reward_form=RewardForm(request.form)
+    username = session["username"]
+    healthpoints_db = root.child("Rewards/"+username).get()
+    root.child("Rewards/" + username).set({'healthpoints':0})
+    healthpointss = Rewards(healthpoints_db["healthpoints"])
 
-    return render_template('rewards.html', healthpoints_list=healthpoints_list)
+
+    return render_template('rewards.html', healthpoints_db=healthpoints_db, healthpointss=healthpointss)
 
 
 class Rewards:
-    healthpoints = 0
 
-    def __init__(self, healthpoints):
+
+    def __init__(self, healthpoints=0):
         self.__healthpoints = healthpoints
+
 
     def get_healthpoints(self):
         return self.__healthpoints
@@ -1059,20 +1061,16 @@ class Rewards:
 
 @app.route('/quiz', methods=['GET', 'POST'])
 def quiz():
-    try:
-        new_form = leaderboardform(request.form)
-        if request.method == 'POST' and new_form.validate():
-            score = new_form.score.data
-            username = session["username"]
-            userscore = Leaderboard(username, score)
-            userscore.db = root.child('Leaderboard')  # map current userscore to firebase
-            userscore.db.child(username).set({"Score": userscore.get_score()})  # push means to update score
-            flash('New score inserted successfully', 'success')
+    new_form = leaderboardform(request.form)
+    if request.method == 'POST' and new_form.validate():
+        score = new_form.score.data
+        username = session["username"]
+        userscore = Leaderboard(username, score)
+        userscore.db = root.child('Leaderboard')  # map current userscore to firebase
+        userscore.db.child(username).set({"Score": userscore.get_score()})  # push means to update score
+        flash('New score inserted successfully', 'success')
 
-            return redirect(url_for('leaderboards'))
-    except KeyError:
-        flash('Please Login First to use our Services', 'primary')
-        return redirect(url_for('login'))
+        return redirect(url_for('leaderboards'))
     return render_template('quiz.html', new_form=new_form)
 
 
