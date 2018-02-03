@@ -23,7 +23,6 @@
         display: block;
     }
     #submit{
-
         font-family: sans-serif;
         font-size: 20px;
         background-color: #279;
@@ -37,22 +36,18 @@
     #submit:hover{
         background-color: #38a;
     }
-    .question,.answers{width:500px;
-        margin:auto;font-size:25px}
-    form{
-        text-align: center;
-    }
 </style>
-<h1 align="center">Health Quiz</h1>
+<h1>Quiz on Important Facts</h1>
 <div class="quiz-container">
   <div id="quiz_container"></div>
 </div>
-
+<button id="previous">Previous Question</button>
+<button id="next">Next Question</button>
 <form method="post">
     <div class="sr-only">
          {{ render_field(new_form.score, class_="form-control") }}
     </div>
-<button id="submit" type ="submit" value="submit" text-align="center" class="btn btn-submit">Submit Quiz</button>
+<button id="submit" type ="submit" value="submit" class="btn btn-submit">Submit Quiz</button>
 </form>
 <div id="results"></div>
 <script>
@@ -70,7 +65,6 @@
       for (letter in currentQuestion.answers) {
         // ...add an HTML radio button
         answers.push(
-
           `<label>
             <input type="radio" name="question${questionNumber}" value="${letter}">
             ${letter} :
@@ -121,6 +115,7 @@
     // show number of correct answers out of total
     resultsContainer.innerHTML = `${numCorrect}`;
   }
+
   const quizContainer = document.getElementById("quiz_container");
   const resultsContainer = document.getElementById("results");
   const submitButton = document.getElementById("submit");
