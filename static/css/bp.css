@@ -48,18 +48,30 @@
     opacity: 0;
     transition: 0.3s;
 }
+#bpEdit button{
+    background: white;
+    border: none;
+}
+#bp_edit button{
+    background: white;
+    border: none;
+    padding: 0;
+}
 .col-1.bp-edit{
-    padding-top: 20px;
     position: relative;
     left: -20px;
     transition: 0.3s;
     cursor: pointer;
 }
+.col-2.bp-edit i{
+    padding: 25px;
+}
 .col-1.bp-edit i{
-    padding: 5px;
+    padding: 15px;
     font-size: 1.8rem;
     color: #616161;
-    transition: 0.3s
+    transition: 0.3s;
+    cursor: pointer;
 }
 .bp-edit-btn:hover{
     color: #03A9F4 !important;
@@ -81,40 +93,51 @@
 }
 #bpChart{
     padding: 0;
-    margin: 30px 0;
+    margin: 30px 0 50px;
 }
 .bp-card-header{
     text-align: left;
     background: #03A9F4;
 }
-.bp-main-title{
-    font-size: 2.5rem;
-    padding: 30px 120px;
+.bp-status{
     background: #EEEEEE;
 }
+.bp-main-title{
+    font-size: 2.5rem;
+    padding: 60px 80px 0;
+}
 #bp_control_view{
-    width: 50%;
-    margin-left: 0;
+    margin: 0;
     cursor: pointer;
 }
 #bp_control_view .submit-btn{
     padding: 15px;
 }
+#bp_control_view .col-2{
+    float:right
+}
+#bp_control_view .col-2 i{
+    vertical-align: -5px;
+}
 #float_add_bp{
-    height: 60px;
-    width: 60px;
+    height: 75px;
+    width: 75px;
     border-radius: 100%;
     background: #F44336;
-    box-shadow: 0 5px 25px #e0e0e0;
+    box-shadow: 3px 3px 10px #9e9e9e;
     position: absolute;
     right: 180px;
-    bottom: 320px;
+    bottom: 265px;
     cursor: pointer;
+    transition: 0.3s;
+}
+#float_add_bp:hover{
+    background: #EF5350;
 }
 #float_add_bp i {
     color: white;
-    font-size: 2rem;
-    padding: 15px;
+    font-size: 2.5rem;
+    padding: 18px;
 }
 .submit-btn.active{
     background: white;
@@ -123,13 +146,21 @@
 #chart_control{
     font-size: 2rem;
     text-align: center;
-    padding: 30px;
+    padding-top: 30px;
 }
 #chart_control i {
     font-size: 2rem;
     color: #9E9E9E;
     transition: 0.3s;
+    padding: 15px;
+    border-radius: 100%;
+    box-shadow: 3px 3px 8px #9e9e9e;
+    cursor: pointer;
 }
 #chart_control i:hover{
     color: #424242;
+    background: #F5F5F5;
+}
+.modal .col-5, .modal.col-1{
+    font-size: 1.5rem;
 }

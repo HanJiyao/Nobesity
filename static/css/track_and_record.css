@@ -52,11 +52,6 @@ div.overview span {
 	font-size: 25px;
 }
 
-div.modal-body {
-	padding-left: 0px;
-	padding-right: 0px;
-}
-
 input#actname {
 	margin-left: auto;
 	margin-right: auto;

@@ -1,11 +1,10 @@
 from flask import Flask, render_template, request, flash, redirect, url_for, session
-from wtforms import Form, StringField, TextAreaField, RadioField, SelectField, PasswordField, DecimalField,\
+from wtforms import Form, StringField, TextAreaField, RadioField, SelectField, PasswordField, DecimalField, \
     IntegerField, DateField, validators, ValidationError
 import firebase_admin
 from firebase_admin import credentials, db
 import datetime
 import math
-
 
 cred = credentials.Certificate('./cred/nobesity-it1705-firebase-adminsdk-xo793-bbfa4432da.json')
 default_app = firebase_admin.initialize_app(cred, {'databaseURL': 'https://nobesity-it1705.firebaseio.com/'})
@@ -33,7 +32,7 @@ class RequiredIf(object):
 @app.route('/')
 def index():
     if session.get('logged_in') is True:
-        return redirect(url_for('dashboard'))
+        return redirect(url_for('profile'))
     return render_template('home.html')
 
 
@@ -61,7 +60,7 @@ def login():
     if request.method == 'POST' and login_form.validate():
         login_id = login_form.username.data.lower()
         for i in uid_db:
-            if root.child('Users/'+i+'/email').get() == login_id or login_id == i:
+            if root.child('Users/' + i + '/email').get() == login_id or login_id == i:
                 session['username'] = i
                 session['logged_in'] = True
                 flash('Welcome Back, ' + session['username'], 'primary')
@@ -91,7 +90,7 @@ def signup():
         })
         session['logged_in'] = True
         session['username'] = signup_form.username.data.lower()
-        flash('You are successfully signed up as '+session['username'], 'success')
+        flash('You are successfully signed up as ' + session['username'], 'success')
         return redirect(url_for('verify_email'))
 
     return render_template('signup.html', form=signup_form)
@@ -154,27 +153,26 @@ class HealthDetailSetup:
         self.__suggest_hr_min = math.ceil(0.5 * self.__hr_hrr)
         self.__suggest_hr_max = math.ceil(0.85 * self.__hr_hrr)
         self.__suggest_hr = str(self.__suggest_hr_min) + ' - ' + str(self.__suggest_hr_max)
-        self.__plan_grade = 30
         self.__bmi_grade = 0
         if 18.5 > self.__bmi:
-            self.__bmi_grade = 20 - (18.5 - self.__bmi) * 1.6
+            self.__bmi_grade = 25 - (18.5 - self.__bmi) * 1.8
         elif 22.9 < self.__bmi:
-            self.__bmi_grade = 20 - (self.__bmi - 22.9) * 1.6
+            self.__bmi_grade = 25 - (self.__bmi - 22.9) * 1.8
         else:
-            self.__bmi_grade = 20
+            self.__bmi_grade = 25
         if self.__bmi_grade < 0:
             self.__bmi_grade = 0
         self.__bfp_grade = 0
         if gender == 'male':
             if self.__bfp > 25:
-                self.__bfp_grade = 20 - (self.__bfp - 25) * 2
+                self.__bfp_grade = 25 - (self.__bfp - 25) * 2.5
             else:
-                self.__bfp_grade = 20
+                self.__bfp_grade = 25
         if gender == 'female':
             if self.__bfp > 32:
-                self.__bfp_grade = 20 - (self.__bfp - 30) * 2
+                self.__bfp_grade = 25 - (self.__bfp - 30) * 2.5
             else:
-                self.__bfp_grade = 20
+                self.__bfp_grade = 25
         if self.__bfp_grade < 0:
             self.__bfp_grade = 0
         self.__sys_grade = 0
@@ -182,27 +180,27 @@ class HealthDetailSetup:
         self.__pulse_grade = 0
         self.__bp_grade = 0
         if self.__current_systolic < 90:
-            self.__sys_grade = 12 - (90 - self.__current_systolic) * 0.5
+            self.__sys_grade = 20 - (90 - self.__current_systolic) * 0.9
         elif self.__current_systolic > 120:
-            self.__sys_grade = 12 - (self.__current_systolic - 120) * 0.5
+            self.__sys_grade = 20 - (self.__current_systolic - 120) * 0.9
         else:
-            self.__sys_grade = 8
+            self.__sys_grade = 20
         if self.__sys_grade < 0:
             self.__sys_grade = 0
         if self.__current_diastolic < 60:
-            self.__dias_grade = 12 - (60 - self.__current_diastolic) * 0.5
+            self.__dias_grade = 20 - (60 - self.__current_diastolic) * 0.9
         elif self.__current_diastolic > 80:
-            self.__dias_grade = 12 - (self.__current_diastolic - 80) * 0.5
+            self.__dias_grade = 20 - (self.__current_diastolic - 80) * 0.9
         else:
-            self.__dias_grade = 8
+            self.__dias_grade = 20
         if self.__dias_grade < 0:
             self.__dias_grade = 0
         if self.__current_pulse > 75:
-            self.__pulse_grade = 6 - (self.__current_pulse - 75) * 0.3
+            self.__pulse_grade = 10 - (self.__current_pulse - 75) * 0.5
         if self.__pulse_grade < 0:
             self.__pulse_grade = 0
         self.__bp_grade = self.__sys_grade + self.__dias_grade + self.__pulse_grade
-        self.__grade = int(round(self.__plan_grade + self.__bmi_grade + self.__bfp_grade + self.__bp_grade))
+        self.__grade = int(round(self.__bmi_grade + self.__bfp_grade + self.__bp_grade))
         if 80 <= self.__grade <= 100:
             self.__grade_display = 'A'
         elif 60 <= self.__grade < 80:
@@ -221,7 +219,7 @@ class HealthDetailSetup:
         return self.__birth
 
     def get_height(self):
-        return self.__height
+        return float(self.__height)
 
     def get_weight_dict(self):
         return self.__weight_dict
@@ -237,6 +235,9 @@ class HealthDetailSetup:
 
     def get_bfp(self):
         return self.__bfp
+
+    def get_suggest_weight_max(self):
+        return self.__suggest_weight_max
 
     def get_suggest_weight(self):
         return self.__suggest_weight
@@ -287,7 +288,7 @@ def register_name():
     try:
         name_form = NameForm(request.form)
         if request.method == 'POST' and name_form.validate():
-            root.child('Users/'+session['username']).update({
+            root.child('Users/' + session['username']).update({
                 'displayName': name_form.display_name.data
             })
             return redirect(url_for('register_gender'))
@@ -306,7 +307,7 @@ def register_gender():
     try:
         gender_form = GenderForm(request.form)
         if request.method == 'POST' and gender_form.validate():
-            root.child('HealthDetail/'+session['username']).update({
+            root.child('HealthDetail/' + session['username']).update({
                 'gender': gender_form.gender.data,
             })
             return redirect(url_for('register_info'))
@@ -350,15 +351,16 @@ def register_info():
     try:
         more_info_form = MoreInfoForm(request.form)
         register_date = '{:%Y%m%d}'.format(datetime.date.today())
+        birth_year = more_info_form.birth_year.data
+        birth_month = more_info_form.birth_month.data
+        birth_day = more_info_form.birth_day.data
         date_error = False
         if request.method == 'POST' and more_info_form.validate():
-            root.child('HealthDetail/'+session['username']).update({
-                'height': str(more_info_form.height.data/100),
-                'birthday': str(more_info_form.birth_year.data) +
-                str(more_info_form.birth_month.data) +
-                str(more_info_form.birth_day.data)
+            root.child('HealthDetail/' + session['username']).update({
+                'height': str(more_info_form.height.data / 100),
+                'birthday': str(birth_year) + str(birth_month) + str(birth_day)
             })
-            root.child('Weight/'+session['username']).update({
+            root.child('Weight/' + session['username']).update({
                 register_date: str(more_info_form.initial_weight.data)
             })
             try:
@@ -367,7 +369,9 @@ def register_info():
                               int(more_info_form.birth_day.data))
             except ValueError:
                 date_error = True
-            finally:
+                return render_template('firstTimeRegisterInfo.html', moreinfo_form=more_info_form,
+                                       date_error=date_error)
+            else:
                 input_date = datetime.date(int(more_info_form.birth_year.data),
                                            int(more_info_form.birth_month.data),
                                            int(more_info_form.birth_day.data))
@@ -387,7 +391,7 @@ class BpInfoForm(Form):
                                        (min=0, max=300, message="Please Enter A valid BP < 300")])
     diastole = IntegerField('Diastole', [validators.DataRequired('Please Enter Diastolic Pressure'),
                                          validators.NumberRange
-                                         (min=0, max=250, message="Please Enter A valid BP < 250")])
+                                         (min=0, max=300, message="Please Enter A valid BP < 300")])
     pulse = IntegerField('Pulse', [validators.DataRequired('Please Enter the Pulse Rate'),
                                    validators.NumberRange
                                    (min=0, max=300, message="Please Enter A valid Pulse < 300")])
@@ -399,7 +403,7 @@ def register_bp():
         bp_info_form = BpInfoForm(request.form)
         register_time = '{:%Y%m%d%H%M}'.format(datetime.datetime.now())
         if request.method == 'POST' and bp_info_form.validate():
-            root.child('BloodPressure/'+session['username']).update({
+            root.child('BloodPressure/' + session['username']).update({
                 register_time: {
                     'systolic': str(bp_info_form.systole.data),
                     'diastolic': str(bp_info_form.diastole.data),
@@ -438,11 +442,11 @@ class UserHealthDetailForm(Form):
     height = IntegerField('Current Height (cm)',
                           [validators.NumberRange(min=0, max=300, message="Please Enter Correct Height (cm)")])
     initial_systole = IntegerField('Systole', [validators.DataRequired('Please Enter Systolic Pressure'),
-                                             validators.NumberRange(min=0, max=300,
-                                                                    message="Please Enter A valid BP < 300")])
+                                               validators.NumberRange(min=0, max=300,
+                                                                      message="Please Enter A valid BP < 300")])
     initial_diastole = IntegerField('Diastole', [validators.DataRequired('Please Enter Diastolic Pressure'),
-                                               validators.NumberRange(min=0, max=250,
-                                                                      message="Please Enter A valid BP < 250")])
+                                                 validators.NumberRange(min=0, max=250,
+                                                                        message="Please Enter A valid BP < 250")])
     initial_pulse = IntegerField('Pulse', [validators.DataRequired('Please Enter the Pulse Rate'),
                                            validators.NumberRange(min=0, max=300,
                                                                   message="Please Enter A valid Pulse < 300")])
@@ -458,8 +462,8 @@ def health_detail():
         if request.method == 'POST' and setup_detail_form.validate():
             gender = setup_detail_form.gender.data
             birthday = str(
-                setup_detail_form.birth_year.data) + setup_detail_form.birth_month.data + setup_detail_form.birth_day.data
-            height = str(setup_detail_form.height.data/100)
+                setup_detail_form.birth_year.data)+setup_detail_form.birth_month.data+setup_detail_form.birth_day.data
+            height = str(setup_detail_form.height.data / 100)
             weight_dict = {
                 setup_date: str(setup_detail_form.initial_weight.data)
             }
@@ -473,7 +477,7 @@ def health_detail():
             user_info = HealthDetailSetup(
                 gender, birthday, height, weight_dict, bp_dict
             )
-            uid_db.child('HealthDetail/'+session['username']).update({
+            uid_db.child('HealthDetail/' + session['username']).update({
                 'gender': user_info.get_gender(),
                 'birthday': user_info.get_birth(),
                 'height': user_info.get_height(),
@@ -523,15 +527,15 @@ def health_detail():
 def personal_info():
     try:
         name_form = NameForm(request.form)
-        file_name = root.child('Users/' + session['username']+'/photoName').get()
-        photo_url = root.child('Users/' + session['username']+'/photoURL').get()
+        file_name = root.child('Users/' + session['username'] + '/photoName').get()
+        photo_url = root.child('Users/' + session['username'] + '/photoURL').get()
         if request.method == 'POST' and name_form.validate():
             root.child('Users/' + session['username']).update({
                 'displayName': name_form.display_name.data
             })
             flash('Personal information updated successful', 'success')
         else:
-            name_form.display_name.data = root.child('Users/' + session['username']+'/displayName').get()
+            name_form.display_name.data = root.child('Users/' + session['username'] + '/displayName').get()
     except KeyError:
         flash('Please Login First to use our Services', 'primary')
         return redirect(url_for('login'))
@@ -551,7 +555,7 @@ def password_reset():
 @app.route('/delete', methods=['GET', 'POST'])
 def delete():
     try:
-        file_name = root.child('Users/'+session['username']+'/photoName').get()
+        file_name = root.child('Users/' + session['username'] + '/photoName').get()
         if request.method == 'POST':
             root.child('Activities/' + session['username']).delete()
             root.child('BloodPressure/' + session['username']).delete()
@@ -580,10 +584,11 @@ def profile():
         user_info = HealthDetailSetup(user_info_db['gender'], user_info_db['birthday'], user_info_db['height'],
                                       user_weight_db, user_bp_db
                                       )
+        display_name = root.child('Users/' + session['username'] + '/displayName').get()
     except KeyError:
         flash('Please Login First to use our Services', 'primary')
         return redirect(url_for('login'))
-    return render_template('profile.html', user=user_info)
+    return render_template('profile.html', user=user_info, display_name=display_name)
 
 
 class BloodPressure:
@@ -613,10 +618,13 @@ class BloodPressure:
     def get_bp_time(self):
         return self.__bp_time
 
+    def get_bp_datetime(self):
+        return str(self.__bp_date)+str(self.__bp_time)
+
     def display_bp_date(self):
         return datetime.date(int(self.__bp_date[0:4]),
                              int(self.__bp_date[4:6]),
-                             int(self.__bp_date[6:8])).strftime("%A %d. %B %Y")
+                             int(self.__bp_date[6:8])).strftime("%A, %d %B")
 
     def display_bp_time(self):
         return datetime.time(hour=int(self.__bp_time[0:2]),
@@ -640,42 +648,76 @@ class BloodPressure:
 
 @app.route('/bloodPressure')
 def blood_pressure():
-    # try:
-    uid_db = root
-    user_bp_db = uid_db.child('BloodPressure/' + session['username']).get()
-    bp_dict = {}
-    bp_datetime_list = []
-    bp_date_list = []
-    bp_sys_list = []
-    bp_dias_list = []
-    bp_pulse_list = []
-    for j in user_bp_db:
-        bp_date_list.append(j[0:8])
-    list(set(bp_date_list))
-    for k in bp_date_list:
-        bp_dict.update({k: []})
-
-    for i in user_bp_db:
-        bp = BloodPressure(i[0:8], i[8:12], user_bp_db[i]['systolic'], user_bp_db[i]['diastolic'],
-                           user_bp_db[i]['pulse'])
-        bp_datetime_list.append(bp.get_bp_date()+bp.get_bp_time())
-        bp_sys_list.append(bp.get_sys())
-        bp_dias_list.append(bp.get_dias())
-        bp_pulse_list.append(bp.get_pulse())
-        for k in bp_dict:
-            if bp.get_bp_date() == k:
-                bp_dict[k].append(bp)
-    # except KeyError:
-    #     flash('Please Login First to use our Services', 'primary')
-    #     return redirect(url_for('login'))
+    try:
+        uid_db = root
+        user_bp_db = uid_db.child('BloodPressure/' + session['username']).get()
+        bp_dict = {}
+        bp_datetime_list = []
+        bp_date_list = []
+        bp_sys_list = []
+        bp_dias_list = []
+        bp_pulse_list = []
+        bp_pulse_p_list = []
+        for j in user_bp_db:
+            bp_date_list.append(j[0:8])
+        bp_date_list = list(set(bp_date_list))
+        for k in bp_date_list:
+            bp_dict.update({k: []})
+        bp_date_list = list(reversed(sorted(bp_date_list)))
+        for i in user_bp_db:
+            bp = BloodPressure(i[0:8], i[8:12], user_bp_db[i]['systolic'], user_bp_db[i]['diastolic'],
+                               user_bp_db[i]['pulse'])
+            bp_datetime_list.append(bp.get_bp_date() + bp.get_bp_time())
+            bp_sys_list.append(bp.get_sys())
+            bp_dias_list.append(bp.get_dias())
+            bp_pulse_list.append(bp.get_pulse())
+            bp_pulse_p_list.append(bp.get_pulse_p())
+            for k in bp_dict:
+                if bp.get_bp_date() == k:
+                    bp_dict[k].insert(0, bp)
+        max_sys = max(bp_sys_list)
+        max_dias = max(bp_dias_list)
+        avg_sys = str(round(float(sum(bp_sys_list)) / max(len(bp_sys_list), 1)))
+        avg_dias = str(round(float(sum(bp_dias_list)) / max(len(bp_sys_list), 1)))
+        avg_bp = avg_sys + '/' + avg_dias
+        avg_pp = round(float(sum(bp_pulse_p_list)) / max(len(bp_pulse_p_list), 1),1)
+    except KeyError:
+        flash('Please Login First to use our Services', 'primary')
+        return redirect(url_for('login'))
     return render_template('bloodPressure.html', bp_dict=bp_dict, bp_datetime_list=bp_datetime_list,
-                           bp_date_list=bp_date_list.reverse(), bp_sys_list=bp_sys_list, bp_dias_list=bp_dias_list,
-                           bp_pulse_list=bp_pulse_list)
+                           bp_date_list=bp_date_list, bp_sys_list=bp_sys_list, bp_dias_list=bp_dias_list,
+                           bp_pulse_list=bp_pulse_list, avg_bp=avg_bp, avg_pp=avg_pp, max_sys=max_sys,
+                           max_dias=max_dias)
 
 
-@app.route('/plan')
-def plans():
-    return render_template('plan.html')
+@app.route('/weight')
+def weight():
+    try:
+        uid_db = root
+        user_info_db = uid_db.child('HealthDetail/' + session['username']).get()
+        user_weight_db = uid_db.child('Weight/' + session['username']).get()
+        user_bp_db = uid_db.child('BloodPressure/' + session['username']).get()
+        user_info = HealthDetailSetup(user_info_db['gender'], user_info_db['birthday'], user_info_db['height'],
+                                      user_weight_db, user_bp_db
+                                      )
+        weight_date_list = []
+        weight_list = []
+        weight_difference_list = []
+        weight_different = 0
+        for i in user_weight_db:
+            weight_date_list.insert(0, i)
+            weight_list.insert(0, float(user_weight_db[i]))
+        weight_list_len = len(weight_list)
+        for i in range(0, len(weight_list)):
+            try:
+                weight_difference_list.append(weight_list[i]-weight_list[i+1])
+            except IndexError:
+                weight_difference_list.append(0)
+    except KeyError:
+        flash('Please Login First to use our Services', 'primary')
+        return redirect(url_for('login'))
+    return render_template('weight.html', user=user_info, weight_date_list=weight_date_list, weight_list=weight_list,
+                           weight_difference_list=weight_difference_list, weight_list_len=weight_list_len)
 
 
 class Diet:
@@ -751,45 +793,53 @@ def diet():
             for dietID in Diet_db[username]:
                 eachdiet = Diet_db[username][dietID]
                 food = Diet(eachdiet['Name'], eachdiet['Type'], eachdiet['Calories Value'], eachdiet['Fats Value'],
-                        eachdiet['Carbohydrates Value'], eachdiet['Protein Value'], eachdiet['Diet Date'])
+                            eachdiet['Carbohydrates Value'], eachdiet['Protein Value'], eachdiet['Diet Date'])
                 total_calories += food.get_calories()
-                entries+=1
+                entries += 1
                 total_fats += food.get_fats()
                 total_carbohydrates += food.get_carbohydrates()
                 total_protein += food.get_protein()
                 total = total_fats + total_carbohydrates + total_protein
-                fat_percent = (total_fats /total)*100
+                fat_percent = (total_fats / total) * 100
                 fat_percentage = '{0:.0f}'.format(fat_percent)
-                carbohydrate_percent = (total_carbohydrates/total)*100
+                carbohydrate_percent = (total_carbohydrates / total) * 100
                 carbohydrate_percentage = '{0:.0f}'.format(carbohydrate_percent)
-                protein_percent= (total_protein/total)*100
+                protein_percent = (total_protein / total) * 100
                 protein_percentage = '{0:.0f}'.format(protein_percent)
                 food.set_dietID(dietID)
                 diet_list.append(food)
-        except TypeError :
+        except TypeError:
             return redirect(url_for('new_diet'))
         except KeyError:
             return redirect(url_for('new_diet'))
     except KeyError:
         flash('Please Login First to use our Services', 'primary')
         return redirect(url_for('login'))
-    return render_template('diet.html', diet=diet_list, total_calories=total_calories,entries=entries,total_fats=total_fats,
-                               total_carbohydrates=total_carbohydrates, total_protein=total_protein,fat_percentage=fat_percentage,
-                               carbohydrate_percentage=carbohydrate_percentage,protein_percentage=protein_percentage)
+    return render_template('diet.html', diet=diet_list, total_calories=total_calories, entries=entries,
+                           total_fats=total_fats,
+                           total_carbohydrates=total_carbohydrates, total_protein=total_protein,
+                           fat_percentage=fat_percentage,
+                           carbohydrate_percentage=carbohydrate_percentage, protein_percentage=protein_percentage)
 
 
 class Food(Form):
     diet_name = StringField('Name', [validators.length(min=1, max=150), validators.DataRequired()])
     diet_type = SelectField('Type', [validators.DataRequired()], choices=[("", "Select"), ("Foods", "Foods"),
                                                                           ("Drinks", "Drinks"), ("Fruits", "Fruits")])
-    calories = IntegerField('Calories Value', [validators.number_range(min =1, max=999, message="Invalid number range"),validators.DataRequired()])
-    fats = IntegerField('Fats Value', [validators.number_range(min =1, max=999, message="Invalid number range"),validators.DataRequired()])
-    carbohydrates = IntegerField('Carbohydrates Value', [validators.number_range(min =1, max=999, message="Invalid number range"),validators.DataRequired()])
-    proteins = IntegerField('Protein Value', [validators.number_range(min =1, max= 999, message="Invalid number range"),validators.DataRequired()])
+    calories = IntegerField('Calories Value', [validators.number_range(min=1, max=999, message="Invalid number range"),
+                                               validators.DataRequired()])
+    fats = IntegerField('Fats Value', [validators.number_range(min=1, max=999, message="Invalid number range"),
+                                       validators.DataRequired()])
+    carbohydrates = IntegerField('Carbohydrates Value',
+                                 [validators.number_range(min=1, max=999, message="Invalid number range"),
+                                  validators.DataRequired()])
+    proteins = IntegerField('Protein Value', [validators.number_range(min=1, max=999, message="Invalid number range"),
+                                              validators.DataRequired()])
     calories = IntegerField('Calories Value')
     fats = IntegerField('Fats Value')
     carbohydrates = IntegerField('Carbohydrates Value')
     proteins = IntegerField('Protein Value')
+
 
 @app.route('/new_diet', methods=['GET', 'POST'])
 def new_diet():
@@ -804,16 +854,16 @@ def new_diet():
             carbohydrates = new_form.carbohydrates.data
             protein = new_form.proteins.data
             diet_date = '{:%d-%m-%Y}'.format(datetime.date.today())
-            food_diet = Diet(name, type, calories, fats, carbohydrates, protein,diet_date)
+            food_diet = Diet(name, type, calories, fats, carbohydrates, protein, diet_date)
             food_diet.db = root.child('Food')
             food_diet.db.child(username).push({'Name': food_diet.get_name(),
-                               'Type': food_diet.get_type(),
-                               'Calories Value': food_diet.get_calories(),
-                               'Fats Value': food_diet.get_fats(),
-                               'Carbohydrates Value': food_diet.get_carbohydrates(),
-                               'Protein Value': food_diet.get_protein(),
-                               'Diet Date': food_diet.get_dietDate(),
-                               })
+                                               'Type': food_diet.get_type(),
+                                               'Calories Value': food_diet.get_calories(),
+                                               'Fats Value': food_diet.get_fats(),
+                                               'Carbohydrates Value': food_diet.get_carbohydrates(),
+                                               'Protein Value': food_diet.get_protein(),
+                                               'Diet Date': food_diet.get_dietDate(),
+                                               })
             flash('New Diet inserted successfully', 'success')
             return redirect(url_for('diet'))
     except KeyError:
@@ -970,7 +1020,8 @@ def record():
         try:
             for actID in Act_db:
                 eachact = Act_db[actID]
-                activities = Activity(eachact['Activity'], eachact['Date'], eachact['Duration'], eachact['Calories Burnt'])
+                activities = Activity(eachact['Activity'], eachact['Date'], eachact['Duration'],
+                                      eachact['Calories Burnt'])
                 # total_calories_burnt += activities.get_calories()
                 activities.set_actID(actID)
                 act_list.append(activities)
@@ -981,7 +1032,7 @@ def record():
                 # check if the date of activity matches today's date
                 if eachact['Date'] == str(datetime.date.today()):
                     activities_today = Activity(eachact['Activity'], eachact['Date'], eachact['Duration'],
-                                          eachact['Calories Burnt'])
+                                                eachact['Calories Burnt'])
                     activities_today.set_actID(actID)
                     act_list_today.append(activities_today)
                     message_today = ''
@@ -996,12 +1047,14 @@ def record():
                             eachdiet['Carbohydrates Value'], eachdiet['Protein Value'], eachdiet['Diet Date'])
                 diet_list.append(food)
 
-                diet_date = eachdiet['Diet Date'][6:10]+'-'+eachdiet['Diet Date'][3:5]+'-'+eachdiet['Diet Date'][0:2]
+                diet_date = eachdiet['Diet Date'][6:10] + '-' + eachdiet['Diet Date'][3:5] + '-' + eachdiet[
+                                                                                                       'Diet Date'][0:2]
                 print(str(datetime.date.today()))
 
                 if diet_date == str(datetime.date.today()):
-                    food_today = Diet(eachdiet['Name'], eachdiet['Type'], eachdiet['Calories Value'], eachdiet['Fats Value'],
-                            eachdiet['Carbohydrates Value'], eachdiet['Protein Value'], eachdiet['Diet Date'])
+                    food_today = Diet(eachdiet['Name'], eachdiet['Type'], eachdiet['Calories Value'],
+                                      eachdiet['Fats Value'],
+                                      eachdiet['Carbohydrates Value'], eachdiet['Protein Value'], eachdiet['Diet Date'])
                     diet_today.append(food_today)
                     for i in diet_today:
                         total_calories_in += food_today.get_calories()
@@ -1020,24 +1073,20 @@ def record():
                            display_msg_today=message_today, cal_in=total_calories_in, cal_out=total_calories_out)
 
 
-@app.route('/rewards',methods=['GET',"POST"])
+@app.route('/rewards', methods=['GET', "POST"])
 def rewards():
-    reward_form=RewardForm(request.form)
+    reward_form = RewardForm(request.form)
     username = session["username"]
-    healthpoints_db = root.child("Rewards/"+username).get()
-    root.child("Rewards/" + username).set({'healthpoints':0})
+    healthpoints_db = root.child("Rewards/" + username).get()
+    root.child("Rewards/" + username).set({'healthpoints': 0})
     healthpointss = Rewards(healthpoints_db["healthpoints"])
-
-
     return render_template('rewards.html', healthpoints_db=healthpoints_db, healthpointss=healthpointss)
 
 
 class Rewards:
 
-
     def __init__(self, healthpoints=0):
         self.__healthpoints = healthpoints
-
 
     def get_healthpoints(self):
         return self.__healthpoints
@@ -1078,7 +1127,7 @@ def quiz():
 def leaderboards():
     leaderboard_db = root.child('Leaderboard').get()
     leaderboards_list = []  # create a list to store all the quiz results
-    if leaderboard_db!=None:
+    if leaderboard_db != None:
         for eachusername in leaderboard_db:
             leaderboard = Leaderboard(eachusername, leaderboard_db[eachusername]["Score"])
             leaderboards_list.append(leaderboard)
@@ -1118,6 +1167,7 @@ class Leaderboard:
 
 class leaderboardform(Form):
     score = StringField("Score")
+
 
 if __name__ == '__main__':
     app.run()

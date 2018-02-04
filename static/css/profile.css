@@ -2,9 +2,26 @@
 .profile{
 	max-width: 1000px;
 }
+.profile-background{
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 480px;
+	background: url("../images/profile_bg.jpg") no-repeat fixed;
+	background-size: 100%;
+}
+.health-point-title{
+	position: absolute;
+}
+.user_profile{
+	z-index: 100;
+}
 #user_name{
-	font-size: 50px;
-	font-weight: 100;
+	font-size: 3rem;
+	font-weight: 400;
+	color:white;
+	position: relative;
 }
 .card{
 	border-collapse: collapse;
@@ -80,7 +97,8 @@
 }
 .header-desc{
 	font-size: 20px;
-	color: grey;
+	color: #e0e0e0;
+	position: relative;
 }
 .profilePhoto{
 	height: 150px;
@@ -110,8 +128,10 @@
 	padding-bottom: 30px;
 	margin:0;
 }
-.health_point h5{
+.user-grade-name{
 	padding-top: 90px;
+}
+.health_point h5{
 	color:grey;
 	font-weight: 400;
 	font-size: 30px;

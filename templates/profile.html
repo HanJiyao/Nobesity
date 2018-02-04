@@ -31,15 +31,17 @@
         }
     </script>
 <div class="container text-center profile">
+    <div class="profile-background"></div>
     <div class="user_profile">
-        <h3 id="user_name" class="text-center">{{ session['username'] }}</h3>
-        <div class="header-desc">Health Report</div>
+        <h3 id="user_name" class="text-center pt-5"></h3>
+        <div class="header-desc"></div>
         <div class="profilePhoto">
             <img id="profilePhoto" src="../static/images/default_photo.png" alt="Profile Image">
         </div>
     </div>
     <div class="health_point card">
-        <h5>Health Grade: <span id="grade_display">{{ user.get_grade_display() }}</span></h5>
+        <h1 class="user-grade-name">{{ display_name }}</h1>
+        <h5 class="pt-2">Health Grade: <span id="grade_display">{{ user.get_grade_display() }}</span></h5>
         <h1 id="health_point">{{ user.get_grade() }}</h1>
         <ul class="list-inline">
             <li class="list-inline-item class_a" id="class_a">A</li>

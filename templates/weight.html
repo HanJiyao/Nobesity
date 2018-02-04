@@ -1,5 +1,5 @@
 {% extends 'layout.html' %}
-{% set active_page = "bp" %}
+{% set active_page = "weight" %}
 {% block body %}
     <script>
         $.fn.datetimepicker.Constructor.Default = $.extend({}, $.fn.datetimepicker.Constructor.Default, {
@@ -19,7 +19,7 @@
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content account-box">
           <div class="modal-header">
-            <h5 class="modal-title" id="EditBPModalLabel">Track Blood Pressure</h5>
+            <h5 class="modal-title" id="EditBPModalLabel">Track Body Weight</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -33,62 +33,40 @@
                         </div>
                         <div class="col-7">
                             <div class="form-group">
-                                <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
-                                    <input id="bp_datetime" type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1"/>
-                                    <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+                                <div class="input-group date" id="datetimepicker4" data-target-input="nearest">
+                                    <input type="text"  id="weight_date" class="form-control datetimepicker-input" data-target="#datetimepicker4"/>
+                                    <div class="input-group-append" data-target="#datetimepicker4" data-toggle="datetimepicker">
                                         <div class="input-group-text"><i class="material-icons">date_range</i></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <script type="text/javascript">
-                            try{
-                                $(function () {
-                                $('#datetimepicker1').datetimepicker();
+                            $(function () {
+                                $('#datetimepicker4').datetimepicker({
+                                    format: 'L'
                                 });
-                            } catch (error){}
+                            });
                         </script>
                     </div>
-                    <div class="row mb-3">
-                        <div class="col-5 pt-2 text-right">
-                            Systolic
-                        </div>
-                        <div class="col-4">
-                            <input type="number" id="input_sys" class="form-control" placeholder="Systole">
-                        </div>
-                        <div class="col-3 pt-2">
-                            mmHg
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-5 pt-2 text-right">
-                            Diastolic
-                        </div>
-                        <div class="col-4">
-                            <input type="number" id="input_dias" class="form-control" placeholder="Diastole">
-                        </div>
-                        <div class="col-3 pt-2">
-                            mmHg
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-5 pt-2 text-right">
-                            Pulse Rate
-                        </div>
-                        <div class="col-4">
-                            <input type="number" id="input_pulse" class="form-control" placeholder="Pulse">
-                        </div>
-                        <div class="col-3 pt-2">
-                            Bpm
-                        </div>
-                    </div>
-                    <div class="alert alert-danger mt-2 mb-2 col-12" id="bpError" hidden></div>
                 </div>
+                    <div class="row mt-3 mb-3">
+                        <div class="col-5 pt-2 text-right">
+                            Weight
+                        </div>
+                        <div class="col-5">
+                            <input type="number" step='0.1' id="input_weight" class="form-control" placeholder="Weight">
+                        </div>
+                        <div class="col-2 pt-2">
+                            kg
+                        </div>
+                    </div>
+                    <div class="alert alert-danger mt-2 mb-2 col-12" id="weightError" hidden></div>
               </form>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-light btn-lg" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-primary submit-btn btn-lg" onclick="validateBp(this)">Save changes</button>
+            <button type="button" class="btn btn-primary submit-btn btn-lg" onclick="validWeight(this)">Save changes</button>
           </div>
         </div>
       </div>
@@ -116,17 +94,16 @@
         <div class="bp-card-header">
             <div class="row" id="bp_control_view">
                 <div class="col-1 submit-btn active" id="bp_all" onclick="bp_all()">All</div>
-                <div class="col-1 submit-btn" id="bp_day" onclick="bp_day()">Daily</div>
                 <div class="col-1 submit-btn" id="bp_week" onclick="bp_week()">Week</div>
                 <div class="col-1 submit-btn" id="bp_month" onclick="bp_month()">Month</div>
-                <div class="col-6"></div>
+                <div class="col-7"></div>
                 <div class="col-2 submit-btn" onClick="printDiv()"><i class="material-icons">print</i>Print Data</div>
             </div>
         </div>
         <div id="chart_control">
             <div class="row">
                 <a class="col-3" id="control_left" style="opacity: 0" onclick=""><i class="material-icons">keyboard_arrow_left</i></a>
-                <div class="col-6 pt-2"><span id="chart_time">Blood Pressure Record</span></div>
+                <div class="col-6 pt-2"><span id="chart_time">Weight Record</span></div>
                 <a class="col-3" id="control_right" style="opacity: 0" onclick=""><i class="material-icons">keyboard_arrow_right</i></a>
             </div>
         </div>
@@ -141,29 +118,18 @@
                         "type": "line",
                             "data": {
                                 "labels":
-                                    [{% for i in bp_datetime_list %}
-                                        moment('{{ i }}', "YYYY-MM-DD HH:mm"),
+                                    [{% for i in weight_date_list %}
+                                        moment('{{ i }}', "YYYY-MM-DD"),
                                     {% endfor %}],
                                 "datasets":
                                     [{
                                         "label": "Systolic Pressure",
-                                        "data":{{ bp_sys_list|safe }},
-                                        "fill": false,
-                                        "borderColor": "#F44336",
-                                        "lineTension": 0
-                                    }, {
-                                        "label": "Diastolic Pressure",
-                                        "data":{{ bp_dias_list|safe }},
-                                        "fill": false,
-                                        "borderColor": "#FF9800",
-                                        "lineTension": 0
-                                    }, {
-                                        "label": "Pulse Rate",
-                                        "data":{{ bp_pulse_list|safe }},
-                                        "fill": false,
-                                        "borderColor": "#673AB7",
+                                        "data":{{ weight_list|safe }},
+                                        "fill": true,
+                                        "borderColor": "#03A9F4",
                                         "lineTension": 0
                                     }]
+
                             },
                             "options": {
                                 scales: {
@@ -185,7 +151,7 @@
                                         type: 'line',
                                         mode: 'horizontal',
                                         scaleID: 'y-axis-0',
-                                        value: 60,
+                                        value: {{user.get_suggest_weight_max()}},
                                         borderColor: '#8BC34A',
                                         borderWidth: 1,
                                         borderDash: [10,10],
@@ -193,53 +159,12 @@
                                             enabled: false,
                                             content: 'Min Diastole'
                                         }
-                                    },{
-                                        type: 'line',
-                                        mode: 'horizontal',
-                                        scaleID: 'y-axis-0',
-                                        value: 80,
-                                        borderColor: '#8BC34A',
-                                        borderWidth: 1,
-                                        borderDash: [10,10],
-                                        label: {
-                                            enabled: false,
-                                            content: 'Normal Diastole'
-                                        }
-                                    },{
-                                        type: 'line',
-                                        mode: 'horizontal',
-                                        scaleID: 'y-axis-0',
-                                        value: 120,
-                                        borderColor: '#8BC34A',
-                                        borderWidth: 1,
-                                        borderDash: [10,10],
-                                        label: {
-                                            enabled: false,
-                                            content: 'Normal Systole'
-                                        }
                                     }]
                                 }
                             }
                         });
                 var dayCount = 1;
                 var monthCount = 1;
-                function bp_day(){
-                    dayCount = 1;
-                    bpChart.options.scales.xAxes[0].time.min = moment().startOf('day');
-                    bpChart.options.scales.xAxes[0].time.max = moment().endOf('day');
-                    bpChart.options.scales.xAxes[0].time.unit='hour';
-                    bpChart.options.scales.xAxes[0].time.displayFormats={hour: 'h mm A'};
-                    bpChart.update();
-                    document.getElementById('chart_time').innerText = moment().format('MMM DD');
-                    document.getElementById('control_left').style.opacity = '100';
-                    document.getElementById('control_right').style.opacity = '100';
-                    document.getElementById('control_left').setAttribute('onclick','dayMinus()');
-                    document.getElementById('control_right').setAttribute('onclick','dayPlus()');
-                    document.getElementById('bp_day').className='col-1 submit-btn active';
-                    document.getElementById('bp_week').className='col-1 submit-btn';
-                    document.getElementById('bp_month').className='col-1 submit-btn';
-                    document.getElementById('bp_all').className='col-1 submit-btn';
-                }
                 function bp_week(){
                     dayCount = 0;
                     bpChart.options.scales.xAxes[0].time.min = moment().startOf('week');
@@ -290,20 +215,6 @@
                     document.getElementById('bp_month').className='col-1 submit-btn';
                     document.getElementById('bp_all').className='col-1 submit-btn active';
                 }
-                function dayMinus() {
-                    dayCount -= 1;
-                    bpChart.options.scales.xAxes[0].time.min = moment().startOf('day').day(dayCount);
-                    document.getElementById('chart_time').innerText = moment().startOf('day').day(dayCount).format('MMM DD');
-                    bpChart.options.scales.xAxes[0].time.max = moment().endOf('day').day(dayCount);
-                    bpChart.update();
-                }
-                function dayPlus() {
-                    dayCount += 1;
-                    bpChart.options.scales.xAxes[0].time.min = moment().startOf('day').day(dayCount);
-                    document.getElementById('chart_time').innerText = moment().startOf('day').day(dayCount).format('MMM DD');
-                    bpChart.options.scales.xAxes[0].time.max = moment().endOf('day').day(dayCount);
-                    bpChart.update();
-                }
                 function weekMinus() {
                     dayCount -= 7;
                     bpChart.options.scales.xAxes[0].time.min = moment().startOf('week').day(dayCount);
@@ -335,103 +246,89 @@
             </script>
         </div>
         <div class="bp-status">
-            <a id="float_add_bp" data-toggle="modal" data-target="#bpModal"><i class="material-icons" onclick="resetBp()">add</i></a>
-            <div class = 'bp-main-title'>Blood Pressure Status</div>
-            <div class="card-body p-4" id="bp_container">
+            <a id="float_add_bp" data-toggle="modal" data-target="#bpModal"><i class="material-icons" onclick="resetWeight()">add</i></a>
+            <div class = 'bp-main-title'>Weight Status</div>
+            <div class="card-body p-4">
                 <div class="bp-container">
                     <div class="row">
                         <div class="col-3">
-                            <div>Max SYS</div>
+                            <div>Current Weight</div>
                         </div>
                         <div class="col-3">
-                            <div>Max DIA</div>
+                            <div>Height</div>
                         </div>
                         <div class="col-3">
-                            <div>Average BP</div>
+                            <div>BMI</div>
                         </div>
                         <div class="col-3">
-                            <div>Avg Pulse Pressure</div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-3">
-                            <h1 id="systole">{{ max_sys }}</h1>
-                        </div>
-                        <div class="col-3">
-                            <h1 id="systole">{{ max_dias }}</h1>
-                        </div>
-                        <div class="col-3">
-                            <h1 id="systole">{{ avg_bp }}</h1>
-                        </div>
-                        <div class="col-3">
-                            <h1 id="systole">{{ avg_pp }}</h1>
+                            <div>Compare with Initial</div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-3">
-                            <small>mmHg</small>
+                            <h1>{{ user.get_current_weight() }}</h1>
                         </div>
                         <div class="col-3">
-                            <small>mmHg</small>
+                            <h1>{{ user.get_height()*100 }}</h1>
                         </div>
                         <div class="col-3">
-                            <small>mmHg</small>
+                            <h1>{{ user.get_bmi() }}</h1>
                         </div>
                         <div class="col-3">
-                            <small>mmHg</small>
+                            <h1>{{ user.get_current_weight()-weight_list[-1] }}</h1>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-3">
+                            <small>kg</small>
+                        </div>
+                        <div class="col-3">
+                            <small>cm</small>
+                        </div>
+                        <div class="col-3">
+                            <small>kg/m2</small>
+                        </div>
+                        <div class="col-3">
+                            <small>kg</small>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="blood_pressure card" id="bp_data">
+    <div class="blood_pressure card" id="weight_data">
         <div class="card-header  text-center">
-            <div class="card-header-text">Blood Pressure Data</div>
+            <div class="card-header-text">Weight Data</div>
         </div>
-        {% for i in bp_date_list %}
-        <div class="bp-wrapper">
-            <div id="bp_date">{{ bp_dict[i][0].display_bp_date() }}</div>
-            {% for j in bp_dict[i] %}
+            {% for i in range(0, weight_list_len) %}
             <div id="bp_day">
-                <div class="card-body" id="bp_container" onmouseover="showBpEdit(this)" onmouseleave="hideBpEdit(this)">
+                <div class="card-body" id="bp_container" onmouseover="showWeightEdit(this)" onmouseleave="hideWeightEdit(this)">
                     <div class="bp-container">
                         <div class="row">
-                            <div id="bp_indicator" style="background:{{ j.get_bp_indicator() }}"></div>
-                            <div class="col-1">
-                                <p id="time">{{ j.display_bp_time() }}</p>
-                            </div>
                             <div class="col-10">
                                 <div class="row">
-                                    <div class="col-2 text-right">
-                                        <h1 id="systole">{{ j.get_sys() }}</h1>
+                                    <div class="col-4">
+                                        <h1 id='{{weight_date_list[i]}}'></h1>
+                                        <script>
+                                            document.getElementById('{{weight_date_list[i]}}').innerText = moment('{{weight_date_list[i]}}', 'YYYY-MM-DD').format('MMM DD')
+                                        </script>
                                     </div>
-                                    <div class="col-2 text-left">
-                                        <div>SIS</div>
-                                        <div class="bp-unit">mmHg</div>
+                                    <div class="col-4">
+                                        <h1>{{ weight_list[i] }}</h1>
                                     </div>
-                                    <div class="col-2 text-right">
-                                        <h1 id="diastole">{{ j.get_dias() }}</h1>
-                                    </div>
-                                    <div class="col-2 text-left">
-                                        <div>DIA</div>
-                                        <div class="bp-unit">mmHg</div>
-                                    </div>
-                                    <div class="col-2 text-right">
-                                        <h1 id="pulse">{{ j.get_pulse() }}</h1>
-                                    </div>
-                                    <div class="col-2 text-left">
-                                        <div>Pulse</div>
-                                        <div class="bp-unit">Bpm</div>
+                                    <div class="col-4">
+                                        <h1>
+                                            {{ weight_difference_list[i] }}
+                                        </h1>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-1  bp-edit" id="bpEdit">
+                            <div class="col-2  bp-edit" id="bpEdit">
                                 <div class="row">
-                                    <button class="col-6 p-0" data-toggle="modal" data-target="#bpModal" value="{{j.get_bp_datetime()}}">
-                                        <i class="material-icons bp-edit-btn" onclick="getBpValue(this)">mode_edit</i>
+                                    <button class="col-6 p-0" data-toggle="modal" data-target="#bpModal" value="{{weight_date_list[i]}}">
+                                        <i class="material-icons bp-edit-btn" onclick="getWeightValue(this)">mode_edit</i>
                                     </button>
-                                    <button class="col-6 p-0"  data-toggle="modal" data-target=".bd-modal-sm" value="{{j.get_bp_datetime()}}">
+                                    <button class="col-6 p-0"  data-toggle="modal" data-target=".bd-modal-sm" value="{{weight_date_list[i]}}">
                                         <i class="material-icons bp-delete-btn" onclick="assign_delete(this)">delete</i>
                                     </button>
                                 </div>
@@ -442,100 +339,86 @@
             </div>
             {% endfor %}
         </div>
-    {% endfor %}
-    </div>
 	<script>
-        function showBpEdit(e) {
-            e.childNodes[1].childNodes[1].childNodes[7].style.opacity="100"
+        function showWeightEdit(e) {
+            e.childNodes[1].childNodes[1].childNodes[3].style.opacity="100"
         }
-        function hideBpEdit(e) {
-            e.childNodes[1].childNodes[1].childNodes[7].style.opacity="0"
+        function hideWeightEdit(e) {
+            e.childNodes[1].childNodes[1].childNodes[3].style.opacity="0"
         }
-        document.getElementById('bp_datetime').value = moment().format('MM/DD/YYYY h:mm A');
-        function getBpValue(i) {
-            document.getElementById('bpError').innerText = '';
+        document.getElementById('weight_date').value = moment().format('MM/DD/YYYY');
+        function getWeightValue(i) {
+            document.getElementById('weightError').innerText = '';
             var input_ref = i.parentNode.value;
-            var bp_datetime = input_ref.slice(0,8)+'T'+input_ref.slice(8,12);
-            document.getElementById('bp_datetime').value = moment(bp_datetime).format('MM/DD/YYYY h:mm A');
-            var bpRef = firebase.database().ref('BloodPressure/'+'{{session['username']}}'+'/'+input_ref);
-            bpRef.once('value', function (snapshot) {
-                var sys = parseInt(snapshot.child('systolic').val());
-                var dias = parseInt(snapshot.child('diastolic').val());
-                var pulse = parseInt(snapshot.child('pulse').val());
-                document.getElementById('input_sys').value=sys;
-                document.getElementById('input_dias').value=dias;
-                document.getElementById('input_pulse').value=pulse;
-                document.getElementById('bp_ref').innerText = bp_datetime
+            var weight_date = input_ref;
+            document.getElementById('weight_date').value = moment(weight_date,'YYYYMMDD').format('MM/DD/YYYY');
+            var weightRef = firebase.database().ref('Weight/'+'{{session['username']}}'+'/'+input_ref);
+            weightRef.once('value', function (snapshot) {
+                document.getElementById('input_weight').value=parseFloat(snapshot.val());
+                document.getElementById('weight_ref').innerText = weight_date
             })
         }
         function handleUpdate(i) {
-                document.getElementById('bpError').innerText = '';
-                var bp_ref = document.getElementById('bp_ref').innerText;
-                bp_ref = bp_ref.slice(0,8)+bp_ref.slice(9,13);
-                var bp_sys = document.getElementById('input_sys').value;
-                var bp_dias = document.getElementById('input_dias').value;
-                var bp_pulse = document.getElementById('input_pulse').value;
-                var input_bp_datetime = moment((document.getElementById('bp_datetime').value), "MM-DD-YYYY h:mm A").format('YYYYMMDDHHmm');
-                input_bp_datetime = input_bp_datetime.slice(0,8)+input_bp_datetime.slice(8,12);
-                var bp_db_ref = firebase.database().ref().child('BloodPressure/'+'{{session['username']}}'+'/'+bp_ref);
-                firebase.database().ref().child('BloodPressure/'+'{{session['username']}}'+'/'+input_bp_datetime).update({
-                    'systolic':bp_sys,
-                    'diastolic':bp_dias,
-                    'pulse':bp_pulse
-                }).then(function (value) {
-                        if (input_bp_datetime != bp_ref && bp_ref!='') {
+                document.getElementById('weightError').innerText = '';
+                var weight_ref = document.getElementById('weight_ref').innerText;
+                var input_weight = parseFloat(document.getElementById('input_weight').value).toFixed(1);
+                var input_weight_date = moment((document.getElementById('weight_date').value), "MM-DD-YYYY").format('YYYYMMDD');
+                var bp_db_ref = firebase.database().ref().child('Weight/'+'{{session['username']}}'+'/'+weight_ref);
+                firebase.database().ref().child('Weight/'+'{{session['username']}}'+'/'+input_weight_date).set(input_weight).then(function (value) {
+                        if (input_weight_date != weight_ref && weight_ref!='') {
                         bp_db_ref.remove();
-                        document.getElementById('bp_ref').innerText = input_bp_datetime
+                        document.getElementById('weight_ref').innerText = input_weight_date
                     }
                 });
-            window.location.href='/bloodPressure'
+            window.location.href='/weight'
         }
-        function validateBp(e) {
+        function validWeight(e) {
             var error = [];
             var errorMsg = '';
-            var input_bp_datetime = moment((document.getElementById('bp_datetime').value), "MM-DD-YYYY h:mm A").format('YYYYMMDDHHmm');
-            document.getElementById('bpError').hidden = true;
-            document.getElementById('bpError').innerText = errorMsg;
-            var bp_value = [document.getElementById('input_sys'),document.getElementById('input_dias'),document.getElementById('input_pulse')];
-            for (i=0;i<3;i++){
-                if (bp_value[i].value == ""){
-                    document.getElementById('bpError').hidden = false;
-                    error.push('Please type in '+bp_value[i].placeholder);
-                    errorMsg = error.join('\n');
-                    document.getElementById('bpError').innerText = errorMsg;
-                } else if (parseInt(bp_value[i].value)<0 || parseInt(bp_value[i].value)>300) {
-                    document.getElementById('bpError').hidden = false;
-                    error.push('Please Enter a Number in '+bp_value[i].placeholder+' (between 0 and 300)');
-                    errorMsg = error.join('\n');
-                    document.getElementById('bpError').innerText = errorMsg;
-                } else if (input_bp_datetime == 'invalid date'){
-                    document.getElementById('bpError').hidden = false;
-                    error.push('Please Enter a Correct Date');
-                    errorMsg = error.join('\n');
-                    document.getElementById('bpError').innerText = errorMsg;
-                }
-            } if (document.getElementById('bpError').innerText == ''){
+            var input_weight_date = moment((document.getElementById('weight_date').value), "MM-DD-YYYY").format('YYYYMMDD');
+            document.getElementById('weightError').hidden = true;
+            document.getElementById('weightError').innerText = errorMsg;
+            var weight_value = document.getElementById('input_weight');
+            if (weight_value.value == "") {
+                document.getElementById('weightError').hidden = false;
+                error.push('Please type in ' + weight_value.placeholder);
+                errorMsg = error.join('\n');
+                document.getElementById('weightError').innerText = errorMsg;
+            } else if (parseInt(weight_value.value) < 0 || parseInt(weight_value.value) > 300) {
+                document.getElementById('weightError').hidden = false;
+                error.push('Please Enter a Number in ' + weight_value.placeholder + ' (between 0 and 300)');
+                errorMsg = error.join('\n');
+                document.getElementById('weightError').innerText = errorMsg;
+            } else if (document.getElementById('weight_date').value == ""){
+                document.getElementById('weightError').hidden = false;
+                error.push('Please Enter a Date for your record ');
+                errorMsg = error.join('\n');
+                document.getElementById('weightError').innerText = errorMsg;
+            } else if (input_weight_date.value == 'invalid date') {
+                document.getElementById('weightError').hidden = false;
+                error.push('Please Enter a Correct Date');
+                errorMsg = error.join('\n');
+                document.getElementById('weightError').innerText = errorMsg;
+            } else if (document.getElementById('weightError').innerText == '') {
                 handleUpdate(e)
             }
         }
-        function resetBp() {
-            document.getElementById('bp_ref').innerText = '';
+        function resetWeight() {
+            document.getElementById('weight_ref').innerText = '';
             document.getElementById('input_sys').value = '';
-            document.getElementById('input_dias').value = '';
-            document.getElementById('input_pulse').value = '';
         }
         function assign_delete(e) {
-             document.getElementById('bp_ref').innerText = e.parentNode.value;
+             document.getElementById('weight_ref').innerText = e.parentNode.value;
         }
         function delete_bp() {
-            var delete_bp_datetime = document.getElementById('bp_ref').innerText;
-            firebase.database().ref().child('BloodPressure/'+'{{session['username']}}'+'/'+delete_bp_datetime).remove();
-            window.location.href='/bloodPressure'
+            var delete_weight_date = document.getElementById('weight_ref').innerText;
+            firebase.database().ref().child('Weight/'+'{{session['username']}}'+'/'+delete_weight_date).remove();
+            window.location.href='/weight'
         }
         function printDiv() {
-            document.body.innerHTML = document.getElementById('bp_data').innerHTML;
+            document.body.innerHTML = document.getElementById('weight_data').innerHTML;
             window.print();
-            window.location.href = '/bloodPressure'
+            window.location.href = '/weight'
         }
     </script>
 {% endblock %}
