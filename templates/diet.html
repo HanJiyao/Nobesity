@@ -2,10 +2,10 @@
 {% set active_page = "diet" %}
 {% block body %}
     <div class = 'view_diet'>
-    <h1 id="diet_title">View Diet</h1>
+    <h1 id="diet_title">Diet Records</h1>
         <div class ="newdiet">
             <a href="/new_diet"  class="btn btn-primary btn-sm"><i class="material-icons">add_circle</i>
-                <span>New Diet</span>
+                <span>New Diet Record</span>
             </a>
         </div>
         <div class = "row">
@@ -31,7 +31,7 @@
             var options  = {
                 title:{
                     display: true,
-                    text:' User Diet Details'
+                    text:' Diet Reoord Details'
                 }
             };
          var diet_Chart = new Chart(ctx,{type: 'doughnut', data: myData, options: options});
