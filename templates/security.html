@@ -57,9 +57,14 @@
           // Update successful.
             window.location.href="/setup/email";
         }).catch(function(error) {
-          // An error happened.
-            document.getElementById('error_alert').style.display="block";
-            document.getElementById('error_alert').innerText = error
+            if(error.code == "auth/requires-recent-login"){
+                document.getElementById('error_alert').style.display="block";
+                document.getElementById('error_alert').innerHTML = '<div>'+error+'<div>'+'<a class="re-login" href="/login" style="color:white;font-weight:500">> Re Login Here</a>'
+            } else{
+                // An error happened.
+                document.getElementById('error_alert').style.display="block";
+                document.getElementById('error_alert').innerText = error
+            }
         });
     }
     function sendResetPasswordEmail() {
@@ -91,5 +96,9 @@
             second++;
         }, 1000);
     }
+    </script>
+    <script>
+    openTool();
+    $('#account_nav').attr('class','sub-links selected')
     </script>
 {% endblock %}

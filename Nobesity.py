@@ -105,7 +105,7 @@ def logout():
 
 @app.route('/dashboard')
 def dashboard():
-    return render_template('dashboard.html')
+    return render_template('Reference/dashboard.html')
 
 
 class HealthDetailSetup:
@@ -197,6 +197,8 @@ class HealthDetailSetup:
             self.__dias_grade = 0
         if self.__current_pulse > 75:
             self.__pulse_grade = 10 - (self.__current_pulse - 75) * 0.5
+        else:
+            self.__pulse_grade = 10
         if self.__pulse_grade < 0:
             self.__pulse_grade = 0
         self.__bp_grade = self.__sys_grade + self.__dias_grade + self.__pulse_grade
@@ -320,10 +322,11 @@ def register_gender():
 class MoreInfoForm(Form):
     height = IntegerField('Current Height (cm)',
                           [validators.DataRequired('Please Enter Current Height'),
-                           validators.NumberRange(min=0, max=300, message="Please Enter Correct Height (cm)")])
+                           validators.NumberRange(min=1, max=300, message="Please Enter Correct Height < 300cm")])
     initial_weight = DecimalField('Current Weight (kg)',
                                   [validators.DataRequired('Please Enter Current Weight'),
-                                   validators.NumberRange(min=0, max=200, message="Please Enter Correct Weight (kg)")],
+                                   validators.NumberRange(min=1, max=300,
+                                                          message="Please Enter Correct Weight < 300kg")],
                                   places=1)
     birth_day = SelectField(
         'Day', choices=[
@@ -388,13 +391,13 @@ def register_info():
 class BpInfoForm(Form):
     systole = IntegerField('Systole', [validators.DataRequired('Please Enter Systolic Pressure'),
                                        validators.NumberRange
-                                       (min=0, max=300, message="Please Enter A valid BP < 300")])
+                                       (min=1, max=300, message="Please Enter A valid BP < 300")])
     diastole = IntegerField('Diastole', [validators.DataRequired('Please Enter Diastolic Pressure'),
                                          validators.NumberRange
-                                         (min=0, max=300, message="Please Enter A valid BP < 300")])
+                                         (min=1, max=300, message="Please Enter A valid BP < 300")])
     pulse = IntegerField('Pulse', [validators.DataRequired('Please Enter the Pulse Rate'),
                                    validators.NumberRange
-                                   (min=0, max=300, message="Please Enter A valid Pulse < 300")])
+                                   (min=1, max=300, message="Please Enter A valid Pulse < 300")])
 
 
 @app.route('/setup/bp', methods=['GET', 'POST'])
@@ -681,6 +684,9 @@ def blood_pressure():
         avg_dias = str(round(float(sum(bp_dias_list)) / max(len(bp_sys_list), 1)))
         avg_bp = avg_sys + '/' + avg_dias
         avg_pp = round(float(sum(bp_pulse_p_list)) / max(len(bp_pulse_p_list), 1),1)
+    except TypeError:
+        flash('Please Finish the Account Setup First', 'danger')
+        return redirect(url_for('register_bp'))
     except KeyError:
         flash('Please Login First to use our Services', 'primary')
         return redirect(url_for('login'))
@@ -703,21 +709,48 @@ def weight():
         weight_date_list = []
         weight_list = []
         weight_difference_list = []
-        weight_different = 0
         for i in user_weight_db:
             weight_date_list.insert(0, i)
             weight_list.insert(0, float(user_weight_db[i]))
         weight_list_len = len(weight_list)
         for i in range(0, len(weight_list)):
             try:
-                weight_difference_list.append(weight_list[i]-weight_list[i+1])
+                weight_difference_list.append(round(weight_list[i]-weight_list[i+1], 1))
             except IndexError:
                 weight_difference_list.append(0)
+        display_weight_difference_list = []
+        for i in weight_difference_list:
+            if i > 0:
+                display_weight_difference_list.append(
+                    '<i class="material-icons weight-up" style="color:#F44336">arrow_drop_up</i>'+str(i))
+            elif i == 0:
+                display_weight_difference_list.append(
+                    '<i class="weight-equal" style="color:#FFEB3B">=</i>' + str(i))
+            elif i < 0:
+                display_weight_difference_list.append(
+                    '<i class="material-icons weight-down" style="color:#64DD17">arrow_drop_down</i>' + str(abs(i)))
+        total_weight_difference = round((weight_list[0]-weight_list[-1]), 1)
+        total_indicator = ''
+        if total_weight_difference > 0:
+            total_indicator = '<i class="material-icons weight-up" ' \
+                              'style="color:#F44336;top: -5px;left: 10px;">arrow_drop_up</i>'
+        elif total_weight_difference == 0:
+            total_indicator = '<i class="weight-equal" style="color:#FFEB3B;top: -5px;left: 36px;">=</i>'
+        elif total_weight_difference < 0:
+            total_indicator = '<i class="material-icons weight-down" ' \
+                              'style="color:#64DD17;top: -5px;left: 10px;">arrow_drop_down</i>'
+            total_weight_difference = abs(total_weight_difference)
+
+    except TypeError:
+        flash('Please Finish the Account Setup First', 'danger')
+        return redirect(url_for('register_info'))
     except KeyError:
         flash('Please Login First to use our Services', 'primary')
         return redirect(url_for('login'))
     return render_template('weight.html', user=user_info, weight_date_list=weight_date_list, weight_list=weight_list,
-                           weight_difference_list=weight_difference_list, weight_list_len=weight_list_len)
+                           weight_difference_list=weight_difference_list, weight_list_len=weight_list_len,
+                           total_weight_difference=total_weight_difference, total_indicator=total_indicator,
+                           display_weight_difference_list=display_weight_difference_list)
 
 
 class Diet:

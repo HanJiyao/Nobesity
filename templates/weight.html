@@ -34,7 +34,7 @@
                         <div class="col-7">
                             <div class="form-group">
                                 <div class="input-group date" id="datetimepicker4" data-target-input="nearest">
-                                    <input type="text"  id="weight_date" class="form-control datetimepicker-input" data-target="#datetimepicker4"/>
+                                    <input type="text"  id="weight_date" class="form-control datetimepicker-input" data-target="#datetimepicker4" onblur="checkDatetime(this)"/>
                                     <div class="input-group-append" data-target="#datetimepicker4" data-toggle="datetimepicker">
                                         <div class="input-group-text"><i class="material-icons">date_range</i></div>
                                     </div>
@@ -42,11 +42,19 @@
                             </div>
                         </div>
                         <script type="text/javascript">
-                            $(function () {
-                                $('#datetimepicker4').datetimepicker({
-                                    format: 'L'
-                                });
-                            });
+                            try {
+                                $(function () {
+                                    $('#datetimepicker4').datetimepicker({
+                                        format: 'YYYY-MM-DD',
+                                        maxDate: moment()
+                                    });
+                                })
+                            }catch (error){}
+                            function checkDatetime(e) {
+                                if (e.value == ''){
+                                    e.value=moment().format('YYYY-MM-DD')
+                                }
+                            }
                         </script>
                     </div>
                 </div>
@@ -123,7 +131,7 @@
                                     {% endfor %}],
                                 "datasets":
                                     [{
-                                        "label": "Systolic Pressure",
+                                        "label": "Weight",
                                         "data":{{ weight_list|safe }},
                                         "fill": true,
                                         "borderColor": "#03A9F4",
@@ -157,7 +165,7 @@
                                         borderDash: [10,10],
                                         label: {
                                             enabled: false,
-                                            content: 'Min Diastole'
+                                            content: 'Suggest Weight'
                                         }
                                     }]
                                 }
@@ -177,7 +185,6 @@
                     document.getElementById('control_right').style.opacity = '100';
                     document.getElementById('control_left').setAttribute('onclick','weekMinus()');
                     document.getElementById('control_right').setAttribute('onclick','weekPlus()');
-                    document.getElementById('bp_day').className='col-1 submit-btn';
                     document.getElementById('bp_week').className='col-1 submit-btn active';
                     document.getElementById('bp_month').className='col-1 submit-btn';
                     document.getElementById('bp_all').className='col-1 submit-btn';
@@ -194,7 +201,6 @@
                     document.getElementById('control_right').style.opacity = '100';
                     document.getElementById('control_left').setAttribute('onclick','monthMinus()');
                     document.getElementById('control_right').setAttribute('onclick','monthPlus()');
-                    document.getElementById('bp_day').className='col-1 submit-btn';
                     document.getElementById('bp_week').className='col-1 submit-btn';
                     document.getElementById('bp_month').className='col-1 submit-btn active';
                     document.getElementById('bp_all').className='col-1 submit-btn';
@@ -210,7 +216,6 @@
                     document.getElementById('control_right').style.opacity = '0';
                     document.getElementById('control_left').setAttribute('onclick','');
                     document.getElementById('control_right').setAttribute('onclick','');
-                    document.getElementById('bp_day').className='col-1 submit-btn';
                     document.getElementById('bp_week').className='col-1 submit-btn';
                     document.getElementById('bp_month').className='col-1 submit-btn';
                     document.getElementById('bp_all').className='col-1 submit-btn active';
@@ -275,7 +280,7 @@
                             <h1>{{ user.get_bmi() }}</h1>
                         </div>
                         <div class="col-3">
-                            <h1>{{ user.get_current_weight()-weight_list[-1] }}</h1>
+                            <h1>{{ total_indicator|safe }}{{ total_weight_difference|safe }}</h1>
                         </div>
                     </div>
                     <div class="row">
@@ -301,29 +306,34 @@
             <div class="card-header-text">Weight Data</div>
         </div>
             {% for i in range(0, weight_list_len) %}
-            <div id="bp_day">
+            <div id="weight_oneDay">
                 <div class="card-body" id="bp_container" onmouseover="showWeightEdit(this)" onmouseleave="hideWeightEdit(this)">
                     <div class="bp-container">
                         <div class="row">
-                            <div class="col-10">
+                            <div class="col-2 p-4 text-right">
+                                <button style="background: white;border:none;border-radius: 10%;width: 50px;height: 50px;padding: 0" value="{{weight_date_list[i]}}" data-toggle="modal" data-target="#bpModal" >
+                                    <img src="../static/images/weight.svg" height="50" width="50" style="border-radius: 10%" onclick="getWeightValue(this)">
+                                </button>
+                            </div>
+                            <div class="col-9">
                                 <div class="row">
-                                    <div class="col-4">
-                                        <h1 id='{{weight_date_list[i]}}'></h1>
+                                    <div class="col-4 pt-4">
+                                        <i class="material-icons date-icon">date_range</i><span class="weight_date" id='{{weight_date_list[i]}}'></span>
                                         <script>
                                             document.getElementById('{{weight_date_list[i]}}').innerText = moment('{{weight_date_list[i]}}', 'YYYY-MM-DD').format('MMM DD')
                                         </script>
                                     </div>
-                                    <div class="col-4">
+                                    <div class="col-4 pt-3">
                                         <h1>{{ weight_list[i] }}</h1>
+                                        <span class="weight-unit">kg</span>
                                     </div>
-                                    <div class="col-4">
-                                        <h1>
-                                            {{ weight_difference_list[i] }}
-                                        </h1>
+                                    <div class="col-4 pt-3">
+                                        <h1>{{ display_weight_difference_list[i]|safe }}</h1>
+                                        <span class="weight-unit">kg</span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-2  bp-edit" id="bpEdit">
+                            <div class="col-1  bp-edit" id="bpEdit">
                                 <div class="row">
                                     <button class="col-6 p-0" data-toggle="modal" data-target="#bpModal" value="{{weight_date_list[i]}}">
                                         <i class="material-icons bp-edit-btn" onclick="getWeightValue(this)">mode_edit</i>
@@ -341,17 +351,17 @@
         </div>
 	<script>
         function showWeightEdit(e) {
-            e.childNodes[1].childNodes[1].childNodes[3].style.opacity="100"
+            e.childNodes[1].childNodes[1].childNodes[5].style.opacity="100"
         }
         function hideWeightEdit(e) {
-            e.childNodes[1].childNodes[1].childNodes[3].style.opacity="0"
+            e.childNodes[1].childNodes[1].childNodes[5].style.opacity="0"
         }
-        document.getElementById('weight_date').value = moment().format('MM/DD/YYYY');
+        document.getElementById('weight_date').value = moment().format('YYYY-MM-DD');
         function getWeightValue(i) {
             document.getElementById('weightError').innerText = '';
             var input_ref = i.parentNode.value;
             var weight_date = input_ref;
-            document.getElementById('weight_date').value = moment(weight_date,'YYYYMMDD').format('MM/DD/YYYY');
+            document.getElementById('weight_date').value = moment(weight_date,'YYYYMMDD').format('YYYY-MM-DD');
             var weightRef = firebase.database().ref('Weight/'+'{{session['username']}}'+'/'+input_ref);
             weightRef.once('value', function (snapshot) {
                 document.getElementById('input_weight').value=parseFloat(snapshot.val());
@@ -362,20 +372,19 @@
                 document.getElementById('weightError').innerText = '';
                 var weight_ref = document.getElementById('weight_ref').innerText;
                 var input_weight = parseFloat(document.getElementById('input_weight').value).toFixed(1);
-                var input_weight_date = moment((document.getElementById('weight_date').value), "MM-DD-YYYY").format('YYYYMMDD');
+                var input_weight_date = moment(String(document.getElementById('weight_date').value), 'YYYY-MM-DD').format('YYYYMMDD');
                 var bp_db_ref = firebase.database().ref().child('Weight/'+'{{session['username']}}'+'/'+weight_ref);
-                firebase.database().ref().child('Weight/'+'{{session['username']}}'+'/'+input_weight_date).set(input_weight).then(function (value) {
-                        if (input_weight_date != weight_ref && weight_ref!='') {
-                        bp_db_ref.remove();
-                        document.getElementById('weight_ref').innerText = input_weight_date
-                    }
-                });
+                if (input_weight_date != weight_ref && weight_ref!='') {
+                    bp_db_ref.remove();
+                }
+                document.getElementById('weight_ref').innerText = input_weight_date;
+                firebase.database().ref().child('Weight/'+'{{session['username']}}'+'/'+input_weight_date).set(input_weight);
             window.location.href='/weight'
         }
         function validWeight(e) {
             var error = [];
             var errorMsg = '';
-            var input_weight_date = moment((document.getElementById('weight_date').value), "MM-DD-YYYY").format('YYYYMMDD');
+            var input_weight_date = moment(String(document.getElementById('weight_date').value), 'YYYY-MM-DD').format('YYYYMMDD');
             document.getElementById('weightError').hidden = true;
             document.getElementById('weightError').innerText = errorMsg;
             var weight_value = document.getElementById('input_weight');
@@ -405,7 +414,7 @@
         }
         function resetWeight() {
             document.getElementById('weight_ref').innerText = '';
-            document.getElementById('input_sys').value = '';
+            document.getElementById('input_weight').value = '';
         }
         function assign_delete(e) {
              document.getElementById('weight_ref').innerText = e.parentNode.value;

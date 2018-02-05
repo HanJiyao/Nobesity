@@ -51,15 +51,13 @@
         $( document ).ready(function() {
             document.getElementById('photoURL').innerText = "{{photoURL|safe}}";
             document.getElementById('fileName').innerText = '{{fileName}}';
-            if (document.getElementById('username') != null) {
-                var username = document.getElementById('username').innerText;
-                firebase.database().ref('/Users/' + username + '/photoURL').once('value').then(function (snapshot) {
-                    var photoURL = (snapshot.val());
-                    if (photoURL != null){
-                        document.getElementById('photoPreview').src = photoURL
-                    }
-                });
-            }
+            var username = '{{session['username']|safe}}';
+            firebase.database().ref('/Users/' + username + '/photoURL').once('value').then(function (snapshot) {
+                var photoURL = (snapshot.val());
+                if (photoURL != null){
+                    document.getElementById('photoPreview').src = photoURL
+                }
+            });
         });
         if (window.File && window.FileReader && window.FileList && window.Blob) {
         // Great success! All the File APIs are supported.
@@ -141,5 +139,9 @@
                 'photoURL' : photoURL
             })
         }
+    </script>
+    <script>
+    openTool();
+    $('#account_nav').attr('class','sub-links selected')
     </script>
 {% endblock %}

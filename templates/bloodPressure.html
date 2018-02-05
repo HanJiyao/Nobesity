@@ -34,7 +34,7 @@
                         <div class="col-7">
                             <div class="form-group">
                                 <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
-                                    <input id="bp_datetime" type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1"/>
+                                    <input id="bp_datetime" type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1" onblur="checkDatetime(this)"/>
                                     <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
                                         <div class="input-group-text"><i class="material-icons">date_range</i></div>
                                     </div>
@@ -44,9 +44,17 @@
                         <script type="text/javascript">
                             try{
                                 $(function () {
-                                $('#datetimepicker1').datetimepicker();
+                                    $('#datetimepicker1').datetimepicker({
+                                        format: 'YYYY-MM-DD h:mm A',
+                                        maxDate:moment()
+                                    });
                                 });
                             } catch (error){}
+                            function checkDatetime(e) {
+                                if (e.value == ''){
+                                    e.value=moment().format('YYYY-MM-DD h:mm A')
+                                }
+                            }
                         </script>
                     </div>
                     <div class="row mb-3">
@@ -393,7 +401,7 @@
         <div class="bp-wrapper">
             <div id="bp_date">{{ bp_dict[i][0].display_bp_date() }}</div>
             {% for j in bp_dict[i] %}
-            <div id="bp_day">
+            <div id="bp_oneDay">
                 <div class="card-body" id="bp_container" onmouseover="showBpEdit(this)" onmouseleave="hideBpEdit(this)">
                     <div class="bp-container">
                         <div class="row">
@@ -451,12 +459,12 @@
         function hideBpEdit(e) {
             e.childNodes[1].childNodes[1].childNodes[7].style.opacity="0"
         }
-        document.getElementById('bp_datetime').value = moment().format('MM/DD/YYYY h:mm A');
+        document.getElementById('bp_datetime').value = moment().format('YYYY-MM-DD h:mm A');
         function getBpValue(i) {
             document.getElementById('bpError').innerText = '';
             var input_ref = i.parentNode.value;
             var bp_datetime = input_ref.slice(0,8)+'T'+input_ref.slice(8,12);
-            document.getElementById('bp_datetime').value = moment(bp_datetime).format('MM/DD/YYYY h:mm A');
+            document.getElementById('bp_datetime').value = moment(bp_datetime).format('YYYY-MM-DD h:mm A');
             var bpRef = firebase.database().ref('BloodPressure/'+'{{session['username']}}'+'/'+input_ref);
             bpRef.once('value', function (snapshot) {
                 var sys = parseInt(snapshot.child('systolic').val());
@@ -475,25 +483,24 @@
                 var bp_sys = document.getElementById('input_sys').value;
                 var bp_dias = document.getElementById('input_dias').value;
                 var bp_pulse = document.getElementById('input_pulse').value;
-                var input_bp_datetime = moment((document.getElementById('bp_datetime').value), "MM-DD-YYYY h:mm A").format('YYYYMMDDHHmm');
+                var input_bp_datetime = moment(String(document.getElementById('bp_datetime').value), "YYYY-MM-DD h:mm A").format('YYYYMMDDHHmm');
                 input_bp_datetime = input_bp_datetime.slice(0,8)+input_bp_datetime.slice(8,12);
                 var bp_db_ref = firebase.database().ref().child('BloodPressure/'+'{{session['username']}}'+'/'+bp_ref);
+                if (input_bp_datetime != bp_ref && bp_ref!='') {
+                    bp_db_ref.remove();
+                    document.getElementById('bp_ref').innerText = input_bp_datetime
+                }
                 firebase.database().ref().child('BloodPressure/'+'{{session['username']}}'+'/'+input_bp_datetime).update({
                     'systolic':bp_sys,
                     'diastolic':bp_dias,
                     'pulse':bp_pulse
-                }).then(function (value) {
-                        if (input_bp_datetime != bp_ref && bp_ref!='') {
-                        bp_db_ref.remove();
-                        document.getElementById('bp_ref').innerText = input_bp_datetime
-                    }
                 });
             window.location.href='/bloodPressure'
         }
         function validateBp(e) {
             var error = [];
             var errorMsg = '';
-            var input_bp_datetime = moment((document.getElementById('bp_datetime').value), "MM-DD-YYYY h:mm A").format('YYYYMMDDHHmm');
+            var input_bp_datetime = moment(String(document.getElementById('bp_datetime').value), 'YYYY-MM-DD h:mm A').format('YYYYMMDDHHmm');
             document.getElementById('bpError').hidden = true;
             document.getElementById('bpError').innerText = errorMsg;
             var bp_value = [document.getElementById('input_sys'),document.getElementById('input_dias'),document.getElementById('input_pulse')];
@@ -508,13 +515,20 @@
                     error.push('Please Enter a Number in '+bp_value[i].placeholder+' (between 0 and 300)');
                     errorMsg = error.join('\n');
                     document.getElementById('bpError').innerText = errorMsg;
-                } else if (input_bp_datetime == 'invalid date'){
-                    document.getElementById('bpError').hidden = false;
-                    error.push('Please Enter a Correct Date');
-                    errorMsg = error.join('\n');
-                    document.getElementById('bpError').innerText = errorMsg;
                 }
-            } if (document.getElementById('bpError').innerText == ''){
+            }
+            if (document.getElementById('bp_datetime').value == ""){
+                document.getElementById('bpError').hidden = false;
+                error.push('Please Enter a Date Time for your record ');
+                errorMsg = error.join('\n');
+                document.getElementById('bpError').innerText = errorMsg;
+            } else if (input_bp_datetime == 'invalid date'){
+                document.getElementById('bpError').hidden = false;
+                error.push('Please Enter a Correct Date');
+                errorMsg = error.join('\n');
+                document.getElementById('bpError').innerText = errorMsg;
+            }
+            if (document.getElementById('bpError').innerText == ''){
                 handleUpdate(e)
             }
         }

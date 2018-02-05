@@ -49,7 +49,7 @@
             </div>
             <div class="nav-item dropdown" id="account_login">
                 <a class="dropdown-toggle account-btn" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span id="username">{{session['username']}}</span>
+                    <span id="nav_username">{{session['username']}}</span>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                     <a class="dropdown-item" href="/profile">Profile</a>
@@ -78,7 +78,7 @@
                 <i class="material-icons">account_circle</i>Account
             </a>
         </div>
-        <ul class="sub-links">
+        <ul class="sub-links" id="account_nav">
             <li><a href="/account/security">Sign In & Security</a></li>
             <li><a href="/account/info">Personal Info</a></li>
             <li><a href="/account/detail">Health Detail</a></li>
@@ -89,25 +89,24 @@
                 <i class="material-icons">accessibility</i>Track
             </a>
         </div>
-        <ul class="sub-links">
-            <li><a href="#">Weight</a></li>
-            <li><a href="#">Blood Pressure</a></li>
-            <li><a href="#">Diet</a></li>
-            <li><a href="#">Activity</a></li>
+        <ul class="sub-links" id="health_track_nav">
+            <li><a href="/weight">Weight</a></li>
+            <li><a href="/bloodPressure">Blood Pressure</a></li>
+            <li><a href="/diet">Diet</a></li>
+            <li><a href="/record">Activity</a></li>
         </ul>
         <div>
             <a>
                 <i class="material-icons">help_outline</i>Quiz
             </a>
         </div>
-        <ul class="sub-links">
+        <ul class="sub-links" id="quiz_nav">
             <li><a href="#">Take Quiz</a></li>
             <li><a href="#">Leaderboards</a></li>
             <li><a href="#">Rewards</a></li>
         </ul>
     </div>
     <script>
-
         function openTool() {
             document.getElementById("sidenav").style.width = "250px";
             $("#sidenav").addClass("expened");
@@ -135,14 +134,12 @@
                 }
             });
         });
-        if (document.getElementById('username') != null) {
-            var username = document.getElementById('username').innerText;
-            firebase.database().ref('/Users/' + username + '/photoURL').once('value').then(function (snapshot) {
-                var photoURL = (snapshot.val());
-                if (photoURL != null){
-                    document.getElementById('navPhoto').src = photoURL
-                }
-            });
-        }
+        var username = '{{session['username']|safe}}';
+        firebase.database().ref('/Users/' + username + '/photoURL').once('value').then(function (snapshot) {
+            var photoURL = (snapshot.val());
+            if (photoURL != null) {
+                document.getElementById('navPhoto').src = photoURL
+            }
+        });
     </script>
 </nav>
