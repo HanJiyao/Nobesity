@@ -136,7 +136,19 @@
                     }],
                     labels:['Calories In', 'Calories Out']
                 };
-                var options = {beginAtZero: true};
+                var options = {
+                    scales: {
+                        xAxes: [{
+                            id: 'x-axis-0',
+                            gridLines: {
+                                display: false
+                            },
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                };
                 var calBarChart = new Chart(ctx,{type: 'horizontalBar', data: calData, options: options});
             </script>
             <script>
@@ -149,7 +161,19 @@
                     }],
                     labels:['Calories In', 'Calories Out']
                 };
-                var options = {beginAtZero: true};
+                var options = {
+                    scales: {
+                        xAxes: [{
+                            id: 'x-axis-0',
+                            gridLines: {
+                                display: false
+                            },
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                };
                 var overBarChart = new Chart(ctx,{type: 'horizontalBar', data: overData, options: options});
             </script>
     </div>

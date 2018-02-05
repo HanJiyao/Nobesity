@@ -935,9 +935,9 @@ def faq():
 
 class ActivityForm(Form):
     activity = StringField('Name Of Activity', [validators.Length(min=1, max=20), validators.DataRequired()])
-    date = DateField('Date Of Activity', format='%d-%m-%Y')
-    duration = IntegerField('Duration Of Activity')
-    calories = IntegerField('Calories Burnt')
+    date = DateField('Date Of Activity', [validators.DataRequired('Date format is DD-MM-YYYY')], format='%d-%m-%Y')
+    duration = IntegerField('Duration Of Activity', [validators.DataRequired('Please enter digits')])
+    calories = IntegerField('Calories Burnt', [validators.DataRequired('Please enter digits')])
 
 
 class Activity:
@@ -1039,7 +1039,7 @@ def record():
                     # no message if there is an activity done today
                     for i in act_list_today:
                         total_calories_out += activities_today.get_calories()
-                        print(total_calories_out)
+                        # print(total_calories_out)
 
             for dietID in Diet_db[username]:
                 eachdiet = Diet_db[username][dietID]
@@ -1058,7 +1058,7 @@ def record():
                     diet_today.append(food_today)
                     for i in diet_today:
                         total_calories_in += food_today.get_calories()
-                        print(total_calories_in)
+                        # print(total_calories_in)
 
         except TypeError:
             return redirect(url_for('input_activity'))
