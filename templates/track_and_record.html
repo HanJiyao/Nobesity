@@ -88,6 +88,7 @@
                             <th>Date Of Activity</th>
                             <th>Duration Of Activity (in minutes)</th>
                             <th>Calories Burnt</th>
+                            <th>Delete Activity</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -98,6 +99,12 @@
                                 <td>{{eachact.get_date()}}</td>
                                 <td>{{eachact.get_duration()}}</td>
                                 <td>{{eachact.get_calories()}}</td>
+                                <td>
+                                    <form action="{{ url_for("delete_activity", id=eachact.get_actID())}}" method="POST">
+                                    <input type ="submit" value= 'Delete' class ="btn btn-submit btn-lg" id = "delete_button"
+	                                    onclick= "return confirm('Confirm the delete of this activity? Data would not be recovered.')">
+                                    </form>
+                                </td>
 
                             </tr>
                             {% endfor %}

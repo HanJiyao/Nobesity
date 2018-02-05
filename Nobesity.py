@@ -1002,6 +1002,19 @@ def input_activity():
     return render_template('input_activity.html', actform=actform)
 
 
+@app.route('/delete_activity/<string:id>', methods=['POST'])
+def delete_activity(id):
+    try:
+        username = session["username"]
+        Act_db = root.child('Activities/' + username + '/' + id)
+        Act_db.delete()
+        flash('Activity was deleted', 'success')
+    except KeyError:
+        flash('Please Login First to use our Services', 'primary')
+        return redirect(url_for('login'))
+    return redirect(url_for('record'))
+
+
 @app.route('/record')
 def record():
     try:
