@@ -994,7 +994,7 @@ def input_activity():
             latest_activity.db.push({'Activity': latest_activity.get_activity(), 'Date': latest_activity.get_date(),
                                      'Duration': latest_activity.get_duration(),
                                      'Calories Burnt': latest_activity.get_calories()})
-            flash('New activ ity updated successfully', 'success')
+            flash('New activity updated successfully', 'success')
             return redirect(url_for('record'))
     except KeyError:
         flash('Please Login First to use our Services', 'primary')
@@ -1011,8 +1011,8 @@ def record():
         act_list_today = []
         diet_today = []
         diet_list = []
-        total_calories_burnt = 0
-        total_calories = 0
+        overall_calories_out = 0
+        overall_calories_in = 0
         total_calories_in = 0
         total_calories_out = 0
         message_today = 'You have not recorded any activities today! Get moving!'
@@ -1022,7 +1022,7 @@ def record():
                 eachact = Act_db[actID]
                 activities = Activity(eachact['Activity'], eachact['Date'], eachact['Duration'],
                                       eachact['Calories Burnt'])
-                # total_calories_burnt += activities.get_calories()
+                overall_calories_out += activities.get_calories()
                 activities.set_actID(actID)
                 act_list.append(activities)
                 # if list is not empty, do the sorting by date
@@ -1045,11 +1045,11 @@ def record():
                 eachdiet = Diet_db[username][dietID]
                 food = Diet(eachdiet['Name'], eachdiet['Type'], eachdiet['Calories Value'], eachdiet['Fats Value'],
                             eachdiet['Carbohydrates Value'], eachdiet['Protein Value'], eachdiet['Diet Date'])
+                overall_calories_in += food.get_calories()
                 diet_list.append(food)
-
                 diet_date = eachdiet['Diet Date'][6:10] + '-' + eachdiet['Diet Date'][3:5] + '-' + eachdiet[
                                                                                                        'Diet Date'][0:2]
-                print(str(datetime.date.today()))
+                # print(str(datetime.date.today()))
 
                 if diet_date == str(datetime.date.today()):
                     food_today = Diet(eachdiet['Name'], eachdiet['Type'], eachdiet['Calories Value'],
@@ -1070,7 +1070,8 @@ def record():
         flash('Please Login First to use our Services', 'primary')
         return redirect(url_for('login'))
     return render_template('track_and_record.html', activity=act_list, activity_today=act_list_today, date=today_date,
-                           display_msg_today=message_today, cal_in=total_calories_in, cal_out=total_calories_out)
+                           display_msg_today=message_today, cal_in=total_calories_in, cal_out=total_calories_out,
+                           overall_in=overall_calories_in, overall_out=overall_calories_out)
 
 
 @app.route('/rewards', methods=['GET', "POST"])

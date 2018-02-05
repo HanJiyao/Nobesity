@@ -105,37 +105,52 @@
                     </table>
                 </div>
             </section>
-            <!--BOTTOM SECTION showing the user's weight over a period of time can be shown using a line graph-->
-            <h2 id="test"> Testing Today Calories In: {{ cal_in }}</h2>
-            <h2 id="test"> Testing Today Calories Out: {{ cal_out }}</h2>
-            <canvas id = "Canvas"></canvas>
-            <h2 id="test"> New Today Calories In: {{ cal_in }}</h2>
-            <h2 id="test"> New Today Calories Out: {{ cal_out }}</h2>
+{#            <h2 id="test"> Testing Today Calories In: {{ cal_in }}</h2>#}
+{#            <h2 id="test"> Testing Today Calories Out: {{ cal_out }}</h2>#}
+{#            <canvas id = "Canvas"></canvas>#}
+            <h2 id="test"> Today Calories In: {{ cal_in }}</h2>
+            <h2 id="test"> Today Calories Out: {{ cal_out }}</h2>
             <canvas id = "New"></canvas>
-            <script>
-                var ctx = document.getElementById("Canvas").getContext("2d");
-                var actData = {
-                    datasets: [{
-                            data: [{{ cal_in }}, {{ cal_out }}],
-                            backgroundColor: ["#1b9393", "#0074D9"]
-                    }],
-                    labels:['Calories In', 'Calories Out']
-                };
-                var options  =  Chart.defaults.pie;
-                var actPieChart = new Chart(ctx,{type: 'pie', data: actData, options: options});
-            </script>
+            <h2 id="test"> Overall Calories In: {{ overall_in }}</h2>
+            <h2 id="test"> Overall Calories Out: {{ overall_out }}</h2>
+            <canvas id = "Overall"></canvas>
+{#            <script>#}
+{#                var ctx = document.getElementById("Canvas").getContext("2d");#}
+{#                var actData = {#}
+{#                    datasets: [{#}
+{#                            data: [{{ cal_in }}, {{ cal_out }}],#}
+{#                            backgroundColor: ["#1b9393", "#0074D9"]#}
+{#                    }],#}
+{#                    labels:['Calories In', 'Calories Out']#}
+{#                };#}
+{#                var options  =  Chart.defaults.pie;#}
+{#                var actPieChart = new Chart(ctx,{type: 'pie', data: actData, options: options});#}
+{#            </script>#}
             <script>
                 Chart.defaults.global.legend.display = false;
                 var ctx = document.getElementById("New").getContext("2d");
                 var calData = {
                     datasets: [{
                             data: [{{ cal_in }}, {{ cal_out }}],
-                            backgroundColor: ["#1b9393", "#0074D9"]
+                            backgroundColor: ["#3abefa", "#9afe2e"]
                     }],
                     labels:['Calories In', 'Calories Out']
                 };
-                var options = Chart.defaults.horizontalBar;
+                var options = {beginAtZero: true};
                 var calBarChart = new Chart(ctx,{type: 'horizontalBar', data: calData, options: options});
+            </script>
+            <script>
+                Chart.defaults.global.legend.display = false;
+                var ctx = document.getElementById("Overall").getContext("2d");
+                var overData = {
+                    datasets: [{
+                            data: [{{ overall_in }}, {{ overall_out }}],
+                            backgroundColor: ["#3abefa", "#9afe2e"]
+                    }],
+                    labels:['Calories In', 'Calories Out']
+                };
+                var options = {beginAtZero: true};
+                var overBarChart = new Chart(ctx,{type: 'horizontalBar', data: overData, options: options});
             </script>
     </div>
     </div>
