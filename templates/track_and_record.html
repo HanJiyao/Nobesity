@@ -88,8 +88,6 @@
                             <th>Date Of Activity</th>
                             <th>Duration Of Activity (in minutes)</th>
                             <th>Calories Burnt</th>
-                            <th>Update Activity</th>
-                            <th>Delete Activity</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -100,17 +98,6 @@
                                 <td>{{eachact.get_date()}}</td>
                                 <td>{{eachact.get_duration()}}</td>
                                 <td>{{eachact.get_calories()}}</td>
-                                <td>
-                                    <div class="updateact"><a href = "/update_activity/{{eachact.get_actID()}}" class="btn btn-primary btn-sm" id="update_button">
-	                                Update</a>
-                                    </div>
-                                </td>
-                                <td>
-                                    <form action="{{ url_for("delete_activity", id=eachact.get_actID())}}" method="POST">
-                                    <input type ="submit" value= 'Delete' class ="btn btn-submit btn-lg" id = "delete_button"
-	                                    onclick= "return confirm('Confirm the delete of this activity? Data would not be recovered.')">
-                                    </form>
-                                </td>
 
                             </tr>
                             {% endfor %}
@@ -118,76 +105,37 @@
                     </table>
                 </div>
             </section>
-{#            <h2 id="test"> Testing Today Calories In: {{ cal_in }}</h2>#}
-{#            <h2 id="test"> Testing Today Calories Out: {{ cal_out }}</h2>#}
-{#            <canvas id = "Canvas"></canvas>#}
-            <h2 id="test"> Today Calories In: {{ cal_in }}</h2>
-            <h2 id="test"> Today Calories Out: {{ cal_out }}</h2>
+            <!--BOTTOM SECTION showing the user's weight over a period of time can be shown using a line graph-->
+            <h2 id="test"> Testing Today Calories In: {{ cal_in }}</h2>
+            <h2 id="test"> Testing Today Calories Out: {{ cal_out }}</h2>
+            <canvas id = "Canvas"></canvas>
+            <h2 id="test"> New Today Calories In: {{ cal_in }}</h2>
+            <h2 id="test"> New Today Calories Out: {{ cal_out }}</h2>
             <canvas id = "New"></canvas>
-            <h2 id="test"> Overall Calories In: {{ overall_in }}</h2>
-            <h2 id="test"> Overall Calories Out: {{ overall_out }}</h2>
-            <canvas id = "Overall"></canvas>
-{#            <script>#}
-{#                var ctx = document.getElementById("Canvas").getContext("2d");#}
-{#                var actData = {#}
-{#                    datasets: [{#}
-{#                            data: [{{ cal_in }}, {{ cal_out }}],#}
-{#                            backgroundColor: ["#1b9393", "#0074D9"]#}
-{#                    }],#}
-{#                    labels:['Calories In', 'Calories Out']#}
-{#                };#}
-{#                var options  =  Chart.defaults.pie;#}
-{#                var actPieChart = new Chart(ctx,{type: 'pie', data: actData, options: options});#}
-{#            </script>#}
+            <script>
+                var ctx = document.getElementById("Canvas").getContext("2d");
+                var actData = {
+                    datasets: [{
+                            data: [{{ cal_in }}, {{ cal_out }}],
+                            backgroundColor: ["#1b9393", "#0074D9"]
+                    }],
+                    labels:['Calories In', 'Calories Out']
+                };
+                var options  =  Chart.defaults.pie;
+                var actPieChart = new Chart(ctx,{type: 'pie', data: actData, options: options});
+            </script>
             <script>
                 Chart.defaults.global.legend.display = false;
                 var ctx = document.getElementById("New").getContext("2d");
                 var calData = {
                     datasets: [{
                             data: [{{ cal_in }}, {{ cal_out }}],
-                            backgroundColor: ["#3abefa", "#9afe2e"]
+                            backgroundColor: ["#1b9393", "#0074D9"]
                     }],
                     labels:['Calories In', 'Calories Out']
                 };
-                var options = {
-                    scales: {
-                        xAxes: [{
-                            id: 'x-axis-0',
-                            gridLines: {
-                                display: false
-                            },
-                            ticks: {
-                                beginAtZero: true
-                            }
-                        }]
-                    }
-                };
+                var options = Chart.defaults.horizontalBar;
                 var calBarChart = new Chart(ctx,{type: 'horizontalBar', data: calData, options: options});
-            </script>
-            <script>
-                Chart.defaults.global.legend.display = false;
-                var ctx = document.getElementById("Overall").getContext("2d");
-                var overData = {
-                    datasets: [{
-                            data: [{{ overall_in }}, {{ overall_out }}],
-                            backgroundColor: ["#3abefa", "#9afe2e"]
-                    }],
-                    labels:['Calories In', 'Calories Out']
-                };
-                var options = {
-                    scales: {
-                        xAxes: [{
-                            id: 'x-axis-0',
-                            gridLines: {
-                                display: false
-                            },
-                            ticks: {
-                                beginAtZero: true
-                            }
-                        }]
-                    }
-                };
-                var overBarChart = new Chart(ctx,{type: 'horizontalBar', data: overData, options: options});
             </script>
     </div>
     </div>
