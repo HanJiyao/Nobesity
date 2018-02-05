@@ -14,8 +14,30 @@
 </thead>
   <tbody>
 <tr>
-    Healthpoints left:{{healthpoints}}<td align="center"></td>
-</tr>
+    Healthpoints left:{{healthpoints}}
+    <td align="center">
+        {% if itemsredeemed=="Cap" %}
+           <td><img src="http://wigglybridgedistillery.com/wp-content/uploads/2016/07/nike-dri-fit-featherlight-cap-mens-600x600.jpeg">
+            <br>Item:{{ itemsredeemed }}</td>
+    {% endif %}
+</tr>   {% if itemsredeemed=="Water Bottle" %}
+            <td><img src= "http://www.gocontigo.com/media/catalog/product/cache/19/image/425x/040ec09b1e35df139433887a97daa66f/m/o/monaco_cortland_back_2.jpg">
+                <br>Item:{{ itemsredeemed }}</td>
+    {% endif %}
+        {% if itemsredeemed=="Basketball" %}
+            <td><img src="http://cdn6.bigcommerce.com/s-2sxhiat0li/products/182/images/588/GL7X_AD__99451.1461966775.500.750.jpg?c=2">
+            <br>Item:{{ itemsredeemed }}</td>
+        {% endif %}
+        {% if itemsredeemed=="Shoe" %}
+            <td><img src="https://www.runnersworld.com/sites/runnersworld.com/files/styles/listicle_slide_custom_user_phone_1x/public/reebok_harmony_w_400.jpg?itok=U3lsw4qz"><br>Item:{{ itemsredeemed }}</td>
+            {% endif %}
+        {% if itemsredeemed=="Treadmill" %}
+            <td><img src="https://www.runnersworld.com/sites/runnersworld.com/files/styles/listicle_slide_custom_user_phone_1x/public/reebok_harmony_w_400.jpg?itok=U3lsw4qz"><br>Item:{{ itemsredeemed }}</td>
+            {% endif %}
+        {% if itemsredeemed=="NObesity T-Shirt" %}
+            <td><img src="https://images-na.ssl-images-amazon.com/images/I/51eoH2uBrDL._UX385_.jpg"><br>Item:{{ itemsredeemed }}</td>
+            {% endif %}
   </tbody>
         </table>
+</div>
 {% endblock %}
