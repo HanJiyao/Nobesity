@@ -1156,8 +1156,6 @@ def record():
                            display_msg_today=message_today, cal_in=total_calories_in, cal_out=total_calories_out,
                            overall_in=overall_calories_in, overall_out=overall_calories_out)
 
-
-
 @app.route('/rewards', methods=["GET","POST"])
 def rewards():
     listofrewards={"500":{"Name":"Shirt","Redeem":False},
@@ -1169,44 +1167,67 @@ def rewards():
     rewardform = RewardsForm(request.form)
     username = session["username"]
     healthpoints_db = root.child("Rewards/"+username).get()
+    redeemed_items_db=root.child("Redeemeditems/"+username).get()
     healthpointss = Rewards(healthpoints_db["healthpoints"])
+    count=0
     if request.method == 'POST' and rewardform.validate():
         if rewardform.redeemitem.data==True:
+            root.child("Redeemeditems/" + username).set(
+                {'Item': "NObesity T-Shirt"})
+            count=count+1
             if healthpointss.get_healthpoints()<500:
                 flash('Not enough healthpoints', 'danger')
             else:
                 healthpointss.minus_healthpoints(500)
                 print(healthpointss.get_healthpoints())
         if rewardform.redeemitem2.data==True:
+            root.child("Redeemeditems/" + username).set(
+                {'Item': "Water Bottle"})
+            count = count + 1
             if healthpointss.get_healthpoints()<1500:
                 flash('Not enough healthpoints', 'danger')
             else:
                 healthpointss.minus_healthpoints(1500)
                 healthpointss.get_healthpoints()
         if rewardform.redeemitem3.data==True:
+            root.child("Redeemeditems/" + username).set(
+                {'Item': "Treadmill"})
+            count = count + 1
             if healthpointss.get_healthpoints()<10000:
                 flash('Not enough healthpoints', 'danger')
             else:
                 healthpointss.minus_healthpoints(10000)
                 healthpointss.get_healthpoints()
         if rewardform.redeemitem4.data==True:
+            root.child("Redeemeditems/" + username).set(
+                {'Item': "Basketball"})
             if healthpointss.get_healthpoints()<2500:
+                count = count + 1
                 flash('Not enough healthpoints', 'danger')
             else:
                 healthpointss.minus_healthpoints(2500)
                 healthpointss.get_healthpoints()
         if rewardform.redeemitem5.data==True:
+            root.child("Redeemeditems/" + username).set(
+                {'Item': "Shoe"})
+            count = count + 1
             if healthpointss.get_healthpoints()<4000:
                 flash('Not enough healthpoints', 'danger')
             else:
                 healthpointss.minus_healthpoints(4000)
                 healthpointss.get_healthpoints()
         if rewardform.redeemitem6.data==True:
+            root.child("Redeemeditems/" + username).set(
+                {'Item': "Cap"})
+            count = count + 1
             if healthpointss.get_healthpoints()<6000:
                 flash('Not enough healthpoints', 'danger')
             else:
                 healthpointss.minus_healthpoints(6000)
                 healthpointss.get_healthpoints()
+        if count==0:
+            flash("Not enough healthpoints","danger")
+
         root.child("Rewards/" + username).set({'Item': listofrewards, 'healthpoints': healthpointss.get_healthpoints()})
         flash('Successfully redeemed', 'success')
         return redirect(url_for('rewardconfirmation'))
@@ -1216,10 +1237,9 @@ def rewards():
 def rewardconfirmation():
     username = session["username"]
     healthpoints = root.child("Rewards/" + username+'/healthpoints').get()
-    return render_template('rewardconfirmation.html',healthpoints=healthpoints)
-
-
-
+    itemsredeemed= root.child("Redeemeditems/" + username+'/Item').get()
+    print(itemsredeemed)
+    return render_template('rewardconfirmation.html',healthpoints=healthpoints,itemsredeemed=itemsredeemed)
 
 class RewardsForm(Form):
     redeemitem=BooleanField("Redeem?")
@@ -1233,10 +1253,8 @@ class RewardsForm(Form):
 
 class Rewards:
 
-
     def __init__(self,healthpoints=0):
         self.__healthpoints = healthpoints
-
 
     def get_healthpoints(self):
         return self.__healthpoints
@@ -1256,16 +1274,27 @@ class Rewards:
 
 @app.route('/quiz', methods=['GET', 'POST'])
 def quiz():
+    count=0
     new_form = leaderboardform(request.form)
     if request.method == 'POST' and new_form.validate():
+
         score = new_form.score.data
         username = session["username"]
         userscore = Leaderboard(username, score)
         userscore.db = root.child('Leaderboard')  # map current userscore to firebase
         userscore.db.child(username).set({"Score": userscore.get_score()})  # push means to update score
-        flash('New score inserted successfully', 'success')
-
+        print(userscore.get_score())
+        if count==0:
+            if int(userscore.get_score()) > 3:
+                root.child("Rewards/" + username).set(
+                { 'healthpoints':10000,'count':count+1})
+        else:
+            root.child("Rewards/" + username).set(
+                {'count': count + 1})
+        flash('New score inserted successfully.First time doers will get 10000 healthpoints', 'success')
         return redirect(url_for('leaderboards'))
+
+
     return render_template('quiz.html', new_form=new_form)
 
 
