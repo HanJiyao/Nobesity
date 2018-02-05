@@ -1021,7 +1021,6 @@ def update_activity(actID):
         username = session["username"]
         url = 'Activities/' + username + '/' + actID
         update_form = ActivityForm(request.form)
-        print(update_form.validate())
         if request.method == 'POST' and update_form.validate():
             activity = update_form.activity.data
             date = str(update_form.date.data)
