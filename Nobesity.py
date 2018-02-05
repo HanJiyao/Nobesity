@@ -1021,6 +1021,7 @@ def update_activity(actID):
         username = session["username"]
         url = 'Activities/' + username + '/' + actID
         update_form = ActivityForm(request.form)
+        print(update_form.validate())
         if request.method == 'POST' and update_form.validate():
             activity = update_form.activity.data
             date = str(update_form.date.data)
@@ -1028,11 +1029,13 @@ def update_activity(actID):
             calories = int(update_form.calories.data)
             latest_activity = Activity(activity, date, duration, calories)
             Act_db = root.child('Activities/' + username + '/' + actID)
-            Act_db.set({'Activity': latest_activity.get_activity(),
-                         'Date': latest_activity.get_date(),
-                         'Duration': latest_activity.get_duration(),
-                         'Calories Burnt': latest_activity.get_calories()})
+            Act_db.update({'Activity': latest_activity.get_activity(),
+                            'Date': latest_activity.get_date(),
+                            'Duration': latest_activity.get_duration(),
+                            'Calories Burnt': latest_activity.get_calories()})
+
             flash('Activity updated successfully', 'success')
+
             return redirect(url_for('record'))
         else:
             eachact = root.child(url).get()
@@ -1040,13 +1043,14 @@ def update_activity(actID):
                                       eachact['Calories Burnt'])
             activities.set_actID(actID)
             update_form.activity.data = activities.get_activity()
-            update_form.date.data = activities.get_date()
+            date = activities.get_date()
+            update_form.date.data = datetime.date(int(date[0:4]), int(date[5:7]),int(date[8:10]))
             update_form.duration.data = activities.get_duration()
             update_form.calories.data = activities.get_calories()
     except KeyError:
         flash('Please Login First to use our Services', 'primary')
         return redirect(url_for('login'))
-    return render_template('track_and_record.html', actform=update_form)
+    return render_template('update_activity.html', actform=update_form)
 
 
 @app.route('/record')
