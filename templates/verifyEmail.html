@@ -31,7 +31,10 @@
         // [START_EXCLUDE]
         document.getElementById("verify_email").style.display = "none";
         document.getElementById("verify_status").style.display = "block";
-      });
+      }).catch(function(error) {
+      // An error happened.
+              console.log(error)
+    });
       // [END sendemailverification]
     }
 

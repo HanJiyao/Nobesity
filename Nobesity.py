@@ -591,6 +591,9 @@ def profile():
     except KeyError:
         flash('Please Login First to use our Services', 'primary')
         return redirect(url_for('login'))
+    except TypeError:
+        flash('Please complete the user setup first', 'danger')
+        return redirect(url_for('register_info'))
     return render_template('profile.html', user=user_info, display_name=display_name)
 
 
@@ -1352,4 +1355,4 @@ class leaderboardform(Form):
     score = StringField("Score")
 
 if __name__ == '__main__':
-    app.run()
+    app.run(port=443)

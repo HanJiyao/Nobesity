@@ -55,6 +55,7 @@
         var email = document.getElementById("new_email").value;
         user.updateEmail(email).then(function() {
           // Update successful.
+            writeUserData("{{session['username']}}", firebase.auth().currentUser.emailVerified, user.uid, firebase.auth().currentUser.email);
             window.location.href="/setup/email";
         }).catch(function(error) {
             if(error.code == "auth/requires-recent-login"){
@@ -95,6 +96,13 @@
             }
             second++;
         }, 1000);
+    }
+    function writeUserData(userId, emailVerified, uid, email) {
+      firebase.database().ref('Users/' + userId).update({
+          emailVerified: emailVerified,
+          uid: uid,
+          email:email
+      });
     }
     </script>
     <script>
