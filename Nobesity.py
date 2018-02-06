@@ -1167,6 +1167,7 @@ def rewards():
     selecteditems=[]
     rewardform = RewardsForm(request.form)
     username = session["username"]
+    root.child("Rewards/" + username+'/healthpoints').set(0)
     healthpoints_db = root.child("Rewards/"+username).get()
     redeemed_items_db=root.child("Redeemeditems/"+username).get()
     healthpointss = Rewards(healthpoints_db["healthpoints"])
