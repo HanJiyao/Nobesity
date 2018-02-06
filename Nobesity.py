@@ -1357,5 +1357,5 @@ class leaderboardform(Form):
     score = StringField("Score")
 
 if __name__ == '__main__':
-    app.run(port=443)
+    app.run()
 
