@@ -1170,7 +1170,7 @@ def rewards():
     selecteditems=[]
     rewardform = RewardsForm(request.form)
     username = session["username"]
-    root.child("Rewards/" + username+'/healthpoints').set(0)
+
     healthpoints_db = root.child("Rewards/"+username).get()
     redeemed_items_db=root.child("Redeemeditems/"+username).get()
     healthpointss = Rewards(healthpoints_db["healthpoints"])
@@ -1285,10 +1285,10 @@ class Rewards:
 
 @app.route('/quiz', methods=['GET', 'POST'])
 def quiz():
-    count=0
+
     new_form = leaderboardform(request.form)
     if request.method == 'POST' and new_form.validate():
-
+        count = 0
         score = new_form.score.data
         username = session["username"]
         userscore = Leaderboard(username, score)
@@ -1296,11 +1296,11 @@ def quiz():
         userscore.db.child(username).set({"Score": userscore.get_score()})  # push means to update score
 
         if count==0:
-            if int(userscore.get_score()) > 3:
+            if int(userscore.get_score()) > 2:
                 root.child("Rewards/" + username).set(
-                { 'healthpoints':10000,'count':count+1})
+                { 'healthpoints':20000,'count':count+1})
         else:
-            root.child("Rewards/" + username).set(
+            root.child("Leaderboard/" + username).update(
                 {'count': count + 1})
         flash('New score inserted successfully.First time doers will get 10000 healthpoints', 'success')
         return redirect(url_for('leaderboards'))
@@ -1356,3 +1356,4 @@ class leaderboardform(Form):
 
 if __name__ == '__main__':
     app.run(port=443)
+
