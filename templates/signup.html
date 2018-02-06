@@ -69,10 +69,10 @@
             if (password != confirmPassword) {
                 error_alert.css('display', 'block');
                 error_alert.html("Passwords must match");
-                document.getElementById("quickstart-sign-in").disable = true;
+                document.getElementById("quickstart-sign-in").disabled = true;
             } else{
                 error_alert.css('display', 'none');
-                document.getElementById("quickstart-sign-in").disable = false;
+                document.getElementById("quickstart-sign-in").disabled = false;
             }
         }
         /**

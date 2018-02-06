@@ -552,6 +552,8 @@ def security():
 
 @app.route('/password')
 def password_reset():
+    session.pop('username', None)
+    session.pop('logged_in', None)
     return render_template('passwordReset.html')
 
 

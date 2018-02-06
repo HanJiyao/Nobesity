@@ -112,7 +112,7 @@
                 displayName : displayName,
                 photoURL: photoURL
             });
-            var username = document.getElementById('username').innerText;
+            var username = '{{session['username']}}';
             firebase.database().ref().child('Users/'+ username + '/').update({
                 'photoURL':photoURL,
                 'photoName': photoName

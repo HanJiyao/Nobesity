@@ -1,6 +1,7 @@
 {% extends 'layout.html' %}
 {% block body %}
     <form method="post" class="mx-auto account-box p-5">
+     <div class="form-control alert alert-danger col-12 mt-3 mb-0" id="error_alert" style="display: none"></div>
       <div class="form-group form-row account-detail pt-4 pb-4">
         <div class="col-1"><i class="material-icons">account_box</i></div>
         <div class="col-4"> Username :</div>
@@ -15,18 +16,17 @@
             <div class="mt-2 text-left" id="email_display">email</div>
             <input class="form-control" id="new_email" style="display: none">
         </div>
-        <div class="col-1"><i class="material-icons email-verified" id="verified">verified_user</i></div>
+          <div class="col-1"><a href="/setup/email"><i class="material-icons email-verified" id="verified">verified_user</i></a></div>
         <div class="col-1">
             <i class="material-icons" id="editEmail" onclick="editEmail()">mode_edit</i>
             <a id="toVerify" style="display: none" onclick="toVerify()"><i class="material-icons">done</i></a>
         </div>
-          <div class="form-control alert alert-danger col-12 mt-3 mb-0" id="error_alert" style="display: none"></div>
       </div>
       <div class="form-group form-row account-detail pt-4 pb-4">
         <div class="col-1"><i class="material-icons">vpn_key</i></div>
         <div class="col-4"> Password :</div>
           <div class="col-7">
-            <a class="form-control email-verify-btn" id="reset_password" onclick="sendResetPasswordEmail();resendCount()">Reset Password by Email</a>
+            <a class="form-control email-verify-btn" id="reset_password" href="/password">Reset Password by Email</a>
             <a class="form-control email-verify-btn" id="reset_status" style="display:none; background: #e9ecef; color:#222222">Resend</a>
           </div>
       </div>

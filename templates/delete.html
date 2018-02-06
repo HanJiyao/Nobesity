@@ -7,31 +7,44 @@
             <div class="form-group account-content">
                 <div class="form-group text-center">
                     <img src="../static/images/last_img.jpg" alt="Bye" width="200">
-                    <div class="form-control alert alert-danger col-12 mt-3" id="error_alert" style="display: none"></div>
+
                 </div>
             </div>
+            <div class="form-control alert alert-danger col-12 mt-3" id="error_alert" style="display: none"></div>
           <div class="form-group form-row save-cancel-btn">
             <a href="/account/security" class="col-5 btn btn-outline-secondary form-control">Cancel</a>
-            <button type="submit" class="col-5 ml-auto btn btn-outline-danger form-control" id="delete_account" onclick="deleteAccount()">Delete</button>
+            <a class="col-5 ml-auto btn btn-outline-danger form-control" id="delete_account" onclick="deleteAccount()">Delete</a>
           </div>
         </form>
     </div>
     <script>
     function deleteAccount() {
-        firebase.storage().ref('{{session['username']}}' + '/profilePicture/' + '{{fileName}}').delete().then(function() {
+        if ('{{fileName}}' != 'None'){
+            firebase.storage().ref('{{session['username']}}' + '/profilePicture/' + '{{fileName}}').delete().then(function() {
+                firebase.auth().currentUser.delete().then(function() {
+                    deleteRedirect()
+                // User deleted.
+                }).catch(function(error) {
+                // An error happened.
+                    document.getElementById('error_alert').style.display='block';
+                    document.getElementById('error_alert').innerText = error
+                });
+            })
+        } else{
             firebase.auth().currentUser.delete().then(function() {
-                deleteRedirect()
-            // User deleted.
-            }).catch(function(error) {
-            // An error happened.
-                document.getElementById('error_alert').style.display='block';
-                document.getElementById('error_alert').innerText = error
+                    deleteRedirect()
+                // User deleted.
+                }).catch(function(error) {
+                // An error happened.
+                document.getElementById('error_alert').style.display="block";
+                document.getElementById('error_alert').innerHTML = '<div>'+error+'<div>'+'<a class="re-login" href="/login" style="color:white;font-weight:500">> Re Login Here</a>'
             });
-        })
+        }
     }
     function deleteRedirect() {
             firebase.auth().onAuthStateChanged(function (user) {
                 if (user) {
+                } else{
                     document.getElementById("delete_form").submit()
                 }
             })
