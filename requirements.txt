@@ -23,7 +23,7 @@ MarkupSafe==1.0
 packaging==17.1
 pip-review==1.0
 ply==3.11
-protobuf==3.5.2
+protobuf==3.18.3
 pyasn1==0.4.2
 pyasn1-modules==0.2.1
 pyparsing==2.2.0
